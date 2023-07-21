@@ -1,0 +1,73 @@
+﻿@page
+@using NewStreamSupporter.Helpers;
+@model NewStreamSupporter.Areas.Dashboard.Pages.Rewards.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h3><a asp-area="" asp-page="/Rewards" asp-route-uid="@Model.HttpContext.GetUserId()">Click here</a> to see your reward page.</h3>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+<table class="table table-responsive table-hover widget-table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.RewardModel[0].Name)
+            </th>
+            @*
+            <th>
+            @Html.DisplayNameFor(model => model.RewardModel[0].Text)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.RewardModel[0].Cost)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.RewardModel[0].HasTextField)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.RewardModel[0].BackgroundColor)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.RewardModel[0].FontColor)
+            </th>
+            *@
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.RewardModel)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                @*
+            <td>
+            @Html.DisplayFor(modelItem => item.Text)
+            </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.Cost)
+            </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.HasTextField)
+            </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.BackgroundColor)
+            </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.FontColor)
+            </td>
+            *@
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">edit</span></a>
+                    <a asp-page="./Details" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Details">info</span></a>
+                    <a asp-area="Api" asp-controller="Component" asp-action="Counter" asp-route-uid="@item.OwnerId" asp-route-id="@item.Id" target="_blank"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Open widget">content_copy</span></a>
+                    <a asp-page="./Delete" asp-route-id="@item.Id"><span class="material-icons border border-1 border-danger text-danger rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">delete</span></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

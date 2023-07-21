@@ -1,0 +1,25 @@
+﻿
+
+<div class="form-switch form-check d-flex justify-content-center" id="theme-selector">
+    <input class="form-check-input" type="checkbox" role="switch" id="theme-selector-input">
+    <label class="form-check-label ps-2" for="theme-selector-input">Dark Theme</label>
+    <script>
+        (function () {
+            let input = document.querySelector("#theme-selector input");
+            if(input === null){
+                console.error("Input was null");
+                return;
+            }
+
+            input.addEventListener("change", function(){
+                SetTheme(input.checked ? "dark" : "light");
+                ReloadTheme();
+            });
+
+            const currentTheme = GetTheme();
+            if(currentTheme === "dark"){
+                input.checked = true;
+            }
+        })();
+    </script>
+</div>

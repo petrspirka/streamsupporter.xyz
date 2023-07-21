@@ -1,0 +1,135 @@
+﻿@using Microsoft.AspNetCore.Identity;
+@using NewStreamSupporter.Data;
+@inject SignInManager<ApplicationUser> SignInManager
+
+
+<!--
+    Original code taken from https://getbootstrap.com/docs/5.3/examples/sidebars
+
+    Bootstrap is published under the MIT license, see the full license here: https://github.com/twbs/bootstrap/blob/main/LICENSE
+-->
+<div id="sidenav">
+    <nav class="h-100">
+        <div class="p-3 border-end overflow-y-auto h-100 d-flex flex-column">
+            <a asp-area="" asp-page="/Index"
+               class="d-flex align-items-center pb-3 mb-3 link-body-emphasis text-decoration-none border-bottom">
+                <span class="fs-5 ps-2 fw-semibold">StreamSupporter</span>
+            </a>
+            <ul class="list-unstyled ps-0">
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
+                        Home
+                    </button>
+                    <div class="collapse" id="home-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li>
+                                <a asp-area="" asp-page="/Index"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a>
+                            </li>
+                            <li>
+                                <a asp-area="" asp-page="/PrivacyPolicy"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded">Privacy Policy</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="mb-1">
+                    <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                            data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                        Dashboard
+                    </button>
+                    <div class="collapse" id="dashboard-collapse">
+                        <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                            <li>
+                                <a asp-area="Dashboard" asp-page="/Index"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded">Overview</a>
+                            </li>
+                            <li>
+                                <a asp-area="Dashboard" asp-page="/Alert"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded">Alert</a>
+                            </li>
+                            <li>
+                                <a asp-area="Dashboard" asp-page="/Marquee/Index"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded">Marquee</a>
+                            </li>
+                            <li>
+                                <a asp-area="Dashboard" asp-page="/Counter/Index"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded">Counters</a>
+                            </li>
+                            <li>
+                                <a asp-area="Dashboard" asp-page="/DonationGoal/Index"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded">Donation Goals</a>
+                            </li>
+                            <li>
+                                <a asp-area="Dashboard" asp-page="/Timer/Index"
+                                   class="link-body-emphasis d-inline-flex text-decoration-none rounded">Timers</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li class="border-top my-3"></li>
+                @if (SignInManager.IsSignedIn(User))
+                {
+                    <li class="mb-1">
+                        <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
+                        data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                            Account
+                        </button>
+                        <div class="collapse" id="account-collapse">
+                            <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
+                                <li>
+                                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                                    asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a>
+                                </li>
+                                <li>
+                                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                                    asp-area="Identity" asp-page="/Account/Manage/Email">Email</a>
+                                </li>
+                                <li>
+                                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                                    asp-area="Identity" asp-page="/Account/Manage/ChangePassword">Password</a>
+                                </li>
+                                @if ((await SignInManager.GetExternalAuthenticationSchemesAsync()).Any())
+                                {
+                                    <li>
+                                        <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                                        asp-area="Identity" asp-page="/Account/Manage/ExternalLogins">External logins</a>
+                                    </li>
+                                }
+                                <li>
+                                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                                       asp-area="Identity" asp-page="/Account/Manage/TwoFactorAuthentication">Two-factor authentication</a>
+                                </li>
+                                <li>
+                                    <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
+                                       asp-area="Identity" asp-page="/Account/Manage/PersonalData">Personal data</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                    <li class="mb-1">
+                        <form id="logoutForm" class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })">
+                            <button id="logout" type="submit" class="btn fw-medium d-inline-flex align-items-center rounded border-0">Logout</button>
+                        </form>
+                    </li>
+                }
+                else
+                {
+                    <li>
+                        <a class="btn fw-medium d-inline-flex align-items-center rounded border-0"
+                            asp-area="Identity" asp-page="/Account/Login">Login</a>
+                    </li>
+                    <li>
+                        <a class="btn fw-medium d-inline-flex align-items-center rounded border-0"
+                            asp-area="Identity" asp-page="/Account/Register">Register</a>
+                    </li>
+                }
+            </ul>
+            <div class="mt-auto">
+                <hr />
+                <partial name="_ThemeSelectorPartial" />
+            </div>
+        </div>
+    </nav>
+</div>

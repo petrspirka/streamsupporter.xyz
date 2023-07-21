@@ -1,0 +1,41 @@
+﻿@using NewStreamSupporter.Data;
+@model CounterModel
+@{
+}
+
+<style>
+    .main-container {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+        font-size: 14px;
+        border-radius: 15px;
+        background-color: @Model.BackgroundColor;
+        color: @Model.FontColor;
+    }
+
+    .center-text {
+        text-align: center;
+    }
+</style>
+<script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
+<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<div class="d-flex flex-column calign-content-center main-container">
+    <div class="center-text">@Html.Encode(Model.Text)</div>
+    <div class="center-text" id="counter-value">@Model.Value</div>
+</div>
+<script>
+    const counter = document.getElementById("counter-value");
+    
+    function trigger(){
+        const original = Number(counter.innerHTML);
+        counter.innerHTML = original + 1;
+    }
+</script>
+<script>
+    import("/js/component.js").then(res => {
+        const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "counter");
+        signalClient.setTrigger((arg) => {
+            trigger()
+        });
+        signalClient.start();
+    });
+</script>

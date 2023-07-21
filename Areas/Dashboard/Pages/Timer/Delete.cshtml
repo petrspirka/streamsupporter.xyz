@@ -1,0 +1,59 @@
+﻿@page
+@model NewStreamSupporter.Areas.Dashboard.Pages.Timer.DeleteModel
+
+<h1>Delete timer</h1>
+
+<hr />
+
+<div class="row mx-0">
+    <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
+        <dl class="row mx-0">
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.TimerModel.Name)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.TimerModel.Name)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.TimerModel.Text)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.TimerModel.Text)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.TimerModel.Length)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.TimerModel.Length)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.TimerModel.BackgroundColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.TimerModel.BackgroundColor'}" disabled />
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.TimerModel.FontColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.TimerModel.FontColor'}" disabled />
+                </dd>
+            </div>
+        </dl>
+
+        <form method="post">
+            <input type="hidden" asp-for="TimerModel.Id" />
+            <a asp-page="./Index" class="btn btn-primary mb-1">Cancel</a>
+            <input type="submit" value="Delete" class="btn btn-danger mb-1" />
+        </form>
+    </div>
+</div>

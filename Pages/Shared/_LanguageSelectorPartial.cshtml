@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Localization;
+@using NewStreamSupporter.Helpers;
+
+@if(CultureHelper.Cultures.Length > 1){
+
+    var cultureFeature = Context.Request.HttpContext.Features.Get<IRequestCultureFeature>();
+    var culture = cultureFeature?.RequestCulture.Culture.NativeName;
+
+    var defaultCookieName = CookieRequestCultureProvider.DefaultCookieName;
+
+    <div class="dropup btn-group" id="languageSelector">
+        <button type="button" class="btn dropdown-toggle text-muted" data-bs-toggle="dropdown" aria-expanded="false">
+            @culture
+        </button>
+        <ul class="dropdown-menu">
+            @foreach(var supportedCulture in CultureHelper.Cultures)
+            {
+                <li class="dropdown-item">
+                    <button class="btn text-muted" onclick="" data-language-string="@supportedCulture.IetfLanguageTag">
+                        @supportedCulture.DisplayName
+                    </button>
+                </li>
+            }
+        </ul>
+        <script>
+            (function () {
+                const buttons = document.querySelectorAll("#languageSelector button[data-language-string]");
+                for(let button of buttons)
+                button.addEventListener("click", function (event) {
+                    document.cookie = "@defaultCookieName" + "=c=" + button.dataset.languageString + "|uic=" + button.dataset.languageString;
+                    location.reload();
+                }, false);
+            })();
+        </script>
+    </div>
+}

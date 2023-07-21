@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization;
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="@(Context.Request.Cookies.ContainsKey("theme") ? Context.Request.Cookies["theme"] : "light")">
+<head>
+    <partial name="_CommonHeadPartial" />
+</head>
+<body>
+    <div class="flex-column d-flex vh-100 max-vh-100">
+        @*
+        <header>
+            <partial name="_CommonHeaderPartial" />
+        </header>
+        *@
+        <div class="flex-md-row d-flex flex-grow-1 h-100">
+            <partial name="_SideNavPartial" />
+            <div class="container-fluid px-0">
+                <partial name="_CookieConsentPartial" class="modal-dialog-centered" />
+                <main class="overflow-auto h-100 p-2">
+                    @RenderBody()
+                </main>
+            </div>
+        </div>
+        @*
+        <footer class="border-top footer text-muted navbar w-100">
+            <partial name="_CommonFooterPartial" />
+        </footer>
+        *@
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

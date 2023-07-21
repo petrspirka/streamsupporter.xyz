@@ -1,0 +1,71 @@
+﻿@page
+@model NewStreamSupporter.Areas.Dashboard.Pages.Rewards.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete reward</h1>
+
+<hr />
+
+<div class="row mx-0">
+    <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
+        <dl class="row mx-0">
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RewardModel.Name)
+                </dt>
+                <dd class="col-sm-8">
+                    @Html.DisplayFor(model => model.RewardModel.Name)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RewardModel.Text)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.RewardModel.Text)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RewardModel.Cost)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.RewardModel.Cost)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RewardModel.HasTextField)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.RewardModel.HasTextField)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RewardModel.BackgroundColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.RewardModel.BackgroundColor'}" disabled />
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.RewardModel.FontColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.RewardModel.FontColor'}" disabled />
+                </dd>
+            </div>
+        </dl>
+
+        <form method="post">
+            <input type="hidden" asp-for="RewardModel.Id" />
+            <a asp-page="./Index" class="btn btn-primary mb-1">Cancel</a>
+            <input type="submit" value="Delete" class="btn btn-danger mb-1" />
+        </form>
+    </div>
+</div>

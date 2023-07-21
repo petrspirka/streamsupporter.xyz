@@ -1,0 +1,61 @@
+﻿@page
+@model NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal.DetailsModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>DonationGoalModel</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DonationGoalModel.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DonationGoalModel.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DonationGoalModel.Text)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DonationGoalModel.Text)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DonationGoalModel.TargetAmount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DonationGoalModel.TargetAmount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DonationGoalModel.CurrentAmount)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DonationGoalModel.CurrentAmount)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DonationGoalModel.BackgroundColor)
+        </dt>
+        <dd class="col-sm-10">
+            <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.DonationGoalModel.BackgroundColor'}" disabled />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DonationGoalModel.FontColor)
+        </dt>
+        <dd class="col-sm-10">
+            <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.DonationGoalModel.FontColor'}" disabled />
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.DonationGoalModel.ExpiryDate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DonationGoalModel.ExpiryDate)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-page="./Edit" asp-route-id="@Model.DonationGoalModel?.Id">Edit</a> |
+    <a asp-page="./Index">Back to List</a>
+</div>

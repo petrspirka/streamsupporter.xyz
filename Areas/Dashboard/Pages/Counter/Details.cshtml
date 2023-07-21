@@ -1,0 +1,59 @@
+﻿@page
+@model NewStreamSupporter.Areas.Dashboard.Pages.Counter.DetailsModel
+
+<h1>Counter details</h1>
+
+<hr />
+
+<div class="row mx-0">
+    <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
+        <dl class="row mx-0">
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.CounterModel.Name)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.CounterModel.Name)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.CounterModel.Text)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.CounterModel.Text)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.CounterModel.Value)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.CounterModel.Value)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.CounterModel.BackgroundColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.CounterModel.BackgroundColor'}" disabled />
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.CounterModel.FontColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.CounterModel.FontColor'}" disabled />
+                </dd>
+            </div>
+        </dl>
+
+        <div>
+            <a class="btn btn-primary mb-1" asp-page="./Edit" asp-route-id="@Model.CounterModel?.Id">Edit</a>
+            <a class="btn btn-danger mb-1" asp-page="./Delete" asp-route-id="@Model.CounterModel?.Id">Delete</a>
+            <a class="btn btn-primary mb-1" asp-page="./Index">Back to list</a>
+        </div>
+    </div>
+</div>

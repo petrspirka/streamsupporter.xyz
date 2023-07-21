@@ -1,0 +1,105 @@
+﻿@page
+@using Microsoft.IdentityModel.Tokens;
+@model NewStreamSupporter.Pages.RewardsModel;
+@{
+    ViewData["Title"] = Model.ShopOwner.UserName + "'s Shop";
+
+    string? message = Model.Success switch
+    {
+        true => "Item successfully purchased!",
+        false => "Purchase failed!",
+        _ => null
+    };
+}
+
+<h1><span class="text-truncate">@(Model.ShopOwner.UserName)</span>'s Shop</h1>
+
+@if (!message.IsNullOrEmpty())
+{
+    <div class="alert alert-dismissible alert-@((bool)Model.Success! ? "success" : "danger")">
+        <button class="btn-close" data-bs-dismiss="alert"></button>
+        @message
+    </div>
+}
+
+@if (Model.OwnedCurrencyAmount != null)
+{
+    <h3>You have @Model.OwnedCurrencyAmount currency. Spend it wisely.</h3>
+}
+@if (Model.ShopOwner.OwnedRewards.Count == 0)
+{
+    <p>It seems that this person does not have any rewards set! Tell them to do so in their dashboard!</p>
+}
+else
+{
+    <div class="d-flex flex-wrap flex-row">
+        @foreach (var reward in Model.ShopOwner.OwnedRewards)
+        {
+            <div class="p-2 m-2 rounded" style="@($"background-color:{reward.BackgroundColor};color:{reward.FontColor};")">
+                <h5>@reward.Name</h5>
+                <p>@reward.Text</p>
+                <div class="d-flex flex-row justify-content-between">
+                    <button class=" btn btn-primary w-100" 
+                        data-reward-id="@reward.Id"
+                        data-user-id="@reward.OwnerId"
+                        data-modal-header="@reward.Name" 
+                        data-modal-input-enabled="@reward.HasTextField" 
+                        data-modal-body="@reward.Text" 
+                        data-bs-toggle="modal" 
+                        data-bs-target="#modal">@reward.Cost</button>
+                    <script>
+                        {
+                            const script = document.currentScript;
+                            const button = script.previousElementSibling;
+                            const isAffordable = "@(Model.OwnedCurrencyAmount >= reward.Cost)".toLowerCase() === "true";
+                            if(!isAffordable){
+                                button.disabled = true;
+                            }
+                        }
+                    </script>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="modal" id="modal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form method="post">
+                    <input id="idInput" type="hidden" name="id"/>
+                    <input id="uidInput" type="hidden" name="uid"/>
+                    <div class="modal-header">
+                        <h5 class="modal-title">Are you sure you want to purchase <span id="header-span"></span>?</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="#modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>It does this: <span id="body-span"></span></p>
+                        <input id="inputText" name="text" type="text" />
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" data-bs-dismiss="#modal">Cancel</button>
+                        <input type="submit" class="btn btn-primary" value="Confirm" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script>
+        const modal = document.getElementById("modal");
+        const header = document.getElementById("header-span");
+        const body = document.getElementById("body-span");
+        const inputField = document.getElementById("inputText");
+        const idInput = document.getElementById("idInput");
+        const uidInput = document.getElementById("uidInput");
+
+        modal.addEventListener("show.bs.modal", event => {
+            const triggeredSource = event.relatedTarget;
+            console.log(triggeredSource);
+            console.log(triggeredSource.dataset);
+            header.innerHTML = triggeredSource.dataset.modalHeader;
+            body.innerHTML = triggeredSource.dataset.modalBody;
+            idInput.value = triggeredSource.dataset.rewardId;
+            uidInput.value = triggeredSource.dataset.userId;
+            inputField.disabled = (triggeredSource.dataset.modalInputEnabled).toLowerCase() === "false";
+        });
+    </script>
+}

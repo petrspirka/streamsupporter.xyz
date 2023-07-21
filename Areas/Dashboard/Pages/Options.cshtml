@@ -1,0 +1,31 @@
+﻿@page
+@model NewStreamSupporter.Areas.Dashboard.Pages.OptionsModel
+
+@{
+    ViewData["SelectedSubArea"] = "Options";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Model.IsGoogleActive" /> @Html.DisplayNameFor(model => model.Model.IsGoogleActive)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="Model.IsTwitchActive" /> @Html.DisplayNameFor(model => model.Model.IsTwitchActive)
+                </label>
+            </div>
+            <button class="btn-primary" type="submit">Submit</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

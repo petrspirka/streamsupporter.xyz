@@ -1,0 +1,15 @@
+﻿@using NewStreamSupporter.Data;
+@model NewStreamSupporter.Data.NotificationModel
+@{
+}
+
+<div style="background-color:@Model.BackgroundColor" class="alert alert-dismissible fade show flex-row d-flex" role="alert">
+    <div class="flex-grow-1">
+        @Model.Text
+    </div>
+    <form method="post">
+        <input type="hidden" value="@Model.Id" name="id" />
+        <input type="hidden" value="@nameof(NotificationModel)" name="type" />
+        <button type="submit" class="btn-close" data-bs-dismiss="alert" />
+    </form>
+</div>

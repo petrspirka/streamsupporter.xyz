@@ -1,0 +1,70 @@
+﻿@page
+@model NewStreamSupporter.Areas.Dashboard.Pages.Marquee.CreateModel
+
+<h1>Create marquee</h1>
+
+<hr />
+<div class="row mx-0">
+    <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
+        <form method="post">
+            <input type="hidden" asp-for="MarqueeModel.Id" />
+            <input type="hidden" asp-for="MarqueeModel.OwnerId" />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group pb-2">
+                <label asp-for="MarqueeModel.Name" class="control-label"></label>
+                <input asp-for="MarqueeModel.Name" class="form-control" />
+                <span asp-validation-for="MarqueeModel.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="MarqueeModel.Text" class="control-label"></label>
+                <input asp-for="MarqueeModel.Text" class="form-control" />
+                <span asp-validation-for="MarqueeModel.Text" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="MarqueeModel.BackgroundColor" class="control-label"></label>
+                <br />
+                <input class="form-control js-color" asp-for="MarqueeModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <span asp-validation-for="MarqueeModel.BackgroundColor" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="MarqueeModel.FontColor" class="control-label"></label>
+                <br />
+                <input class="form-control js-color" asp-for="MarqueeModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <span asp-validation-for="MarqueeModel.FontColor" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="MarqueeModel.SpeedFactor" class="control-label"></label>
+                <input asp-for="MarqueeModel.SpeedFactor" class="form-control" />
+                <span asp-validation-for="MarqueeModel.SpeedFactor" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="MarqueeModel.SpeedFactorPerCharacter" class="control-label"></label>
+                <input asp-for="MarqueeModel.SpeedFactorPerCharacter" class="form-control" />
+                <span asp-validation-for="MarqueeModel.SpeedFactorPerCharacter" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="MarqueeModel.FadeTime" class="control-label"></label>
+                <input asp-for="MarqueeModel.FadeTime" class="form-control" />
+                <span asp-validation-for="MarqueeModel.FadeTime" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="MarqueeModel.Delay" class="control-label"></label>
+                <input asp-for="MarqueeModel.Delay" class="form-control" />
+                <span asp-validation-for="MarqueeModel.Delay" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check pb-2">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="MarqueeModel.Permanent" /> @Html.DisplayNameFor(model => model.MarqueeModel.Permanent)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary mb-1" />
+                <a class="btn btn-danger mb-1" asp-page="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,171 @@
+﻿@using NewStreamSupporter.Data;
+@model MarqueeModel
+@{
+    var animationLength = (Model.SpeedFactorPerCharacter * Model.Text.Length + Model.SpeedFactor);
+}
+
+<style>
+    .main-container {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+        font-size: 14px;
+        overflow: hidden;
+        color: @Model.FontColor;
+        background-color: @Model.BackgroundColor;
+        position: relative;
+        border-radius: 15px;
+    }
+
+    .hidden {
+        opacity: 0;
+    }
+
+    p {
+        font-size: medium;
+        font-weight: bold;
+    }
+
+    .marquee-text {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+    }
+
+    .looping {
+        animation: marqueeAnimation;
+        animation-iteration-count: infinite;
+        animation-duration: @($"{animationLength}s");
+        animation-delay: @($"{Model.Delay}s");
+    }
+
+    @@keyframes marqueeAnimation {
+        0% {
+            transform: translateX(100%);
+        }
+
+        100% {
+            transform: translateX(-100%);
+        }
+    }
+
+    @@keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    @@keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    .fadeOut {
+        animation: @($"fadeOut {Model.FadeTime}s;") animation-fill-mode: forwards;
+    }
+
+    .fadeIn {
+        animation: @($"fadeIn {Model.FadeTime}s;") animation-fill-mode: forwards;
+    }
+</style>
+<script>
+    const isPermanent = "@Model.Permanent".toLowerCase() === "true";
+    const defaultString = "@Model.Text";
+
+    let isActive = false,
+        isRunning = false;
+
+    let mainContainer,
+        marqueeText;
+
+    let showMarqueeTextTimer,
+        hideMarqueeTimer,
+        stopMarqueeTimer;
+
+    function startMarquee(marqueeText) {
+        if(marqueeText == null){
+            marqueeText = defaultString;
+        }
+        if (isRunning) return;
+        showMarquee();
+        let calculatedTime = @animationLength * 1000;
+        isRunning = true;
+        showMarqueeTextTimer = setTimeout(() => setMarqueeText(marqueeText), @Model.FadeTime * 1000);
+        stopMarqueeTimer = setTimeout(stopMarquee, @Model.FadeTime * 1000 + calculatedTime);
+    }
+
+    function setMarqueeText(text) {
+        const time = @animationLength;
+        void marqueeText.elementWidth;
+        marqueeText.style.animation = "marqueeAnimation " + time + "s";
+        marqueeText.style.animationTimingFunction = "linear";
+        marqueeText.style.animationDelay = "@Model.Delay";
+        marqueeText.innerHTML = text;
+        setTimeout(clearMarqueeText, time * 1000);
+    }
+
+    function clearMarqueeText() {
+        marqueeText.style.animation = "initial";
+        marqueeText.innerHTML = "";
+    }
+
+    function stopMarquee() {
+        clearTimeout(showMarqueeTextTimer);
+        clearTimeout(hideMarqueeTimer);
+        clearTimeout(stopMarqueeTimer);
+
+        clearMarqueeText();
+        hideMarquee();
+        isRunning = false;
+    }
+
+    function showMarquee() {
+        if (!isActive) activateMarquee();
+        if (mainContainer.classList.contains("fadeOut")) mainContainer.classList.remove("fadeOut");
+        mainContainer.classList.add("fadeIn");
+    }
+
+    function hideMarquee() {
+        if (mainContainer.classList.contains("fadeIn")) mainContainer.classList.remove("fadeIn");
+        mainContainer.classList.add("fadeOut");
+    }
+
+    function activateMarquee() {
+        mainContainer.classList.remove("hidden");
+        isActive = true;
+    }
+
+    window.onload = (ev) => {
+        mainContainer = document.getElementsByClassName("main-container")[0];
+        marqueeText = document.getElementsByClassName("marquee-text")[0];
+        if (isPermanent) {
+            showMarquee();
+            marqueeText.innerHTML = "@Model.Text";
+            marqueeText.classList.add("looping");
+        }
+    };
+</script>
+<div class="main-container hidden">
+    <p><span>&#8203;</span></p>
+    <p class="marquee-text"></p>
+</div>
+<script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
+<script>
+    import("/js/component.js").then(res => {
+        const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "marquee");
+        signalClient.setTrigger((arg) => {
+            trigger(arg);
+        });
+        signalClient.start();
+    });
+</script>

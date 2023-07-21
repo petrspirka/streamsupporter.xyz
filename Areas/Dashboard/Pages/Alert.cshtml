@@ -1,0 +1,58 @@
+﻿@page
+@model NewStreamSupporter.Areas.Dashboard.Pages.Alert.AlertPageModel
+
+@{
+    ViewData["SelectedSubArea"] = "Alert";
+}
+
+<h1>Alert</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="AlertModel.Id" />
+            <input type="hidden" asp-for="AlertModel.OwnerId" value="@Model.AlertModel.OwnerId" />
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AlertModel.ShouldTriggerFollows" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerFollows)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="AlertModel.ShouldTriggerDonations" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerDonations)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="AlertModel.BackgroundColor" class="control-label"></label>
+                <br />
+                <input class="form-control js-color" asp-for="AlertModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <span asp-validation-for="AlertModel.BackgroundColor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AlertModel.FontColor" class="control-label"></label>
+                <br />
+                <input class="form-control js-color" asp-for="AlertModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <span asp-validation-for="AlertModel.FontColor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AlertModel.AlertDuration" class="control-label"></label>
+                <input asp-for="AlertModel.AlertDuration" class="form-control" />
+                <span asp-validation-for="AlertModel.AlertDuration" class="text-danger"></span>
+            </div>
+            <div class="form-group pt-2 pb-2">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+    <a asp-area="Api" asp-controller="Component" asp-action="Alert" asp-route-uid="@Model.AlertModel.OwnerId" asp-route-id="@Model.AlertModel.Id">Show</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

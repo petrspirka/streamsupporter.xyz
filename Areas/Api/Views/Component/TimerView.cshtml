@@ -1,0 +1,240 @@
+﻿@using NewStreamSupporter.Data;
+@model TimerModel
+@{
+    var fadeTime = 1;
+#pragma warning disable
+}
+
+<style>
+    .hidden {
+        opacity: 0;
+    }
+
+    .main-container {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+        font-size: 14px;
+        background-color: #00000000;
+        padding: 0px 8px 8px 8px;
+        border-radius: 15px;
+    }
+
+    .timer-title {
+        text-align: center;
+        color: @Model.FontColor;
+        padding: 8px 8px 8px 8px;
+    }
+
+    .timer-progress-container {
+        background-color: #22222288;
+        border-radius: 15px;
+        margin: 2px;
+        border: 1px solid #11111188;
+        position: relative;
+    }
+
+    .timer-progress-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 15px;
+        background-color: @Model.BackgroundColor;
+    }
+
+    .timer-progress-text {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        color: @Model.FontColor;
+    }
+
+    .fadeOut {
+        animation: @($"fadeOut {fadeTime}s");
+        animation-fill-mode: forwards;
+    }
+
+    .fadeIn {
+        animation: @($"fadeIn {fadeTime}s");
+        animation-fill-mode: forwards;
+    }
+
+    @@keyframes fadeOut {
+        0% {
+            opacity: 1;
+        }
+
+        100% {
+            opacity: 0;
+        }
+    }
+
+    @@keyframes fadeIn {
+        0% {
+            opacity: 0;
+        }
+
+        100% {
+            opacity: 1;
+        }
+    }
+
+    @@keyframes progressing {
+        from {
+            width: 0%;
+        }
+
+        to {
+            width: 100%;
+        }
+    }
+</style>
+<div class="main-container hidden">
+    <p class="timer-title">@Model.Text</p>
+    <div class="timer-progress-container">
+        <p><span>&#8203;</span></p>
+        <div class="timer-progress-bar hidden"></div>
+        <p class="timer-progress-text">0:00</p>
+    </div>
+</div>
+<script>
+    let isActive = false,
+        isRunning = false;
+
+    let fadeTime = 1,
+        stayTime = 5,
+        isTestMode = false;
+
+    let mainContainer,
+        mainText,
+        progressBarContainer,
+        progressBar,
+        progressBarText;
+
+    let currentTargetTime = 0,
+        currentTime = 0,
+        currentStartTimer,
+        currentStepInterval,
+        currentStopTimer;
+
+    window.addEventListener('load', function (obj) {
+        const duration = @Model.Length;
+
+        fadeTime = @fadeTime;
+        stayTime = @fadeTime;
+
+        mainContainer = document.getElementsByClassName("main-container")[0];
+        mainText = document.getElementsByClassName("timer-title")[0];
+        progressBarContainer = document.getElementsByClassName("timer-progress-container")[0];
+        progressBar = document.getElementsByClassName("timer-progress-bar")[0];
+        progressBarText = document.getElementsByClassName("timer-progress-text")[0];
+    });
+
+    function showWidget() {
+        if (!isActive) activateWidget();
+        if (mainContainer.classList.contains("fadeOut")) mainContainer.classList.remove("fadeOut");
+        mainContainer.classList.add("fadeIn");
+    }
+
+    function hideWidget() {
+        if (mainContainer.classList.contains("fadeIn")) mainContainer.classList.remove("fadeIn");
+        mainContainer.classList.add("fadeOut");
+    }
+
+    function startWidget() {
+        if (isRunning) return;
+        const time = @Model.Length;
+        setTimer(time);
+        showWidget();
+        currentStartTimer = setTimeout(() => {
+            startTimer(time);
+            progressBar.classList.remove("hidden");
+            currentStepInterval = setInterval(() => {
+                currentTargetTime--;
+                if (currentTargetTime == 0) clearInterval(currentStepInterval);
+                setTimerTime(currentTargetTime);
+            }, 1000);
+        }, fadeTime * 1000 + stayTime * 1000);
+        currentStopTimer = setTimeout(() => {
+            stopWidget();
+            isRunning = false;
+        }, ((fadeTime * 1000) * 2) + stayTime * 1000 * 2 + time * 1000);
+    }
+
+    function stopWidget() {
+        clearTimeout(currentStartTimer);
+        clearInterval(currentStepInterval);
+        clearTimeout(currentStopTimer);
+        setTimerTime(0);
+        isRunning = false;
+        setTimeout(() => progressBar.classList.add("hidden"), fadeTime * 1000);
+        hideWidget();
+    }
+
+    function setTimer(time) {
+        currentTargetTime = time;
+        currentTime = 0;
+        setTimerTime(time);
+        startTimer
+    }
+
+    function startTimer(time) {
+        isRunning = true;
+        progressBar.style.animation = "initial";
+        void progressBar.offsetWidth;
+        progressBar.style.animation = "progressing " + time + "s";
+        progressBar.style.animationTimingFunction = "linear";
+        progressBar.style.animationFillMode = "forwards";
+    }
+
+    function setTimerTime(time) {
+        const timerText = getTimerText(time);
+        progressBarText.innerHTML = timerText;
+    }
+
+    function getTimerText(seconds) {
+        if (seconds <= 0) return "0:00";
+        let hours = Math.floor(seconds / 3600);
+        seconds = seconds % 3600;
+        let minutes = Math.floor(seconds / 60);
+        seconds = seconds % 60;
+        let result = "";
+        if (hours > 0) {
+            result += hours + ":";
+        }
+        if (hours > 0 && minutes < 10) result += "0" + minutes + ":";
+        else result += minutes + ":";
+
+        if (seconds < 10) result += "0";
+        result += seconds;
+        return result;
+    }
+
+    function activateWidget() {
+        mainContainer.classList.remove("hidden");
+        isActive = true;
+    }
+
+    function showError(message) {
+        showWidget();
+        mainText.innerHTML = message;
+    }
+
+    function trigger() {
+        startWidget();
+    }
+</script>
+
+<script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
+<script>
+    import("/js/component.js").then(res => {
+        const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "timer");
+        signalClient.setTrigger((arg) => {
+            trigger()
+        });
+        signalClient.start();
+    });
+</script>

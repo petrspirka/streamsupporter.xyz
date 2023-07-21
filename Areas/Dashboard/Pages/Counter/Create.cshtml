@@ -1,0 +1,50 @@
+﻿@page
+@model NewStreamSupporter.Areas.Dashboard.Pages.Counter.CreateModel
+
+<h1>Create counter</h1>
+
+<hr />
+<div class="row mx-0">
+    <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="CounterModel.Id" />
+            <input type="hidden" asp-for="CounterModel.OwnerId" />
+            <div class="form-group pb-2">
+                <label asp-for="CounterModel.Name" class="control-label"></label>
+                <input asp-for="CounterModel.Name" class="form-control" />
+                <span asp-validation-for="CounterModel.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="CounterModel.Text" class="control-label"></label>
+                <input asp-for="CounterModel.Text" class="form-control" />
+                <span asp-validation-for="CounterModel.Text" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="CounterModel.Value" class="control-label"></label>
+                <input asp-for="CounterModel.Value" class="form-control" />
+                <span asp-validation-for="CounterModel.Value" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="CounterModel.BackgroundColor" class="control-label"></label>
+                <br />
+                <input class="form-control js-color" asp-for="CounterModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <span asp-validation-for="CounterModel.BackgroundColor" class="text-danger"></span>
+            </div>
+            <div class="form-group pb-2">
+                <label asp-for="CounterModel.FontColor" class="control-label"></label>
+                <br />
+                <input class="form-control js-color" asp-for="CounterModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <span asp-validation-for="CounterModel.FontColor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary mb-1" />
+                <a class="btn btn-danger mb-1" asp-page="Index">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

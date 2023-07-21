@@ -1,0 +1,291 @@
+﻿@using NewStreamSupporter.Data;
+@model DonationGoalModel
+
+@{
+    var animationLength = 3;
+}
+<!DOCTYPE html>
+<html lang="en-us">
+    <head>
+        <title>Donation Goal</title>
+        <style>
+            :root {
+                --progress-start-width: 0%;
+                --progress-end-width: 0%;
+            }
+
+            * {
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+                font-weight: bold;
+                color: @Model.FontColor;
+                overflow: hidden;
+                margin: 0;
+            }
+
+            .tip-display {
+                position: absolute;
+                top: -100%;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 5;
+                padding: 4px;
+                text-align: center;
+            }
+
+            .progress-bar-container {
+                position: relative;
+            }
+
+            .main-container {
+                font-size: 20px;
+            }
+
+            .progress-bar-filler {
+                position: absolute;
+                top: 0;
+                left: 0;
+                background-color: @Model.BackgroundColor;
+                width: var(--progress-end-width);
+                filter: brightness(75%);
+                height: 100%;
+                z-index: 2;
+            }
+
+            .goal-current-wrapper {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                display: flex;
+                justify-content: space-between;
+                z-index: 3;
+            }
+
+            .text-shadow {
+                text-shadow: -5px -5px 8px #000000, 5px -5px 8px #000000, -5px 5px 8px #000000, 5px 5px 8px #000000;
+            }
+
+            .goal-name {
+                text-align: center;
+                margin: 0px 0px 5px 0px;
+            }
+
+            .progress-bar-background {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                top: 0;
+                left: 0;
+                background-color: #00000044;
+            }
+
+            .margin-x {
+                margin-left: 8px;
+                margin-right: 8px;
+            }
+
+            .progress-bar {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                animation-name: progressing;
+                animation-fill-mode: forwards;
+                animation-duration: @($"{animationLength}s");
+                background-color: @Model.BackgroundColor;
+                position: relative;
+                z-index: 3;
+            }
+
+            .goal-current {
+                text-align: center;
+            }
+
+            .goal-current-wrapper {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+            .goal-end {
+                text-align: center;
+                margin: 8px 0 0 0;
+            }
+
+            @@keyframes progressing {
+                0% {
+                    width: var(--progress-start-width);
+                }
+
+                100% {
+                    width: var(--progress-end-width);
+                }
+            }
+
+            @@keyframes slide-in-out {
+                0% {
+                    top: -100%;
+                }
+
+                20% {
+                    top: 0;
+                }
+
+                80% {
+                    top: 0;
+                }
+
+                100% {
+                    top: 100%;
+                }
+            }
+
+            @@keyframes slide-out-in {
+                0% {
+                    top: 0;
+                }
+
+                20% {
+                    top: 100%;
+                }
+
+                20.00000001% {
+                    top: -100%;
+                }
+
+                80% {
+                    top: -100%;
+                }
+
+                100% {
+                    top: 0;
+                }
+            }
+
+            .goal-target {
+                text-align: right;
+            }
+
+            .div-center {
+                width: 100%;
+                padding: 4px;
+            }
+        </style>
+        <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    </head>
+    <body>
+    <div class="main-container">
+        <p class="goal-name">@Model.Text</p>
+        <div class=progress-bar-container>  
+            <p style="padding: 6px 0 0 0;"><span>&#8203;</span></p>
+            <div class=progress-bar-background>
+                <div class="progress-bar-filler"></div>
+                <div class="progress-bar"></div>
+            </div>
+            <p class="tip-display">@Model.Text</p>
+            <div class="goal-current-wrapper">
+                <div class="goal-start div-center margin-x">$0</div>
+                <div class="goal-current div-center">$@Model.CurrentAmount</div>
+                <div class="goal-target div-center margin-x">$@Model.TargetAmount</div>
+            </div>
+        </div>
+        <p class="goal-end">@Model.ExpiryDate</p>
+    </div>
+    <script>
+        const animationLength = @animationLength;
+
+        let progressBar,
+            goalCurrent,
+            goalEnd,
+            tipDisplay,
+            goalCurrentWrapper;
+
+        let currentDonated,
+            tipGoal;
+
+        function trigger(user, amount) {
+            const sender = user;
+            currentDonated += Number(amount);
+            updateProgressBar();
+            updateTipDisplay(sender, amount);
+        };
+
+        window.addEventListener('load', function (obj) {
+            progressBar = document.getElementsByClassName("progress-bar")[0];
+            goalCurrent = document.getElementsByClassName("goal-current")[0];
+            goalEnd = document.getElementsByClassName("goal-end")[0];
+            tipDisplay = document.getElementsByClassName("tip-display")[0];
+            goalCurrentWrapper = document.getElementsByClassName("goal-current-wrapper")[0];
+
+            currentDonated = @Model.CurrentAmount;
+            tipGoal = @Model.TargetAmount;
+            goalCurrent.innerHTML = "$" + currentDonated.toFixed(2);
+
+
+            const endDate = Date.parse("@Model.ExpiryDate.ToLongDateString()");
+            const currentDate = new Date();
+            const difference = endDate - currentDate;
+            const timeFormatter = new Intl.RelativeTimeFormat('en', { numeric: "auto" });
+            console.log(endDate);
+            if (difference + 86400000 > 0) {
+                goalEnd.innerHTML = "Ends " + timeFormatter.format(Math.floor(difference / 86400000) + 1, 'day');
+            }
+            else {
+                goalEnd.innerHTML = "Ended " + timeFormatter.format(Math.floor(difference / 86400000) + 1, 'day');
+            }
+
+            document.documentElement.style.setProperty('--progress-start-width', (currentDonated / tipGoal) * 100 + '%');
+
+            updateProgressBar();
+        });
+
+        function updateProgressBar() {
+            let progress = currentDonated / tipGoal;
+            if (progress > 1) progress = 1;
+
+            const progressString = progress * 100 + '%';
+
+            document.documentElement.style.setProperty('--progress-end-width', progressString);
+
+            progressBar.style.animation = "initial";
+            void progressBar.offsetWidth;
+            progressBar.style.animationName = "progressing";
+            progressBar.style.animationFillMode = "forwards";
+            progressBar.style.animationDuration = "@(animationLength)s";
+
+            setTimeout(() => document.documentElement.style.setProperty("--progress-start-width", progressString), @animationLength * 1000);
+
+        }
+
+
+        async function updateTipDisplay(sender, amount) {
+            tipDisplay.innerHTML = sender + " ● $" + amount;
+            goalCurrentWrapper.style.animation = "initial";
+            tipDisplay.style.animation = "initial";
+            void tipDisplay.offsetWidth;
+            void goalCurrentWrapper.offsetWidth;
+            tipDisplay.style.animationName = "slide-in-out";
+            tipDisplay.style.animationDuration = @animationLength + "s";
+            tipDisplay.style.animationFillMode = "backwards";
+            goalCurrentWrapper.style.animationName = "slide-out-in";
+            goalCurrentWrapper.style.animationDuration = animationLength + "s";
+            setTimeout(() => goalCurrent.innerHTML = "$" + currentDonated.toFixed(2), animationLength * 500);
+        }
+    </script>
+    <script>
+        import("/js/component.js").then(res => {
+            const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "donationGoal");
+            signalClient.setTrigger((arg) => {
+                const name = arg.name;
+                const amount = arg.amount;
+                trigger(name, amount)
+            });
+            signalClient.start();
+        });
+    </script>
+    </body>
+</html>

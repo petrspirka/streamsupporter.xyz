@@ -1,0 +1,121 @@
+﻿@using NewStreamSupporter.Data;
+@model AlertModel;
+@{
+    var fadeAnimationLength = 1;
+    var animationLength = Model.AlertDuration;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .main-container {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+            background-color: @Model.BackgroundColor;
+        }
+
+        .alert-text {
+            text-align: center;
+        }
+
+        .hidden {
+            opacity: 0;
+        }
+
+        @@keyframes fadeOut {
+            0% {
+                opacity: 1;
+            }
+
+            100% {
+                opacity: 0;
+            }
+        }
+
+        @@keyframes fadeIn {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+
+        .fadeOut {
+            animation: @($"fadeOut {fadeAnimationLength}s;") animation-fill-mode: forwards;
+        }
+
+        .fadeIn {
+            animation: @($"fadeIn {fadeAnimationLength}s;") animation-fill-mode: forwards;
+        }
+    </style>
+    <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
+    <script src="~/js/component.js"></script>
+    <script>
+        let audioSource,
+            mainContainer,
+            alertText;
+
+        let isActive = false,
+            stopTimeout;
+
+        window.addEventListener("load", () => {
+            audioSource = document.getElementsByClassName("audio-source")[0];
+            mainContainer = document.getElementsByClassName("main-container")[0];
+            alertText = document.getElementsByClassName("alert-text")[0];
+        });
+
+        function startAlert(message) {
+            alertText.innerHTML = message;
+            audioSource.currentTime = 0;
+            audioSource.play();
+            showAlert();
+            stopTimeout = setTimeout(() => {
+                stopAlert();
+            }, @fadeAnimationLength * 1000 + @animationLength * 1000);
+        }
+
+        function stopAlert() {
+            hideAlert();
+            audioSource.pause();
+            audioSource.currentTime = 0;
+        }
+
+        function showAlert() {
+            if (!isActive) activateAlert();
+            if (mainContainer.classList.contains("fadeOut")) mainContainer.classList.remove("fadeOut");
+            mainContainer.classList.add("fadeIn");
+        }
+
+        function hideAlert() {
+            if (mainContainer.classList.contains("fadeIn")) mainContainer.classList.remove("fadeIn");
+            mainContainer.classList.add("fadeOut");
+        }
+
+        function activateAlert() {
+            mainContainer.classList.remove("hidden");
+            isActive = true;
+        }
+
+        function trigger(msg){
+            startAlert(msg);
+        }
+    </script>
+</head>
+<body>
+    <div class="main-container">
+        <audio class="audio-source" src="~/assets/service-bell-ring-14610.mp3"></audio>
+        <p class="alert-text"></p>
+    </div>
+    <script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
+    <script>
+        import("/js/component.js").then(res => {
+            const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "alert");
+            signalClient.setTrigger((arg) => {
+                trigger(arg);
+            });
+            signalClient.start();
+        });
+    </script>
+</body>
+</html>

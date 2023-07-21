@@ -1,0 +1,64 @@
+﻿@page
+@model NewStreamSupporter.Areas.Dashboard.Pages.Counter.IndexModel
+
+<h1>
+    Counters
+    <a asp-page="Create"><spam data-bs-toggle="tooltip" data-bs-placement="top" class="material-icons border border-1 border-primary rounded p-1">add</spam></a>
+</h1>
+
+<hr />
+
+<table class="table table-responsive table-striped table-hover widget-table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.CounterModel[0].Name)
+            </th>
+            @*
+            <th>
+            @Html.DisplayNameFor(model => model.CounterModel[0].Text)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.CounterModel[0].Value)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.CounterModel[0].BackgroundColor)
+            </th>
+            <th>
+            @Html.DisplayNameFor(model => model.CounterModel[0].FontColor)
+            </th>
+            *@
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.CounterModel)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                @*
+            <td>
+            @Html.DisplayFor(modelItem => item.Text)
+            </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.Value)
+            </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.BackgroundColor)
+            </td>
+            <td>
+            @Html.DisplayFor(modelItem => item.FontColor)
+            </td>
+            *@
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">edit</span></a>
+                    <a asp-page="./Details" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Details">info</span></a>
+                    <a asp-area="Api" asp-controller="Component" asp-action="Counter" asp-route-uid="@item.OwnerId" asp-route-id="@item.Id" target="_blank"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Open widget">visibility</span></a>
+                    <a asp-page="./Delete" asp-route-id="@item.Id"><span class="material-icons border border-1 border-danger text-danger rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">delete</span></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
