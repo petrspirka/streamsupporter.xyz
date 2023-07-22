@@ -3,11 +3,8 @@
 
 // Write your JavaScript code.
 function GetTheme() {
-    let themeRegex = document.cookie.match(/(?<=theme=)[^;]*/gm);
-    if (themeRegex === null) {
-        return "light";
-    }
-    let theme = themeRegex[0];
+    console.log("Cookie: " + document.cookie);
+    let theme = GetCookie("theme");
     console.log("Theme: " + theme);
     if (theme != "dark") {
         theme = "light"
@@ -16,7 +13,8 @@ function GetTheme() {
 }
 
 function SetTheme(theme) {
-    document.cookie = "theme=" + theme;
+    console.log("Cookie: " + document.cookie);
+    SetCookie("theme", theme);
     console.log("Setting theme to " + theme);
     if (typeof jscolor !== "undefined") {
         var themedColor = theme == "dark" ? "#333333FF" : "#FFFFFFFF";
@@ -29,6 +27,20 @@ function SetTheme(theme) {
 }
 
 function ReloadTheme() {
+    console.log("Cookie: " + document.cookie);
     console.log("Reloading theme, which is set to: " + GetTheme());
     document.documentElement.dataset.bsTheme = GetTheme();
+}
+
+function SetCookie(name, value) {
+    document.cookie = name + '=' + value + '; Path=/;';
+}
+
+function GetCookie(name) {
+    const regex = new RegExp("(?<=" + name + "=)[^;]*", 'gm');
+    const match = document.cookie.match(regex);
+    if (match === null) {
+        return "light";
+    }
+    return match[0];
 }

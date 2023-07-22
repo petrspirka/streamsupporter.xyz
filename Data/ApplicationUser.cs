@@ -14,14 +14,21 @@ public class ApplicationUser : IdentityUser
     public ICollection<NotificationModel> Notifications { get; set; } = default!;
     public AlertModel Alert { get; set; } = default!;
 
+    [PersonalData]
     public string? TwitchId { get; set; }
+    [PersonalData]
     public string? TwitchUsername { get; set; }
+    [PersonalData]
     public string? GoogleBrandId { get; set; }
+    [PersonalData]
     public string? GoogleBrandName { get; set; }
 
     public bool IsGoogleActive { get; set; } = default!;
     public bool IsTwitchActive { get; set; } = default!;
+    [PersonalData]
     public string? TwitchRefreshToken { get; set; }
+    [PersonalData]
     public string? TwitchAccessToken { get; set; }
+    [PersonalData]
     public DateTime? TwitchAccessTokenExpiry { get; set; }
 }

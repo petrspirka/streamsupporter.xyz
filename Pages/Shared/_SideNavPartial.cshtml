@@ -18,10 +18,10 @@
             <ul class="list-unstyled ps-0">
                 <li class="mb-1">
                     <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                            data-bs-toggle="collapse" data-bs-target="#home-collapse" aria-expanded="false">
+                            data-bs-toggle="collapse" data-bs-target="#home-collapse" data-area-button="Home" aria-expanded="false">
                         Home
                     </button>
-                    <div class="collapse" id="home-collapse">
+                    <div class="collapse" id="home-collapse" data-area="Home">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                             <li>
                                 <a asp-area="" asp-page="/Index"
@@ -36,10 +36,10 @@
                 </li>
                 <li class="mb-1">
                     <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                            data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" aria-expanded="false">
+                            data-bs-toggle="collapse" data-bs-target="#dashboard-collapse" data-area-button="Dashboard" aria-expanded="false">
                         Dashboard
                     </button>
-                    <div class="collapse" id="dashboard-collapse">
+                    <div class="collapse" id="dashboard-collapse" data-area="Dashboard">
                         <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                             <li>
                                 <a asp-area="Dashboard" asp-page="/Index"
@@ -65,6 +65,10 @@
                                 <a asp-area="Dashboard" asp-page="/Timer/Index"
                                    class="link-body-emphasis d-inline-flex text-decoration-none rounded">Timers</a>
                             </li>
+                            <li>
+                                <a asp-area="Dashboard" asp-page="Options"
+                                    class="link-body-emphasis d-inline-flex text-decoration-none rounded">Options</a>
+                            </li>
                         </ul>
                     </div>
                 </li>
@@ -73,10 +77,10 @@
                 {
                     <li class="mb-1">
                         <button class="btn btn-toggle d-inline-flex align-items-center rounded border-0 collapsed"
-                        data-bs-toggle="collapse" data-bs-target="#account-collapse" aria-expanded="false">
+                        data-bs-toggle="collapse" data-bs-target="#account-collapse" data-area-button="Account" aria-expanded="false">
                             Account
                         </button>
-                        <div class="collapse" id="account-collapse">
+                        <div class="collapse" id="account-collapse" data-area="Account">
                             <ul class="btn-toggle-nav list-unstyled fw-normal pb-1 small">
                                 <li>
                                     <a class="link-body-emphasis d-inline-flex text-decoration-none rounded"
@@ -130,6 +134,17 @@
                 <hr />
                 <partial name="_ThemeSelectorPartial" />
             </div>
+            <script>
+                const sectionSelector = "[data-area='@ViewData["Area"]']";
+                const buttonSelector = "[data-area-button='@ViewData["Area"]']";
+                const section = document.querySelector(sectionSelector);
+                const button = document.querySelector(buttonSelector);
+                if(section && button){
+                    section.classList.add("show");
+                    button.classList.remove("collapsed");
+                    button.setAttribute("aria-expanded", "true");
+                }
+            </script>
         </div>
     </nav>
 </div>
