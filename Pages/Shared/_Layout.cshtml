@@ -5,31 +5,49 @@
     <partial name="_CommonHeadPartial" />
 </head>
 <body>
-    <div class="flex-column d-flex vh-100 max-vh-100">
-        @*
-        <header>
-            <partial name="_CommonHeaderPartial" />
-        </header>
-        *@
-        <div class="flex-md-row d-flex flex-grow-1 h-100">
+    <div class="row mx-0 h-100">
+        <div class="col-auto p-0 h-100">
             <partial name="_SideNavPartial" />
-            <div class="container-fluid px-0">
-                <main class="overflow-auto h-100 p-2">
+        </div>
+        <div class="col h-100">
+            <div class="px-0">
+                <div class="container-fluid overflow-auto h-100 p-2">
+                    <header>
+                        <button class="btn navbar-toggler d-sm-none p-2 border-1 border rounded mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#sidenav" aria-expanded="true">
+                            <span class="material-icons align-middle">menu</span>
+                        </button>
+                    </header>
                     <partial name="_CookieConsentPartial" class="modal-dialog-centered" />
-                    @RenderBody()
-                </main>
+                    <main class="mx-2 mx-md-4">
+                        @RenderBody()
+                    </main>
+                </div>
             </div>
         </div>
-        @*
-        <footer class="border-top footer text-muted navbar w-100">
-            <partial name="_CommonFooterPartial" />
-        </footer>
-        *@
+        <script>
+            function updateSideNav(matches){
+                const collapse = new bootstrap.Collapse($("#sidenav"), {
+                    toggle: false
+                });
+                console.log("Hiding: " + matches);
+                if (matches) {
+                    collapse.show();
+                }
+                else {
+                    collapse.hide();
+                }
+            }
+
+            //Bootstrap's sm breakpoint
+            const minQuery = window.matchMedia("(min-width: 576px)");
+            minQuery.addEventListener("change", (ev) => {
+                updateSideNav(ev.matches);
+            });
+
+            updateSideNav(minQuery.matches);
+            
+        </script>
+        @await RenderSectionAsync("Scripts", required: false)
     </div>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-
-    @await RenderSectionAsync("Scripts", required: false)
-
 </body>
 </html>

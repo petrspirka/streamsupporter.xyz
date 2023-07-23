@@ -1,5 +1,6 @@
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +14,7 @@ using NewStreamSupporter.Services;
 using NewStreamSupporter.Services.Twitch;
 using NewStreamSupporter.Services.YouTube;
 using OpenExchangeRates;
+using System.Net;
 using TwitchLib.Api;
 using TwitchLib.Api.Core;
 using TwitchLib.Api.Core.Interfaces;
@@ -199,6 +201,12 @@ namespace NewStreamSupporter
             //app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseCookiePolicy();
+
+            app.UseForwardedHeaders(new()
+            {
+                ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto,
+                KnownNetworks = { new(IPAddress.Parse("127.0.0.1"), 8) }
+            });
 
             app.UseRouting();
 

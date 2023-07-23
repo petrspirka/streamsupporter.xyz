@@ -1,42 +1,37 @@
 ﻿@page
 @model NewStreamSupporter.Areas.Dashboard.Pages.Rewards.EditModel
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<h1>Edit reward</h1>
 
-<h1>Edit</h1>
-
-<h4>RewardModel</h4>
 <hr />
-<div class="row">
-    <div class="col-md-4">
+<div class="row mx-0">
+    <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <form method="post">
             <input type="hidden" asp-for="RewardModel.Id" />
             <input type="hidden" asp-for="RewardModel.OwnerId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="RewardModel.Id" />
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="RewardModel.Name" class="control-label"></label>
                 <input asp-for="RewardModel.Name" class="form-control" />
                 <span asp-validation-for="RewardModel.Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="RewardModel.Text" class="control-label"></label>
                 <input asp-for="RewardModel.Text" class="form-control" />
                 <span asp-validation-for="RewardModel.Text" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="RewardModel.Cost" class="control-label"></label>
                 <input asp-for="RewardModel.Cost" class="form-control" />
                 <span asp-validation-for="RewardModel.Cost" class="text-danger"></span>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check pb-2">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="RewardModel.HasTextField" /> @Html.DisplayNameFor(model => model.RewardModel.HasTextField)
                 </label>
             </div>
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="RewardModel.TriggeredId" class="control-label"></label>
                 <select class="form-control" name="chosenElement">
                     <option value="">Select an option</option>
@@ -54,27 +49,24 @@
                 </select>
                 <span asp-validation-for="RewardModel.TriggeredId" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="RewardModel.BackgroundColor" class="control-label"></label>
                 <br />
                 <input class="form-control js-color" asp-for="RewardModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="RewardModel.BackgroundColor" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group pb-2">
                 <label asp-for="RewardModel.FontColor" class="control-label"></label>
                 <br />
                 <input class="form-control js-color" asp-for="RewardModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="RewardModel.FontColor" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary mb-1" />
+                <a class="btn btn-danger mb-1" asp-page="./Index">Cancel</a>
             </div>
         </form>
     </div>
-</div>
-
-<div>
-    <a asp-page="./Index">Back to List</a>
 </div>
 
 @section Scripts {
