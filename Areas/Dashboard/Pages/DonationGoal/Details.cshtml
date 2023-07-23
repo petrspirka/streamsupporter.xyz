@@ -1,61 +1,74 @@
 ﻿@page
 @model NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal.DetailsModel
 
-@{
-    ViewData["Title"] = "Details";
-}
+<h1>Donation goal details</h1>
 
-<h1>Details</h1>
+<hr />
 
-<div>
-    <h4>DonationGoalModel</h4>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DonationGoalModel.Name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DonationGoalModel.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DonationGoalModel.Text)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DonationGoalModel.Text)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DonationGoalModel.TargetAmount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DonationGoalModel.TargetAmount)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DonationGoalModel.CurrentAmount)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DonationGoalModel.CurrentAmount)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DonationGoalModel.BackgroundColor)
-        </dt>
-        <dd class="col-sm-10">
-            <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.DonationGoalModel.BackgroundColor'}" disabled />
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DonationGoalModel.FontColor)
-        </dt>
-        <dd class="col-sm-10">
-            <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.DonationGoalModel.FontColor'}" disabled />
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.DonationGoalModel.ExpiryDate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.DonationGoalModel.ExpiryDate)
-        </dd>
-    </dl>
-</div>
-<div>
-    <a asp-page="./Edit" asp-route-id="@Model.DonationGoalModel?.Id">Edit</a> |
-    <a asp-page="./Index">Back to List</a>
+<div class="row mx-0">
+    <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
+        <dl class="row mx-0">
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DonationGoalModel.Name)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.DonationGoalModel.Name)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DonationGoalModel.Text)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.DonationGoalModel.Text)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DonationGoalModel.TargetAmount)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.DonationGoalModel.TargetAmount)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DonationGoalModel.CurrentAmount)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.DonationGoalModel.CurrentAmount)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DonationGoalModel.BackgroundColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.DonationGoalModel.BackgroundColor'}" disabled />
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DonationGoalModel.FontColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.DonationGoalModel.FontColor'}" disabled />
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.DonationGoalModel.ExpiryDate)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.DonationGoalModel.ExpiryDate)
+                </dd>
+            </div>
+        </dl>
+        <div>
+            <a class="btn btn-primary mb-1" asp-page="./Edit" asp-route-id="@Model.DonationGoalModel?.Id">Edit</a>
+            <a class="btn btn-danger mb-1" asp-page="./Delete" asp-route-id="@Model.DonationGoalModel?.Id">Delete</a>
+            <a class="btn btn-primary mb-1" asp-page="./Index">Back to list</a>
+        </div>
+    </div>
 </div>
