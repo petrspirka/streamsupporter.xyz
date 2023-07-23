@@ -225,7 +225,7 @@ namespace NewStreamSupporter
             IEmailSender? mailService = app.Services.GetService<IEmailSender>();
             if (mailService != null && mailService is IHostedService hostedMailService)
             {
-                hostedMailService.StartAsync(new CancellationToken());
+                hostedMailService.StartAsync(CancellationToken.None);
             }
 
             //Inicializace hostovaných služeb
