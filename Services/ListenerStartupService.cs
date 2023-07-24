@@ -104,9 +104,17 @@ namespace NewStreamSupporter.Services
             }
             await context.SaveChangesAsync();
 
-            var subCounters = await context.CounterModel.Where(c => c.OwnerId == channelUser.Id)
-                    .Where(c => c.TriggeredByDonations)
-                    .ToListAsync();
+            var subCounters = await context.CounterModel
+                .Where(c => c.OwnerId == channelUser.Id)
+                .Where(c => c.TriggeredByDonations)
+                .ToListAsync();
+
+            foreach(var subCounter in subCounters)
+            {
+                await _hubService.Trigger("counter", subCounter.Id);
+                subCounter.Value += 1;
+            }
+            await context.SaveChangesAsync();
 
             //Pokud uživatel chce dostávat upozornění ohledně příspěvků, spustíme upozornění s informacemi o uživatelim který přispěl
             if (channelUser.Alert != null && channelUser.Alert.ShouldTriggerDonations)

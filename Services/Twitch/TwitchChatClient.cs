@@ -25,8 +25,18 @@ namespace NewStreamSupporter.Services.Twitch
         {
             _client = twitchClient;
             _client.OnMessageReceived += OnMessageReceived;
+            _client.OnConnected += OnConnected;
 
             _queuedChannels = new List<string>();
+        }
+
+        //Metoda sloužící pro připojení uživatelů při spuštění
+        private void OnConnected(object? sender, OnConnectedArgs e)
+        {
+            foreach (string channel in _queuedChannels)
+            {
+                _client.JoinChannel(channel);
+            }
         }
 
         //Metoda sloužící pro převedení vnitřních argumentů knihovny na argumenty používané aplikací
@@ -72,11 +82,7 @@ namespace NewStreamSupporter.Services.Twitch
         /// <inheritdoc/>
         public Task StartAsync(CancellationToken cancellationToken)
         {
-            bool result = _client.Connect();
-            foreach (string channel in _queuedChannels)
-            {
-                _client.JoinChannel(channel);
-            }
+            _client.Connect();
             return Task.CompletedTask;
         }
 
