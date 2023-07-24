@@ -181,6 +181,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
                         user.TwitchAccessTokenExpiry = DateTime.Parse(info.AuthenticationTokens.Where(token => token.Name == "expires_at").First().Value);
                         break;
                     case "Google":
+                        _logger.LogDebug("Length: " + info.AuthenticationTokens.Count());
                         string googleAccessToken = info.AuthenticationTokens.Where(token => token.Name == "access_token").First().Value;
                         string googleRefreshToken = info.AuthenticationTokens.Where(token => token.Name == "refresh_token").First().Value;
                         DateTime GoogleAccessTokenExpiry = DateTime.Parse(info.AuthenticationTokens.Where(token => token.Name == "expires_at").First().Value);
@@ -226,8 +227,16 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
                             values: new { area = "Identity", userId = userId, code = code },
                             protocol: Request.Scheme);
 
-                        await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                            $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        try
+                        {
+                            await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
+                                $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                        }
+                        catch(Exception ex)
+                        {
+                            _logger.LogError(ex.Message);
+                            await _userManager.DeleteAsync(user);
+                        }
 
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
                         if (_userManager.Options.SignIn.RequireConfirmedAccount)
