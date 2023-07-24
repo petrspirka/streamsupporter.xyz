@@ -9,5 +9,8 @@ namespace NewStreamSupporter.Data
         [Display(Name = "Value")]
         [Range(-999999999.0, 999999999.0)]
         public long Value { get; set; } = default!;
+
+        [Display(Name = "Should donations increase value?")]
+        public bool TriggeredByDonations { get; set; } = false;
     }
 }

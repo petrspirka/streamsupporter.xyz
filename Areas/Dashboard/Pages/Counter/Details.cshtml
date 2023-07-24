@@ -48,6 +48,14 @@
                     <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.CounterModel.FontColor'}" disabled />
                 </dd>
             </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4">
+                    @Html.DisplayNameFor(model => model.CounterModel.TriggeredByDonations)
+                </dt>
+                <dd class="col-sm-8 text-break">
+                    @Html.DisplayFor(model => model.CounterModel.TriggeredByDonations)
+                </dd>
+            </div>
         </dl>
 
         <div>

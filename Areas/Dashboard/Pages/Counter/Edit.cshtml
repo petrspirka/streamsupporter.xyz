@@ -37,6 +37,11 @@
                 <input class="form-control js-color" asp-for="CounterModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="CounterModel.FontColor" class="text-danger"></span>
             </div>
+            <div class="form-group form-check pb-2">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="CounterModel.TriggeredByDonations" /> @Html.DisplayNameFor(model => model.CounterModel.TriggeredByDonations)
+                </label>
+            </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary mb-1" />
                 <a class="btn btn-danger mb-1" asp-page="./Index">Cancel</a>
