@@ -4,7 +4,9 @@ using Google.Apis.YouTube.v3.Data;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Models;
-using OpenExchangeRates;
+using freecurrencyapi;
+using Microsoft.CodeAnalysis.CSharp;
+using Newtonsoft.Json;
 
 namespace NewStreamSupporter.Services.YouTube
 {
@@ -55,7 +57,7 @@ namespace NewStreamSupporter.Services.YouTube
         /// <inheritdoc/>
         public void AddUserListener(string userId)
         {
-            if (!_inactiveUsers.Contains(userId))
+            if (!_inactiveUsers.Contains(userId) && !_activeUsers.ContainsKey(userId))
             {
                 _inactiveUsers.Add(userId);
             }
@@ -131,7 +133,7 @@ namespace NewStreamSupporter.Services.YouTube
         private async void OnChatTimerTick(object? state)
         {
             using AsyncServiceScope scope = _serviceProvider.CreateAsyncScope();
-            OpenExchangeRatesClient exchangeRatesClient = scope.ServiceProvider.GetRequiredService<OpenExchangeRatesClient>();
+            Freecurrencyapi freeCurrencyApi = scope.ServiceProvider.GetRequiredService<Freecurrencyapi>();
 
             Dictionary<string, Tuple<string, string?>> userChatPairs = _activeUsers.ToDictionary(i => i.Key, i => i.Value);
             foreach (KeyValuePair<string, Tuple<string, string?>> userChatPair in userChatPairs)
@@ -156,7 +158,7 @@ namespace NewStreamSupporter.Services.YouTube
                 foreach (LiveChatMessage? message in messages.Items)
                 {
                     //Pokud bude libovolná zpráva ukončující, nastaví se streamEnded na true (logický OR)
-                    streamEnded |= await ProcessMessage(userChatPair.Key, message, exchangeRatesClient);
+                    streamEnded |= await ProcessMessage(userChatPair.Key, message, freeCurrencyApi);
                 }
                 _activeUsers[userChatPair.Key] = new(userChatPair.Value.Item1, messages.NextPageToken);
 
@@ -177,31 +179,36 @@ namespace NewStreamSupporter.Services.YouTube
         }
 
         //Pomocná metoda pro zpracování zprávy
-        private async Task<bool> ProcessMessage(string userId, LiveChatMessage message, OpenExchangeRatesClient exchangeRatesClient)
+        private async Task<bool> ProcessMessage(string userId, LiveChatMessage message, Freecurrencyapi freeCurrencyApi)
         {
             LiveChatMessageSnippet snippet = message.Snippet;
 
             PlatformUser author = new(snippet.AuthorChannelId, message.AuthorDetails.DisplayName, Platform.YouTube);
-            ConvertResponse? dollarAmount = null;
             switch (snippet.Type)
             {
                 case "chatEndedEvent":
                     return true;
                 case "superChatEvent":
-                    dollarAmount = await exchangeRatesClient.ConvertAsync(
-                        snippet.SuperChatDetails.Currency, "USD",
-                        (decimal)(snippet.SuperChatDetails.AmountMicros ?? throw new ArgumentException("AmountMicros was null")))
-                        ?? throw new Exception("The exchange rates client failed to convert currency correctly");
+                    {
+                        var conversionRateRaw = freeCurrencyApi.Latest(snippet.SuperChatDetails.Currency, "USD");
+                        var amountString = JsonConvert.DeserializeXmlNode(conversionRateRaw)!.FirstChild!.InnerText;
+                        var conversionRate = float.Parse(amountString);
+                        float amount = (float)(snippet.SuperChatDetails.AmountMicros! / 1000000) * conversionRate;
+                        float roundedAmount = (float)Math.Round(amount, 2);
 
-                    OnStreamDonation?.Invoke(this, new StreamDonationEventArgs(userId, author, (float)dollarAmount.Amount, snippet.SuperChatDetails.UserComment));
+                        OnStreamDonation?.Invoke(this, new StreamDonationEventArgs(userId, author, roundedAmount, snippet.SuperChatDetails.UserComment));
+                    }
                     break;
                 case "superStickerEvent":
-                    dollarAmount = await exchangeRatesClient.ConvertAsync(
-                        snippet.SuperStickerDetails.Currency, "USD",
-                        (decimal)(snippet.SuperStickerDetails.AmountMicros ?? throw new ArgumentException("AmountMicros was null")))
-                        ?? throw new Exception("The exchange rates client failed to convert currency correctly");
+                    {
+                        var conversionRateRaw = freeCurrencyApi.Latest(snippet.SuperChatDetails.Currency, "USD");
+                        var amountString = JsonConvert.DeserializeXmlNode(conversionRateRaw)!.FirstChild!.InnerText;
+                        var conversionRate = float.Parse(amountString);
+                        float amount = (float)(snippet.SuperChatDetails.AmountMicros! / 1000000) * conversionRate;
+                        float roundedAmount = (float)Math.Round(amount, 2);
 
-                    OnStreamDonation?.Invoke(this, new StreamDonationEventArgs(userId, author, (float)dollarAmount.Amount));
+                        OnStreamDonation?.Invoke(this, new StreamDonationEventArgs(userId, author, roundedAmount));
+                    }
                     break;
                 case "textMessageEvent":
                     OnStreamChatMessage?.Invoke(this, new StreamChatMessageEventArgs(userId, author, snippet.TextMessageDetails.MessageText));

@@ -1,3 +1,4 @@
+using freecurrencyapi;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -13,7 +14,6 @@ using NewStreamSupporter.Models;
 using NewStreamSupporter.Services;
 using NewStreamSupporter.Services.Twitch;
 using NewStreamSupporter.Services.YouTube;
-using OpenExchangeRates;
 using System.Net;
 using TwitchLib.Api;
 using TwitchLib.Api.Core;
@@ -143,7 +143,7 @@ namespace NewStreamSupporter
                 .AddSingleton<TwitchListenerService>()
                 .AddSingleton<ListenerStartupService>()
                 .AddTransient<RewardManagerService>()
-                .AddTransient<OpenExchangeRatesClient>(impl => new OpenExchangeRatesClient(config["OpenExchangeRatesAppId"]!))
+                .AddTransient<Freecurrencyapi>(impl => new Freecurrencyapi(config["FreeCurrencyApiKey"]!))
                 .AddSingleton<IYouTubePollingService, YouTubePollingService>()
                 .AddTransient<YouTubeService>()
                 .AddSingleton<ICurrencyService, CurrencyService>()

@@ -1,4 +1,5 @@
 ﻿using NewStreamSupporter.Contracts;
+using TwitchLib.Api.Core.Exceptions;
 using TwitchLib.Api.Helix;
 using TwitchLib.Api.Helix.Models.EventSub;
 using TwitchLib.Api.Interfaces;
@@ -17,18 +18,20 @@ namespace NewStreamSupporter.Services.Twitch
         private IList<EventSubSubscription> _userSubscriptions;
         private bool _initialized = false;
         private readonly EventSub _eventSubApi;
+        private ILogger _logger;
 
         /// <summary>
         /// Vytvoří novou instanci třídy TwitchEventSubManager
         /// </summary>
         /// <param name="twitchAPI">Klient pro komunikaci s Twitch API</param>
         /// <param name="twitchOptions">Nastavení modulu Twitch</param>
-        public TwitchEventSubManager(ITwitchAPI twitchAPI, ITwitchOptions twitchOptions)
+        public TwitchEventSubManager(ITwitchAPI twitchAPI, ITwitchOptions twitchOptions, ILogger<TwitchEventSubManager> logger)
         {
             _userSubscriptions = new List<EventSubSubscription>();
             _webhookCallback = twitchOptions.WebhookCallbackUri;
             _webhookSecret = twitchOptions.WebhookSecret;
             _eventSubApi = twitchAPI.Helix.EventSub;
+            _logger = logger;
         }
 
 
@@ -52,8 +55,16 @@ namespace NewStreamSupporter.Services.Twitch
                 return false;
             }
 
+            bool succeeded = false;
+
             //Pokusíme se odstanit zadaný odběr
-            bool succeeded = await _eventSubApi.DeleteEventSubSubscriptionAsync(subscriptionId);
+            try
+            {
+                succeeded = await _eventSubApi.DeleteEventSubSubscriptionAsync(subscriptionId);
+            } catch(BadResourceException ex)
+            {
+                _logger.LogCritical("Something has gone seriously wrong! {message}", ex.Message);
+            }
             if (!succeeded)
             {
                 return false;

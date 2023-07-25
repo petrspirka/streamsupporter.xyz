@@ -36,7 +36,7 @@ namespace NewStreamSupporter.Services
         public async Task<bool> RedeemReward(string userId, string rewardId, string? message = null)
         {
             RewardModel reward = await _context.Rewards.FindAsync(rewardId) ?? throw new ArgumentException("The specified reward does not exist");
-            ApplicationUser? user = await _context.Users.FindAsync(userId);
+            ApplicationUser user = (await _context.Users.FindAsync(userId))!;
             string rewardOwnerId = reward.OwnerId;
             ulong userCurrency = await _currencyService.GetUserCurrencyAmount(userId, rewardOwnerId);
 
@@ -61,15 +61,20 @@ namespace NewStreamSupporter.Services
                 RewardId = reward.Id,
                 OwnerId = reward.OwnerId,
                 CostAtPurchase = (ulong)cost,
-                Text = message
+                Text = $"{user.UserName} purchased {reward.Name}."
             };
+
+            if(message != null)
+            {
+                purchase.Text += $"\nMessage: {message}";
+            }
 
             //Pokud je odměna sebe-akceptující, pokusíme se ji akceptovat.
             if (reward.AutoAccept)
             {
                 purchase.Confirmed = true;
                 purchase.Finished = true;
-                if (reward.TriggeredId != null && reward.TriggeredType != null && valid)
+                if (reward.TriggeredId != null && reward.TriggeredType != null)
                 {
                     await TriggerReward(reward.TriggeredType, reward.TriggeredId, message);
                 }
