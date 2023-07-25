@@ -5,8 +5,8 @@
 
 <style>
     .main-container {
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
-        font-size: 14px;
+        font-family: sans-serif;
+        /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif; */
         border-radius: 15px;
         background-color: @Model.BackgroundColor;
         color: @Model.FontColor;
@@ -14,20 +14,28 @@
 
     .center-text {
         text-align: center;
+        letter-spacing: 2px;
+        font-weight: bold;
+        padding: 4px
     }
 </style>
 <script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
-<link href="~/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <div class="d-flex flex-column calign-content-center main-container">
     <div class="center-text">@Html.Encode(Model.Text)</div>
     <div class="center-text" id="counter-value">@Model.Value</div>
 </div>
 <script>
+    const animationTime = 1;
+
     const counter = document.getElementById("counter-value");
     
     function trigger(){
         const original = Number(counter.innerHTML);
         counter.innerHTML = original + 1;
+    }
+
+    function slideNumber(){
+
     }
 </script>
 <script>

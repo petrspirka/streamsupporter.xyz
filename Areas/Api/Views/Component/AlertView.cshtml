@@ -9,12 +9,26 @@
 <head>
     <style>
         .main-container {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+            font-family: sans-serif;
             background-color: @Model.BackgroundColor;
+            border-radius: 15px;
+            padding: 4px;
+            opacity: 0;
+        }
+
+        .text-shadow {
+            text-shadow: -5px -5px 8px #000000, 5px -5px 8px #000000, -5px 5px 8px #000000, 5px 5px 8px #000000;
+        }
+
+        .text-shadow-alt {
+            text-shadow: 1px 1px 2px pink;
         }
 
         .alert-text {
             text-align: center;
+            color: @Model.FontColor;
+            letter-spacing: 2px;
+            font-weight: bold;
         }
 
         .hidden {
@@ -104,7 +118,7 @@
 <body>
     <div class="main-container">
         <audio class="audio-source" src="~/assets/service-bell-ring-14610.mp3"></audio>
-        <p class="alert-text"></p>
+        <p class="alert-text text-shadow"></p>
     </div>
     <script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
     <script>

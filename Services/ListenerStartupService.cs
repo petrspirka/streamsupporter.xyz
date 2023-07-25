@@ -122,7 +122,7 @@ namespace NewStreamSupporter.Services
                 await _hubService.Trigger("alert", channelUser.Alert.Id, $"{e.User.Name} donated {e.Amount:c2}");
             }
 
-            await notificationService.AddNotification(channelUser.Id, $"{e.User.Name} donated {e.Amount:n2}", "#008800FF");
+            await notificationService.AddNotification(channelUser.Id, $"{e.User.Name} donated ${e.Amount:n2}", "#008800FF");
         }
 
         /// <summary>
