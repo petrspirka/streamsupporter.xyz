@@ -26,8 +26,10 @@
 </div>
 *@
 
-<div>
-    @RenderBody()
+<div class="row mx-0">
+    <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
+        @RenderBody()
+    </div>
 </div>
 @section Scripts {
     @RenderSection("Scripts", required: false)
