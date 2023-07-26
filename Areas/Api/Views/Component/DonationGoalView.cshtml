@@ -281,8 +281,8 @@
         import("/js/component.js").then(res => {
             const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "donationGoal");
             signalClient.setTrigger((arg) => {
-                const name = arg.name;
-                const amount = arg.amount;
+                const name = arg.Name;
+                const amount = arg.Amount;
                 trigger(name, amount)
             });
             signalClient.start();

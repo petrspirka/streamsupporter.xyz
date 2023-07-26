@@ -125,6 +125,7 @@
         import("/js/component.js").then(res => {
             const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "alert");
             signalClient.setTrigger((arg) => {
+                console.log("Triggering alert with message " + arg);
                 trigger(arg);
             });
             signalClient.start();

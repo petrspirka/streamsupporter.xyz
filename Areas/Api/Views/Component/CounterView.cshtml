@@ -21,7 +21,10 @@
 </style>
 <script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
 <div class="d-flex flex-column calign-content-center main-container">
-    <div class="center-text">@Html.Encode(Model.Text)</div>
+    <div class="center-text"><span>@Html.Encode(Model.Text)</span></div>
+    <div class="counter-value-container">
+        <p class="offscreen-text"></p>
+    </div>
     <div class="center-text" id="counter-value">@Model.Value</div>
 </div>
 <script>
@@ -34,15 +37,13 @@
         counter.innerHTML = original + 1;
     }
 
-    function slideNumber(){
-
-    }
 </script>
 <script>
     import("/js/component.js").then(res => {
         const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "counter");
         signalClient.setTrigger((arg) => {
-            trigger()
+            console.log("Triggering counter");
+            trigger(arg);
         });
         signalClient.start();
     });

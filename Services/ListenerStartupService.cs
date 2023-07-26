@@ -2,6 +2,7 @@
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Models;
+using System.Dynamic;
 
 namespace NewStreamSupporter.Services
 {
@@ -99,7 +100,10 @@ namespace NewStreamSupporter.Services
             List<DonationGoalModel> goals = await context.DonationGoalModel.Where(d => d.OwnerId == channelUser.Id).ToListAsync();
             foreach (DonationGoalModel goal in goals)
             {
-                await _hubService.Trigger("donationGoal", goal.Id, $"{e.Amount:n2}:{e.User.Name}");
+                dynamic obj = new ExpandoObject();
+                obj.Name = e.User.Name;
+                obj.Amount = float.Round(e.Amount, 2);
+                await _hubService.Trigger("donationGoal", goal.Id, obj);
                 goal.CurrentAmount += decimal.Parse(Math.Round(e.Amount, 2).ToString());
             }
             await context.SaveChangesAsync();

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using Newtonsoft.Json;
 using TwitchLib.Communication.Interfaces;
 
 namespace NewStreamSupporter.Services
@@ -117,12 +118,14 @@ namespace NewStreamSupporter.Services
             using var scope = _serviceProvider.CreateAsyncScope();
             var hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<DispatcherHub>>();
 
+            var serializedArg = JsonConvert.SerializeObject(arg);
+
             try
             {
                 //Odešleme zprávy všem widgetům v seznamu
                 IClientProxy client = hubContext.Clients.Clients(clientIds);
                 _logger.LogInformation("Sending event {type}:{method} to clients", type, method);
-                await client.SendAsync(method, arg);
+                await client.SendAsync(method, serializedArg);
             }
             catch (HubException ex)
             {

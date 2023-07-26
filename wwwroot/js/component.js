@@ -9,15 +9,17 @@ export class SignalComponent {
             .withUrl(`/Api/Dispatcher?oid=${id}&uid=${uid}&type=${type}`);
     }
 
-    start() {
+    async start() {
         this.#connection = this.#connection.build();
 
         this.#connection.on("Reload", this.#reload);
         this.#connection.on("Trigger", (arg) => {
+            console.log("Received Trigger with data: " + arg);
             this.#trigger(JSON.parse(arg));
         });
-
-        this.#connection.start();
+        console.log("Starting connection");
+        await this.#connection.start();
+        console.log("Connected with id: " + this.#connection.connectionId);
     }
 
     setReload(func) {
