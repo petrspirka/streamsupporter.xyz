@@ -4,6 +4,7 @@ using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
 using NewStreamSupporter.Models;
 using TwitchLib.Api.Helix.Models.EventSub;
+using TwitchLib.Api.Interfaces;
 
 namespace NewStreamSupporter.Services
 {
@@ -15,6 +16,7 @@ namespace NewStreamSupporter.Services
         //Reference na služby používané touto třídou
         private readonly ITwitchEventSubManager _eventSubManager;
         private readonly ITwitchChatClient _chatClient;
+        private readonly ITwitchAPI _twitchApi;
         private readonly IServiceProvider _serviceProvider;
 
         /// <inheritdoc/>
@@ -40,10 +42,11 @@ namespace NewStreamSupporter.Services
         /// <param name="chatClient">Služba pro připojení chatovacího klienta</param>
         /// <param name="webhookReceiver">Služba pro získávání notifikací z EventSub</param>
         /// <param name="serviceProvider">Poskytovatel služeb pro získání scoped služeb</param>
-        public TwitchListenerService(ITwitchEventSubManager eventSubManager, ITwitchChatClient chatClient, ITwitchEventSubWebhookReceiver webhookReceiver, IServiceProvider serviceProvider)
+        public TwitchListenerService(ITwitchEventSubManager eventSubManager, ITwitchChatClient chatClient, ITwitchEventSubWebhookReceiver webhookReceiver, ITwitchAPI twitchApi, IServiceProvider serviceProvider)
         {
             _eventSubManager = eventSubManager;
             _chatClient = chatClient;
+            _twitchApi = twitchApi;
             _serviceProvider = serviceProvider;
 
             _activeStreams = new List<string>();
@@ -140,6 +143,32 @@ namespace NewStreamSupporter.Services
                     if (!created)
                     {
                         return false;
+                    }
+
+                    if(detail.Topic == "stream.online")
+                    {
+                        var broadcasterId = detail.Condition["broadcaster_user_id"];
+                        var streamResponse = await _twitchApi.Helix.Streams.GetStreamsAsync(userIds: new()
+                        {
+                            { broadcasterId }
+                        });
+                        if(streamResponse.Streams.Length != 0)
+                        {
+                            _activeStreams.Add(broadcasterId);
+                        }
+                    }
+
+                    if (detail.Topic == "stream.offline")
+                    {
+                        var broadcasterId = detail.Condition["broadcaster_user_id"];
+                        var streamResponse = await _twitchApi.Helix.Streams.GetStreamsAsync(userIds: new()
+                        {
+                            { broadcasterId }
+                        });
+                        if (streamResponse.Streams.Length == 0)
+                        {
+                            _activeStreams.Remove(broadcasterId);
+                        }
                     }
                 }
             }
