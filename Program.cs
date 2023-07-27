@@ -14,6 +14,7 @@ using NewStreamSupporter.Models;
 using NewStreamSupporter.Services;
 using NewStreamSupporter.Services.Twitch;
 using NewStreamSupporter.Services.YouTube;
+using System.Configuration;
 using System.Net;
 using TwitchLib.Api;
 using TwitchLib.Api.Core;
@@ -31,7 +32,6 @@ namespace NewStreamSupporter
         public static void Main(string[] args)
         {
             WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
-
             string connectionString = builder.Configuration.GetConnectionString("ApplicationContextConnection") ?? throw new InvalidOperationException("Connection string 'ApplicationContextConnection' not found.");
 
             builder.Services.AddDbContext<ApplicationContext>(options => options.UseSqlite(connectionString));
@@ -43,12 +43,15 @@ namespace NewStreamSupporter
                 .AddSupportedCultures(CultureHelper.Cultures.Select(culture => culture.IetfLanguageTag).ToArray())
                 .AddSupportedUICultures(CultureHelper.Cultures.Select(culture => culture.IetfLanguageTag).ToArray());
 
-            ConfigurationManager config = builder.Configuration;
+            Microsoft.Extensions.Configuration.ConfigurationManager config = builder.Configuration;
             if (config == null)
             {
                 Console.WriteLine("Could not load the app configuration");
                 return;
             }
+
+            IConfigurationSection fileLogging = config.GetRequiredSection("Logging:File");
+            builder.Logging.AddFile(fileLogging);
 
             //Pøidání systému autentizace
             builder.Services.AddDefaultIdentity<ApplicationUser>(options =>

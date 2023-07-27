@@ -22,6 +22,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.6" />
+    <PackageReference Include="NReco.Logging.File" Version="1.1.6" />
     <PackageReference Include="Profanity.Detector" Version="0.1.8" />
     <PackageReference Include="TwitchLib" Version="3.5.3" />
     <PackageReference Include="TwitchLib.Api" Version="3.10.0-preview-e47ba7f" />
