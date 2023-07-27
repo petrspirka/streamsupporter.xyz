@@ -181,7 +181,10 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
                         user.TwitchAccessTokenExpiry = DateTime.Parse(info.AuthenticationTokens.Where(token => token.Name == "expires_at").First().Value);
                         break;
                     case "Google":
-                        _logger.LogDebug("Length: " + info.AuthenticationTokens.Count());
+                        if(!info.AuthenticationTokens.Any(t => t.Name == "refresh_token") || !info.AuthenticationTokens.Any(t => t.Name == "access_token"))
+                        {
+                            return RedirectToPage("/Account/GoogleError");
+                        }
                         string googleAccessToken = info.AuthenticationTokens.Where(token => token.Name == "access_token").First().Value;
                         string googleRefreshToken = info.AuthenticationTokens.Where(token => token.Name == "refresh_token").First().Value;
                         DateTime GoogleAccessTokenExpiry = DateTime.Parse(info.AuthenticationTokens.Where(token => token.Name == "expires_at").First().Value);
