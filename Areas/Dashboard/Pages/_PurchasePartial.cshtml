@@ -3,16 +3,16 @@
 @{
 }
 
-<div class="alert alert-dismissible bg-secondary fade show justify-content-between flex-row d-flex" role="alert">
+<div class="alert alert-dismissible bg-primary fade show justify-content-between flex-row d-flex" role="alert">
     <div class="flex-fill">
-        <p>@Model.Text</p>
+        <p class="m-0 p-2">@Model.Text</p>
     </div>
     <form method="post">
         <input type="hidden" name="id" value="@Model.Id" />
         <input type="hidden" name="type" value="@nameof(PurchaseModel)" />
-        <div class="d-flex flex-column">
-            <button type="submit" name="isConfirmed" class="btn btn-primary" value="True" data-bs-dismiss="alert">Confirm</button>
-            <button type="submit" name="isConfirmed" class="btn btn-primary" value="False" data-bs-dismiss="alert">Cancel</button>
+        <div class="d-flex flex-column justify-content-between">
+            <button type="submit" name="isConfirmed" class="btn btn-success my-1" value="True" data-bs-dismiss="alert">Confirm</button>
+            <button type="submit" name="isConfirmed" class="btn btn-danger my-1" value="False" data-bs-dismiss="alert">Cancel</button>
         </div>
     </form>
 </div>

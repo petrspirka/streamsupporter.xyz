@@ -6,6 +6,7 @@ using Microsoft.IdentityModel.Tokens;
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Services;
+using System.Web;
 
 namespace NewStreamSupporter.Pages
 {
@@ -65,8 +66,7 @@ namespace NewStreamSupporter.Pages
             }
             try
             {
-                return await OnGetAsync(uid, await _rewardService.RedeemReward(loggedInUser, id, text));
-                //return await OnGetAsync(uid, true);
+                return await OnGetAsync(uid, await _rewardService.RedeemReward(loggedInUser, id, HttpUtility.HtmlEncode(text)));
             }
             catch (Exception)
             {

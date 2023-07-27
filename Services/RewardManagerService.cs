@@ -66,7 +66,7 @@ namespace NewStreamSupporter.Services
 
             if(message != null)
             {
-                purchase.Text += $"\nMessage: {message}";
+                purchase.Text += $"<br>Message: {message}";
             }
 
             //Pokud je odměna sebe-akceptující, pokusíme se ji akceptovat.
