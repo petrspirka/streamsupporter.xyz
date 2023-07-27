@@ -10,6 +10,7 @@ namespace NewStreamSupporter.Services
     public class CurrencyService : ICurrencyService
     {
         private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger _logger;
 
         //Mapa platformy -> kanálu -> diváka -> čas. Slouží k rozhodování, zda by daný uživatel měl dostat body
         private readonly IDictionary<Platform, IDictionary<string, IDictionary<string, DateTime>>> _cooldowns;
@@ -27,12 +28,13 @@ namespace NewStreamSupporter.Services
         /// </summary>
         /// <param name="serviceProvider">Poskytovatel služeb</param>
         /// <param name="rewardOptions">Nastavení modulu odměn</param>
-        public CurrencyService(IServiceProvider serviceProvider, IRewardOptions rewardOptions)
+        public CurrencyService(IServiceProvider serviceProvider, IRewardOptions rewardOptions, ILogger<ICurrencyService> logger)
         {
             _rewardAmount = rewardOptions.RewardAmount;
             _rewardCooldown = rewardOptions.RewardCooldown;
             _rewardAmountPerDollar = rewardOptions.RewardAmountPerDollar;
             _serviceProvider = serviceProvider;
+            _logger = logger;
 
             //Vytvoření základní cooldown mapy a map pro všechny platformy
             _cooldowns = new Dictionary<Platform, IDictionary<string, IDictionary<string, DateTime>>>();
@@ -77,6 +79,7 @@ namespace NewStreamSupporter.Services
                 {
                     if (_cooldowns[e.User.Platform][e.Channel][user] < DateTime.Now)
                     {
+                        _logger.LogInformation("Adding currency to user: {userId} for channel {channelId}", e.User.Id, e.Channel);
                         addCurrencyTask = AddCurrency(e.User.Id, e.Channel, (long)_rewardAmount, e.User.Platform);
                         _cooldowns[e.User.Platform][e.Channel][user] = DateTime.Now.AddMilliseconds(_rewardCooldown);
                     }
@@ -84,6 +87,7 @@ namespace NewStreamSupporter.Services
                 //Pokud uživatel neexistuje, přidáme ho do mapy a přičteme mu body
                 else
                 {
+                    _logger.LogInformation("Adding currency to user: {userId} for channel {channelId}", e.User.Id, e.Channel);
                     addCurrencyTask = AddCurrency(e.User.Id, e.Channel, (long)_rewardAmount, e.User.Platform);
                     _cooldowns[e.User.Platform][e.Channel][user] = DateTime.Now.AddMilliseconds(_rewardCooldown);
                 }
