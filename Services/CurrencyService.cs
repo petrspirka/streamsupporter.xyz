@@ -97,7 +97,7 @@ namespace NewStreamSupporter.Services
         /// <inheritdoc/>
         public Task<bool> AddCurrency(string userId, string channel, long amount, Platform platform)
         {
-            _logger.LogInformation("Adding currency to user: {userId} for channel {channelId}", e.User.Id, e.Channel);
+            _logger.LogInformation("Adding currency to user: {userId} for channel {channelId}", userId, channel);
             Task<bool> addCurrencyTask = Task.FromResult(true);
             switch (platform)
             {
