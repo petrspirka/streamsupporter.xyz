@@ -79,7 +79,6 @@ namespace NewStreamSupporter.Services
                 {
                     if (_cooldowns[e.User.Platform][e.Channel][user] < DateTime.Now)
                     {
-                        _logger.LogInformation("Adding currency to user: {userId} for channel {channelId}", e.User.Id, e.Channel);
                         addCurrencyTask = AddCurrency(e.User.Id, e.Channel, (long)_rewardAmount, e.User.Platform);
                         _cooldowns[e.User.Platform][e.Channel][user] = DateTime.Now.AddMilliseconds(_rewardCooldown);
                     }
@@ -87,7 +86,6 @@ namespace NewStreamSupporter.Services
                 //Pokud uživatel neexistuje, přidáme ho do mapy a přičteme mu body
                 else
                 {
-                    _logger.LogInformation("Adding currency to user: {userId} for channel {channelId}", e.User.Id, e.Channel);
                     addCurrencyTask = AddCurrency(e.User.Id, e.Channel, (long)_rewardAmount, e.User.Platform);
                     _cooldowns[e.User.Platform][e.Channel][user] = DateTime.Now.AddMilliseconds(_rewardCooldown);
                 }
@@ -99,6 +97,7 @@ namespace NewStreamSupporter.Services
         /// <inheritdoc/>
         public Task<bool> AddCurrency(string userId, string channel, long amount, Platform platform)
         {
+            _logger.LogInformation("Adding currency to user: {userId} for channel {channelId}", e.User.Id, e.Channel);
             Task<bool> addCurrencyTask = Task.FromResult(true);
             switch (platform)
             {
@@ -247,7 +246,7 @@ namespace NewStreamSupporter.Services
                     exists = false;
                     account = new ClaimedCurrencyModel
                     {
-                        OwnerId = shopOwnerId,
+                        OwnerId = userId,
                         ShopOwnerId = shopOwnerId,
                         Currency = 0
                     };
