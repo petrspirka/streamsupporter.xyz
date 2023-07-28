@@ -66,9 +66,9 @@ namespace NewStreamSupporter.Services
 
             if(message != null)
             {
-                purchase.Text += $"<br>Message: {message}";
+                purchase.Text += $"\nMessage: {message}";
             }
-            else if(reward.TriggeredType == "Alert")
+            else if(reward.TriggeredType == "alert")
             {
                 message = purchase.Text;
             }

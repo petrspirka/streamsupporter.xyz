@@ -35,6 +35,11 @@ body {
     width: 100%;
 }
 
+.widget-datalist div dt, .widget-datalist div dd {
+    display: flex;
+    align-items: center;
+}
+
 .max-vh-100 {
     max-height: 100vh;
 }
