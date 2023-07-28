@@ -21,19 +21,22 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
         private readonly IUserStore<ApplicationUser> _userStore;
         private readonly IYouTubeProviderService _youtubeProviderService;
         private readonly IDataStore _dataStore;
+        private readonly ICurrencyService _currencyService;
 
         public ExternalLoginsModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IUserStore<ApplicationUser> userStore,
             IYouTubeProviderService youtubeProviderService,
-            IDataStore dataStore)
+            IDataStore dataStore,
+            ICurrencyService currencyService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userStore = userStore;
             _youtubeProviderService = youtubeProviderService;
             _dataStore = dataStore;
+            _currencyService = currencyService;
         }
 
         /// <summary>
@@ -164,7 +167,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
                     user.TwitchAccessTokenExpiry = DateTime.Parse(info.AuthenticationTokens.Where(token => token.Name == "expires_at").First().Value);
                     break;
                 case "Google":
-                    //if (!info.AuthenticationTokens.Any(t => t.Name == "refresh_token") || !info.AuthenticationTokens.Any(t => t.Name == "access_token"))
+                    if (!info.AuthenticationTokens.Any(t => t.Name == "refresh_token") || !info.AuthenticationTokens.Any(t => t.Name == "access_token"))
                     {
                         return RedirectToPage("/Account/GoogleError");
                     }
@@ -201,7 +204,10 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
             {
                 StatusMessage = "Failed adding account information to user.";
             }
-
+            else
+            {
+                await _currencyService.Pair(user);
+            }
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 

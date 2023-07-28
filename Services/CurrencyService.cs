@@ -2,6 +2,8 @@
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Models;
+using SQLitePCL;
+
 namespace NewStreamSupporter.Services
 {
     /// <summary>
@@ -295,6 +297,60 @@ namespace NewStreamSupporter.Services
             {
                 return UpdateExistingUser(user.Id, shopOwner.Id, amount);
             }
+        }
+
+        public async Task Pair(ApplicationUser user)
+        {
+            using IServiceScope scope = _serviceProvider.CreateScope();
+            ApplicationContext context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+            var twitchId = user.TwitchId;
+            var googleId = user.GoogleBrandId;
+
+            var existingTwitchCurrencies = await context.UnclaimedCurrencies.Where(c => c.TwitchId == twitchId).ToListAsync();
+            foreach(var currency in existingTwitchCurrencies)
+            {
+                ClaimedCurrencyModel? claimedCurrency = await context.ClaimedCurrencies.Where(c => c.OwnerId == user.Id).FirstOrDefaultAsync();
+                if(claimedCurrency != null)
+                {
+                    claimedCurrency.Currency += currency.Currency;
+                }
+                else
+                {
+                    claimedCurrency = new ClaimedCurrencyModel
+                    {
+                        Currency = currency.Currency,
+                        ShopOwnerId = currency.OwnerId,
+                        OwnerId = user.Id
+                    };
+                    context.ClaimedCurrencies.Add(claimedCurrency);
+                    await context.SaveChangesAsync();
+                }
+                context.UnclaimedCurrencies.Remove(currency);
+            }
+            await context.SaveChangesAsync();
+        
+            var existingGoogleCurrencies = await context.UnclaimedCurrencies.Where(c => c.GoogleId == googleId).ToListAsync();
+            foreach (var currency in existingGoogleCurrencies)
+            {
+                ClaimedCurrencyModel? claimedCurrency = await context.ClaimedCurrencies.Where(c => c.OwnerId == user.Id).FirstOrDefaultAsync();
+                if (claimedCurrency != null)
+                {
+                    claimedCurrency.Currency += currency.Currency;
+                }
+                else
+                {
+                    claimedCurrency = new ClaimedCurrencyModel
+                    {
+                        Currency = currency.Currency,
+                        ShopOwnerId = currency.OwnerId,
+                        OwnerId = user.Id
+                    };
+                    context.ClaimedCurrencies.Add(claimedCurrency);
+                    await context.SaveChangesAsync();
+                }
+                context.UnclaimedCurrencies.Remove(currency);
+            }
+            await context.SaveChangesAsync();
         }
     }
 }

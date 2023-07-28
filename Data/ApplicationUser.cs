@@ -12,7 +12,7 @@ public class ApplicationUser : IdentityUser
     public ICollection<CounterModel> OwnedCounters { get; set; } = default!;
     public ICollection<PurchaseModel> Purchases { get; set; } = default!;
     public ICollection<NotificationModel> Notifications { get; set; } = default!;
-    public AlertModel Alert { get; set; } = default!;
+    public AlertModel Alert { get; set; } = new();
 
     [PersonalData]
     public string? TwitchId { get; set; }

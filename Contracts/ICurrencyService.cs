@@ -63,5 +63,11 @@ namespace NewStreamSupporter.Contracts
         /// <returns>true, jestli byly body změněny, jinak false</returns>
         /// <exception cref="NotImplementedException">Pokud je použita nepodporovaná platforma</exception>
         internal bool UpdateMissingUser(string userId, string shopOwnerId, long amount, Platform platform);
+
+        /// <summary>
+        /// Metoda pro spárování nespárovaných měn s uživatelem
+        /// </summary>
+        /// <param name="user">Uživatel, pro kterého se má služba pokusit spároval volné měny</param>
+        internal Task Pair(ApplicationUser user);
     }
 }

@@ -40,7 +40,7 @@
             animation: marqueeAnimation;
             animation-iteration-count: infinite;
             animation-duration: @($"{animationLength}s");
-            animation-delay: @($"{Model.Delay}s");
+            animation-timing-function: linear;
         }
 
         @@keyframes marqueeAnimation {
@@ -82,40 +82,54 @@
         }
     </style>
     <script>
-
         const isPermanent = "@Model.Permanent".toLowerCase() === "true";
         const defaultString = "@Model.Text";
+        const delay = @Model.Delay;
+        const fadeTime = @Model.FadeTime;
 
         let isActive = false,
-            isRunning = false;
+            isRunning = false,
+            mutex = false;
 
         let mainContainer,
             marqueeText;
+
 
         let showMarqueeTextTimer,
             hideMarqueeTimer,
             stopMarqueeTimer;
 
         function startMarquee(marqueeText) {
-            if (marqueeText == null) {
-                marqueeText = defaultString;
+            if (isRunning) {
+                console.log("Waiting...");
+                setTimeout(async () => await startMarquee(marqueeText), 1000);
             }
-            if (isRunning) return;
-            showMarquee();
-            let calculatedTime = @animationLength * 1000;
             isRunning = true;
-            showMarqueeTextTimer = setTimeout(() => setMarqueeText(marqueeText), @Model.FadeTime * 1000);
-            stopMarqueeTimer = setTimeout(stopMarquee, @Model.FadeTime * 1000 + calculatedTime);
+            return new Promise(async (resolve, reject) => {
+                if (marqueeText == null) {
+                    marqueeText = defaultString;
+                }
+                await showMarquee();
+                let calculatedTime = @animationLength * 1000;
+                await setMarqueeText(marqueeText);
+                await stopMarquee();
+                isRunning = false;
+                resolve();
+            });
         }
 
         function setMarqueeText(text) {
-            const time = @animationLength;
-            void marqueeText.elementWidth;
-            marqueeText.style.animation = "marqueeAnimation " + time + "s";
-            marqueeText.style.animationTimingFunction = "linear";
-            marqueeText.style.animationDelay = "@Model.Delay";
-            marqueeText.innerHTML = text;
-            setTimeout(clearMarqueeText, time * 1000);
+            return new Promise((resolve, reject) => {
+                const time = @animationLength;
+                void marqueeText.elementWidth;
+                marqueeText.style.animation = "marqueeAnimation " + time + "s";
+                marqueeText.style.animationTimingFunction = "linear";
+                marqueeText.innerHTML = text;
+                setTimeout(function() {
+                    clearMarqueeText();
+                    resolve();
+                }, time * 1000);
+            });
         }
 
         function clearMarqueeText() {
@@ -123,25 +137,31 @@
             marqueeText.innerHTML = "";
         }
 
-        function stopMarquee() {
-            clearTimeout(showMarqueeTextTimer);
-            clearTimeout(hideMarqueeTimer);
-            clearTimeout(stopMarqueeTimer);
-
+        async function stopMarquee() {
             clearMarqueeText();
-            hideMarquee();
+            await hideMarquee();
             isRunning = false;
         }
 
         function showMarquee() {
-            if (!isActive) activateMarquee();
-            if (mainContainer.classList.contains("fadeOut")) mainContainer.classList.remove("fadeOut");
-            mainContainer.classList.add("fadeIn");
+            return new Promise((resolve, reject) => {
+                if (!isActive) activateMarquee();
+                if (mainContainer.classList.contains("fadeOut")) mainContainer.classList.remove("fadeOut");
+                mainContainer.classList.add("fadeIn");
+                setTimeout(function () {
+                    resolve();
+                }, fadeTime * 1000);
+            });
         }
 
         function hideMarquee() {
-            if (mainContainer.classList.contains("fadeIn")) mainContainer.classList.remove("fadeIn");
-            mainContainer.classList.add("fadeOut");
+            return new Promise((resolve, reject) => {
+                if (mainContainer.classList.contains("fadeIn")) mainContainer.classList.remove("fadeIn");
+                mainContainer.classList.add("fadeOut");
+                setTimeout(function(){
+                    resolve();
+                }, fadeTime * 1000);
+            });
         }
 
         function activateMarquee() {
@@ -150,17 +170,31 @@
         }
 
         function trigger(msg) {
-            stopMarquee();
+            if(isPermanent){
+                return;
+            }
             startMarquee(msg);
         }
+        
+        function sleep(duration){
+            return new Promise((resolve, reject) => setTimeout(resolve, duration));
+        }
 
-        window.onload = (ev) => {
+        window.onload = async (ev) => {
             mainContainer = document.getElementsByClassName("main-container")[0];
             marqueeText = document.getElementsByClassName("marquee-text")[0];
             if (isPermanent) {
-                showMarquee();
-                marqueeText.innerHTML = "@Model.Text";
-                marqueeText.classList.add("looping");
+                if(delay === 0){
+                    await showMarquee();
+                    marqueeText.classList.add("looping");
+                    marqueeText.innerHTML = defaultString;
+                }
+                else {
+                    while(true){
+                        await startMarquee();
+                        await sleep(delay * 1000);
+                    }
+                }
             }
         };
     </script>

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
+using NewStreamSupporter.Services;
 using System.ComponentModel.DataAnnotations;
 using System.Security.Claims;
 using System.Text;
@@ -29,6 +30,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
         private readonly ILogger<ExternalLoginModel> _logger;
         private readonly IYouTubeProviderService _youtubeProviderService;
         private readonly IDataStore _dataStore;
+        private readonly ICurrencyService _currencyService;
 
         public ExternalLoginModel(
             SignInManager<ApplicationUser> signInManager,
@@ -37,7 +39,8 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
             ILogger<ExternalLoginModel> logger,
             IEmailSender emailSender,
             IYouTubeProviderService youtubeProviderService,
-            IDataStore dataStore)
+            IDataStore dataStore,
+            ICurrencyService currencyService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -47,6 +50,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
             _emailSender = emailSender;
             _youtubeProviderService = youtubeProviderService;
             _dataStore = dataStore;
+            _currencyService = currencyService;
         }
 
         /// <summary>
@@ -228,7 +232,10 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
                             "/Account/ConfirmEmail",
                             pageHandler: null,
                             values: new { area = "Identity", userId = userId, code = code },
-                            protocol: Request.Scheme);
+                        protocol: Request.Scheme);
+
+
+                        await _currencyService.Pair(user);
 
                         try
                         {
@@ -239,6 +246,8 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
                         {
                             _logger.LogError(ex.Message);
                             await _userManager.DeleteAsync(user);
+                            ErrorMessage = "Could not send verification email. Registering has been aborted";
+                            return RedirectToPage("./Login");
                         }
 
                         // If account confirmation is required, we need to show the link if we don't have a real email sender
