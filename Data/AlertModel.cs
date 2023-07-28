@@ -21,7 +21,8 @@ namespace NewStreamSupporter.Data
         public bool ShouldTriggerDonations { get; set; } = false;
 
         [Display(Name = "Duration", Description = "How long the alert stays on screen.")]
-        [Range(1.0, 15.0)]
-        public float AlertDuration { get; set; } = 5.0f;
+        [Column(TypeName = "decimal(9, 2)")]
+        [Range(3.0, 15.0)]
+        public decimal AlertDuration { get; set; } = 5.0M;
     }
 }

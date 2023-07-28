@@ -68,6 +68,10 @@ namespace NewStreamSupporter.Services
             {
                 purchase.Text += $"<br>Message: {message}";
             }
+            else if(reward.TriggeredType == "Alert")
+            {
+                message = purchase.Text;
+            }
 
             //Pokud je odměna sebe-akceptující, pokusíme se ji akceptovat.
             if (reward.AutoAccept)
