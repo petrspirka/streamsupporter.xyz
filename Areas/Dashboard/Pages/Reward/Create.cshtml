@@ -1,4 +1,6 @@
 ﻿@page
+@using NewStreamSupporter.Helpers;
+@using NewStreamSupporter.Data;
 @model NewStreamSupporter.Areas.Dashboard.Pages.Rewards.CreateModel
 
 <h1>Create reward</h1>
@@ -11,32 +13,32 @@
             <input type="hidden" asp-for="RewardModel.Id" />
             <input type="hidden" asp-for="RewardModel.OwnerId" />
             <div class="form-group pb-2">
-                <label asp-for="RewardModel.Name" class="control-label"></label>
+                <label asp-for="RewardModel.Name" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.Name)))"></label>
                 <input asp-for="RewardModel.Name" class="form-control" />
                 <span asp-validation-for="RewardModel.Name" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="RewardModel.Text" class="control-label"></label>
+                <label asp-for="RewardModel.Text" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.Text)))"></label>
                 <input asp-for="RewardModel.Text" class="form-control" />
                 <span asp-validation-for="RewardModel.Text" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="RewardModel.Cost" class="control-label"></label>
-                <input asp-for="RewardModel.Cost" class="form-control" />
+                <label asp-for="RewardModel.Cost" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.Cost)))"></label>
+                <input asp-for="RewardModel.Cost" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<RewardModel>(nameof(RewardModel.Cost)))" max="@(ModelExtensions.GetMaximum<RewardModel>(nameof(RewardModel.Cost)))" />
                 <span asp-validation-for="RewardModel.Cost" class="text-danger"></span>
             </div>
             <div class="form-group form-check pb-2">
-                <label class="form-check-label">
+                <label class="form-check-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.HasTextField)))">
                     <input class="form-check-input" asp-for="RewardModel.HasTextField" /> @Html.DisplayNameFor(model => model.RewardModel.HasTextField)
                 </label>
             </div>
             <div class="form-group form-check pb-2">
-                <label class="form-check-label">
+                <label class="form-check-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.AutoAccept)))">
                     <input class="form-check-input" asp-for="RewardModel.AutoAccept" /> @Html.DisplayNameFor(model => model.RewardModel.AutoAccept)
                 </label>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="RewardModel.TriggeredId" class="control-label"></label>
+                <label asp-for="RewardModel.TriggeredId" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.TriggeredId)))"></label>
                 <select class="form-control" name="chosenElement">
                     <option value="">Select an option</option>
                     @foreach (var option in Model.UserOptions)
@@ -47,13 +49,13 @@
                 <span asp-validation-for="RewardModel.TriggeredId" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="RewardModel.BackgroundColor" class="control-label"></label>
+                <label asp-for="RewardModel.BackgroundColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.BackgroundColor)))"></label>
                 <br />
                 <input class="form-control js-color" asp-for="RewardModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="RewardModel.BackgroundColor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="RewardModel.FontColor" class="control-label"></label>
+                <label asp-for="RewardModel.FontColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.FontColor)))"></label>
                 <br />
                 <input class="form-control js-color" asp-for="RewardModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="RewardModel.FontColor" class="text-danger"></span>

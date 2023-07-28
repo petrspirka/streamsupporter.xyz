@@ -82,6 +82,7 @@
         }
     </style>
     <script>
+
         const isPermanent = "@Model.Permanent".toLowerCase() === "true";
         const defaultString = "@Model.Text";
 
@@ -168,7 +169,7 @@
         import("/js/component.js").then(res => {
             const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "marquee");
             signalClient.setTrigger((arg) => {
-                if(isPermanent){
+                if (isPermanent) {
                     return;
                 }
                 console.log("Triggering marquee with message " + arg);

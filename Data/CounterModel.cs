@@ -6,7 +6,7 @@ namespace NewStreamSupporter.Data
 {
     public class CounterModel : BaseComponentModel, IRewardTriggerable
     {
-        [Display(Name = "Value", Description = "Value of the counter model that is displayed under the text. Automatically increased by rewards.")]
+        [Display(Name = "Value", Description = "Value of the counter that is displayed under the text. Automatically increased by rewards.")]
         [Range(-999999999.0, 999999999.0)]
         public long Value { get; set; } = default!;
 

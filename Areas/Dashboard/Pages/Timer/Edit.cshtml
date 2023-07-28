@@ -1,6 +1,6 @@
 ﻿@page
+@using NewStreamSupporter.Data;
 @using NewStreamSupporter.Helpers;
-@using NewStreamSupporter.Models;
 @model NewStreamSupporter.Areas.Dashboard.Pages.Timer.EditModel
 
 <h1>Edit timer</h1>
@@ -13,28 +13,28 @@
             <input type="hidden" asp-for="TimerModel.Id" />
             <input type="hidden" asp-for="TimerModel.OwnerId" />
             <div class="form-group pb-2">
-                <label asp-for="TimerModel.Name" class="control-label"></label>
+                <label asp-for="TimerModel.Name" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.Name)))"></label>
                 <input asp-for="TimerModel.Name" class="form-control" />
                 <span asp-validation-for="TimerModel.Name" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="TimerModel.Text" class="control-label"></label>
-                <input asp-for="TimerModel.Text" class="form-control" />
+                <label asp-for="TimerModel.Text" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.Text)))"></label>
+                <input asp-for="TimerModel.Text" class="form-control"/>
                 <span asp-validation-for="TimerModel.Text" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="TimerModel.Length" class="control-label"></label>
-                <input asp-for="TimerModel.Length" class="form-control" />
+                <label asp-for="TimerModel.Length" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.Length)))"></label>
+                <input asp-for="TimerModel.Length" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<CounterModel>(nameof(CounterModel.Value)))" max="@(ModelExtensions.GetMaximum<CounterModel>(nameof(TimerModel.Length)))" />
                 <span asp-validation-for="TimerModel.Length" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="TimerModel.BackgroundColor" class="control-label"></label>
+                <label asp-for="TimerModel.BackgroundColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.BackgroundColor)))"></label>
                 <br />
                 <input class="form-control js-color" asp-for="TimerModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="TimerModel.BackgroundColor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="TimerModel.FontColor" class="control-label"></label>
+                <label asp-for="TimerModel.FontColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.FontColor)))"></label>
                 <br />
                 <input class="form-control js-color" asp-for="TimerModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="TimerModel.FontColor" class="text-danger"></span>

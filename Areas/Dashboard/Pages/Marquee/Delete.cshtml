@@ -1,4 +1,6 @@
 ﻿@page
+@using NewStreamSupporter.Data;
+@using NewStreamSupporter.Helpers;
 @model NewStreamSupporter.Areas.Dashboard.Pages.Marquee.DeleteModel
 
 <h1>Delete marquee</h1>
@@ -7,7 +9,7 @@
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <dl class="row mx-0 widget-datalist">
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.Name)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.Name)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -15,7 +17,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.Text)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.Text)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -23,7 +25,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.BackgroundColor)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.BackgroundColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
@@ -31,7 +33,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.FontColor)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.FontColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
@@ -39,7 +41,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.SpeedFactor)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -47,7 +49,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.SpeedFactorPerCharacter)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -55,7 +57,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.FadeTime)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.FadeTime)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -63,7 +65,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.Delay)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.Delay)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -71,7 +73,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.Permanent)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.Permanent)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">

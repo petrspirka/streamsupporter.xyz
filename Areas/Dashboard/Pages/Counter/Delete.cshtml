@@ -1,6 +1,7 @@
 ﻿@page
 @model NewStreamSupporter.Areas.Dashboard.Pages.Counter.DeleteModel
-
+@using NewStreamSupporter.Data;
+@using NewStreamSupporter.Helpers;
 <h1>Delete counter</h1>
 
 <hr />
@@ -9,7 +10,7 @@
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <dl class="row mx-0 widget-datalist">
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.Name)))">
                     @Html.DisplayNameFor(model => model.CounterModel.Name)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -17,7 +18,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.Text)))">
                     @Html.DisplayNameFor(model => model.CounterModel.Text)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -25,7 +26,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.Value)))">
                     @Html.DisplayNameFor(model => model.CounterModel.Value)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -33,7 +34,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.BackgroundColor)))">
                     @Html.DisplayNameFor(model => model.CounterModel.BackgroundColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
@@ -41,7 +42,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.FontColor)))">
                     @Html.DisplayNameFor(model => model.CounterModel.FontColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
@@ -49,7 +50,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.TriggeredByDonations)))">
                     @Html.DisplayNameFor(model => model.CounterModel.TriggeredByDonations)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">

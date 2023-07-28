@@ -1,4 +1,6 @@
 ﻿@page
+@using NewStreamSupporter.Data;
+@using NewStreamSupporter.Helpers;
 @model NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal.DetailsModel
 
 <h1>Donation goal details</h1>
@@ -9,7 +11,7 @@
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <dl class="row mx-0 widget-datalist">
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.Name)))">
                     @Html.DisplayNameFor(model => model.DonationGoalModel.Name)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -17,7 +19,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.Text)))">
                     @Html.DisplayNameFor(model => model.DonationGoalModel.Text)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -25,7 +27,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.TargetAmount)))">
                     @Html.DisplayNameFor(model => model.DonationGoalModel.TargetAmount)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -33,7 +35,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.CurrentAmount)))">
                     @Html.DisplayNameFor(model => model.DonationGoalModel.CurrentAmount)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -41,7 +43,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.BackgroundColor)))">
                     @Html.DisplayNameFor(model => model.DonationGoalModel.BackgroundColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
@@ -49,7 +51,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.FontColor)))">
                     @Html.DisplayNameFor(model => model.DonationGoalModel.FontColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
@@ -57,7 +59,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.ExpiryDate)))">
                     @Html.DisplayNameFor(model => model.DonationGoalModel.ExpiryDate)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">

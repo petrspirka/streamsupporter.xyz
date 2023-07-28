@@ -1,4 +1,6 @@
 ﻿@page
+@using NewStreamSupporter.Data;
+@using NewStreamSupporter.Helpers;
 @model NewStreamSupporter.Areas.Dashboard.Pages.Alert.AlertPageModel
 
 @{
@@ -15,30 +17,30 @@
             <input type="hidden" asp-for="AlertModel.Id" />
             <input type="hidden" asp-for="AlertModel.OwnerId" value="@Model.AlertModel.OwnerId" />
             <div class="form-group form-check pb-2">
-                <label class="form-check-label">
+                <label class="form-check-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerFollows)))">
                     <input class="form-check-input" asp-for="AlertModel.ShouldTriggerFollows" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerFollows)
                 </label>
             </div>
             <div class="form-group form-check pb-2">
-                <label class="form-check-label">
+                <label class="form-check-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerDonations)))">
                     <input class="form-check-input" asp-for="AlertModel.ShouldTriggerDonations" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerDonations)
                 </label>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="AlertModel.BackgroundColor" class="control-label"></label>
+                <label asp-for="AlertModel.BackgroundColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.BackgroundColor)))"></label>
                 <br />
                 <input class="form-control js-color" asp-for="AlertModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="AlertModel.BackgroundColor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="AlertModel.FontColor" class="control-label"></label>
+                <label asp-for="AlertModel.FontColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.FontColor)))"></label>
                 <br />
                 <input class="form-control js-color" asp-for="AlertModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="AlertModel.FontColor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="AlertModel.AlertDuration" class="control-label"></label>
-                <input asp-for="AlertModel.AlertDuration" type="number" class="form-control" />
+                <label asp-for="AlertModel.AlertDuration" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.AlertDuration)))"></label>
+                <input asp-for="AlertModel.AlertDuration" type="number" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<AlertModel>(nameof(AlertModel.AlertDuration)))" max="@(ModelExtensions.GetMaximum<AlertModel>(nameof(AlertModel.AlertDuration)))" />
                 <span asp-validation-for="AlertModel.AlertDuration" class="text-danger"></span>
             </div>
             <div class="form-group pt-2 pb-2">

@@ -13,7 +13,7 @@ namespace NewStreamSupporter.Data
         [Display(Name = "Cost", Description = "The amount of points needed to purchase this reward.")]
         public ulong Cost { get; set; } = 1000;
         [ValidateNever]
-        [Display(Name = "Triggered widget", Description = "The widget that shuold be activated by this reward. Leave at default to not trigger any.")]
+        [Display(Name = "Triggered widget", Description = "The widget that should be activated by this reward. Leave at default to not trigger any.")]
         public string? TriggeredId { get; set; } = default!;
         [ValidateNever]
         public string? TriggeredType { get; set; } = default!;

@@ -1,4 +1,6 @@
 ﻿@page
+@using NewStreamSupporter.Data;
+@using NewStreamSupporter.Helpers;
 @model NewStreamSupporter.Areas.Dashboard.Pages.Rewards.DeleteModel
 
 @{
@@ -13,7 +15,7 @@
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <dl class="row mx-0 widget-datalist">
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.Name)))">
                     @Html.DisplayNameFor(model => model.RewardModel.Name)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -21,7 +23,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.Text)))">
                     @Html.DisplayNameFor(model => model.RewardModel.Text)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -29,7 +31,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.Cost)))">
                     @Html.DisplayNameFor(model => model.RewardModel.Cost)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -37,7 +39,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.HasTextField)))">
                     @Html.DisplayNameFor(model => model.RewardModel.HasTextField)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -45,7 +47,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.AutoAccept)))">
                     @Html.DisplayNameFor(model => model.RewardModel.AutoAccept)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -53,7 +55,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.BackgroundColor)))">
                     @Html.DisplayNameFor(model => model.RewardModel.BackgroundColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
@@ -61,7 +63,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.FontColor)))">
                     @Html.DisplayNameFor(model => model.RewardModel.FontColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">

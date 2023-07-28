@@ -1,4 +1,6 @@
 ﻿@page
+@using NewStreamSupporter.Data;
+@using NewStreamSupporter.Helpers;
 @model NewStreamSupporter.Areas.Dashboard.Pages.Timer.DeleteModel
 
 <h1>Delete timer</h1>
@@ -9,7 +11,7 @@
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <dl class="row mx-0 widget-datalist">
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.Name)))">
                     @Html.DisplayNameFor(model => model.TimerModel.Name)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -17,7 +19,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.Text)))">
                     @Html.DisplayNameFor(model => model.TimerModel.Text)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -25,7 +27,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.Length)))">
                     @Html.DisplayNameFor(model => model.TimerModel.Length)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
@@ -33,7 +35,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.BackgroundColor)))">
                     @Html.DisplayNameFor(model => model.TimerModel.BackgroundColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
@@ -41,7 +43,7 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.FontColor)))">
                     @Html.DisplayNameFor(model => model.TimerModel.FontColor)
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
