@@ -3,48 +3,56 @@
 @{
 }
 
-<style>
-    .main-container {
-        font-family: sans-serif;
-        /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif; */
-        border-radius: 15px;
-        background-color: @Model.BackgroundColor;
-        color: @Model.FontColor;
-    }
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Counter</title>
+    <style>
+        .main-container {
+            font-family: sans-serif;
+            /* font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif; */
+            border-radius: 15px;
+            background-color: @Model.BackgroundColor;
+            color: @Model.FontColor;
+        }
 
-    .center-text {
-        text-align: center;
-        letter-spacing: 2px;
-        font-weight: bold;
-        padding: 4px
-    }
-</style>
-<script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
-<div class="d-flex flex-column calign-content-center main-container">
-    <div class="center-text"><span>@Html.Encode(Model.Text)</span></div>
-    <div class="counter-value-container">
-        <p class="offscreen-text"></p>
-    </div>
-    <div class="center-text" id="counter-value">@Model.Value</div>
-</div>
-<script>
-    const animationTime = 1;
+        .center-text {
+            text-align: center;
+            letter-spacing: 2px;
+            font-weight: bold;
+            padding: 4px
+        }
+    </style>
+    <script>
+        const animationTime = 1;
 
-    const counter = document.getElementById("counter-value");
-    
-    function trigger(){
-        const original = Number(counter.innerHTML);
-        counter.innerHTML = original + 1;
-    }
+        const counter = document.getElementById("counter-value");
 
-</script>
-<script>
-    import("/js/component.js").then(res => {
-        const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "counter");
-        signalClient.setTrigger((arg) => {
-            console.log("Triggering counter");
-            trigger(arg);
+        function trigger() {
+            const original = Number(counter.innerHTML);
+            counter.innerHTML = original + 1;
+        }
+
+    </script>
+    <script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
+    <script>
+        import("/js/component.js").then(res => {
+            const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "counter");
+            signalClient.setTrigger((arg) => {
+                console.log("Triggering counter");
+                trigger(arg);
+            });
+            signalClient.start();
         });
-        signalClient.start();
-    });
-</script>
+    </script>
+</head>
+<body>
+    <div class="d-flex flex-column calign-content-center main-container">
+        <div class="center-text"><span>@Html.Encode(Model.Text)</span></div>
+        <div class="counter-value-container">
+            <p class="offscreen-text"></p>
+        </div>
+        <div class="center-text" id="counter-value">@Model.Value</div>
+    </div>
+</body>
+</html>
