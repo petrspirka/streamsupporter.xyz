@@ -6,7 +6,7 @@ namespace NewStreamSupporter.Data
 {
     public class TimerModel : BaseComponentModel, IRewardTriggerable
     {
-        [Display(Name = "Timer length (in seconds)")]
+        [Display(Name = "Timer length", Description = "Describes how long the timer should run for in seconds.")]
         [Range(1.0, 35999.0)]
         public ulong Length { get; set; } = default!;
     }

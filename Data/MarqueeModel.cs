@@ -7,18 +7,18 @@ namespace NewStreamSupporter.Data
     public class MarqueeModel : BaseComponentModel, IRewardTriggerable
     {
         [Range(0.0, 20.0)]
-        [Display(Name = "Duration")]
+        [Display(Name = "Duration", Description = "The base duration of the marquee in seconds.")]
         public float SpeedFactor { get; set; } = 1;
         [Range(0.0, 5.0)]
-        [Display(Name = "Duration per character")]
+        [Display(Name = "Duration per character", Description = "How many seconds should be added to the base duration per every character in the text.")]
         public float SpeedFactorPerCharacter { get; set; } = 0.1f;
-        [Display(Name = "Fade animation length")]
+        [Display(Name = "Fade animation length", Description = "Length of the fade-in and fade-out animations displayed when the marquee activates. Counted separate from base duration specified by the \"Duration\" and \"Duration per character\" properties.")]
         [Range(0.0, 10.0)]
         public float FadeTime { get; set; } = 1;
-        [Display(Name = "Delay")]
+        [Display(Name = "Delay", Description = "Takes effect when marquee is in permanent mode. Specifies time between activations.")]
         [Range(0.0, 86400.0)]
         public float Delay { get; set; } = 0;
-        [Display(Name = "Permanent?")]
+        [Display(Name = "Permanent?", Description = "Specifies whether the marquee should keep cycling the \"Text\" property continuously.")]
         public bool Permanent { get; set; } = false;
     }
 }

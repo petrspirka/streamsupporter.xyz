@@ -11,17 +11,16 @@ namespace NewStreamSupporter.Data
         //Each user has only 1 alert, therefore all alerts will have the same name
         [NotMapped]
         public new string Name { get; set; } = "Alert";
-
         [NotMapped]
         public new string Text { get; set; } = "";
 
-        [Display(Name = "Do follows trigger alert?")]
+        [Display(Name = "Do follows trigger alert?", Description = "Whether this alert should display a new follow message when a new follower is detected.")]
         public bool ShouldTriggerFollows { get; set; } = false;
 
-        [Display(Name = "Do donations trigger alert?")]
+        [Display(Name = "Do donations trigger alert?", Description = "Whether this alert should display donation message when a new donation is detected.")]
         public bool ShouldTriggerDonations { get; set; } = false;
 
-        [Display(Name = "Duration")]
+        [Display(Name = "Duration", Description = "How long the alert stays on screen.")]
         [Range(1.0, 15.0)]
         public float AlertDuration { get; set; } = 5.0f;
     }
