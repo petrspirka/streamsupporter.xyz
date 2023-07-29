@@ -3,6 +3,7 @@ using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
 using NewStreamSupporter.Models;
+using System.Threading.Channels;
 using TwitchLib.Api.Helix.Models.EventSub;
 using TwitchLib.Api.Interfaces;
 
@@ -18,6 +19,8 @@ namespace NewStreamSupporter.Services
         private readonly ITwitchChatClient _chatClient;
         private readonly ITwitchAPI _twitchApi;
         private readonly IServiceProvider _serviceProvider;
+
+        private bool _shouldFollowsRetrigger;
 
         /// <inheritdoc/>
         public override event EventHandler<StreamChatMessageEventArgs>? OnStreamChatMessage;
@@ -42,12 +45,14 @@ namespace NewStreamSupporter.Services
         /// <param name="chatClient">Služba pro připojení chatovacího klienta</param>
         /// <param name="webhookReceiver">Služba pro získávání notifikací z EventSub</param>
         /// <param name="serviceProvider">Poskytovatel služeb pro získání scoped služeb</param>
-        public TwitchListenerService(ITwitchEventSubManager eventSubManager, ITwitchChatClient chatClient, ITwitchEventSubWebhookReceiver webhookReceiver, ITwitchAPI twitchApi, IServiceProvider serviceProvider)
+        public TwitchListenerService(ITwitchEventSubManager eventSubManager, ITwitchChatClient chatClient, ITwitchEventSubWebhookReceiver webhookReceiver, ITwitchAPI twitchApi, IServiceProvider serviceProvider, bool shouldFollowsRetrigger)
         {
             _eventSubManager = eventSubManager;
             _chatClient = chatClient;
             _twitchApi = twitchApi;
             _serviceProvider = serviceProvider;
+
+            _shouldFollowsRetrigger = shouldFollowsRetrigger;
 
             _activeStreams = new List<string>();
             _existingFollows = new Dictionary<string, IList<string>?>();
@@ -65,19 +70,21 @@ namespace NewStreamSupporter.Services
                 _activeStreams.Add(e.Channel);
                 OnStreamUp?.Invoke(sender, e);
             };
-            webhookReceiver.OnStreamFollow += (sender, e) =>
+            webhookReceiver.OnStreamFollow += async (sender, e) =>
             {
-                //Kontrola, zda uživatel již nebyl sledujícím
-                if (!_existingFollows.ContainsKey(e.Channel))
-                {
-                    _existingFollows[e.Channel] = new List<string>();
-                }
-                if (!_existingFollows[e.Channel]!.Contains(e.User.Id))
+                var scope = _serviceProvider.CreateAsyncScope();
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                if (shouldFollowsRetrigger || !(await context.StreamerFollows.Where(s => s.FollowerId == e.User.Id).Where(s => s.Platform == e.User.Platform).AnyAsync(s => s.StreamerId == e.Channel)))
                 {
                     OnStreamFollow?.Invoke(sender, e);
-                    _existingFollows[e.Channel]!.Add(e.User.Id);
+                    if (!shouldFollowsRetrigger)
+                    {
+                        context.StreamerFollows.Add(new(e.Channel, e.User.Id, e.User.Platform));
+                        await context.SaveChangesAsync();
+                    }
                 }
             };
+
             webhookReceiver.OnStreamDonation += (sender, e) => OnStreamDonation?.Invoke(sender, e);
             webhookReceiver.OnUserRevocation += OnUserRevocation;
             _chatClient.StreamChatMessageReceived += async (sender, e) =>

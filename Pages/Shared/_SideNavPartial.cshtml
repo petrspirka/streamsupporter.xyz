@@ -64,7 +64,7 @@
                                 </li>
                                 <li>
                                     <a asp-area="Dashboard" asp-page="/Reward/Index"
-                                        class="link-body-emphasis d-inline-flex text-decoration-none rounded">Rewards</a>
+                                       class="link-body-emphasis d-inline-flex text-decoration-none rounded">Rewards</a>
                                 </li>
                                 <li>
                                     <a asp-area="Dashboard" asp-page="/Timer/Index"
@@ -77,7 +77,9 @@
                             </ul>
                         </div>
                     </li>
-                    <li class="border-top my-3"></li>
+                </ul>
+                <div class="border-top my-3"></div>
+                <ul class="list-unstyled ps-0">
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <li class="mb-1">

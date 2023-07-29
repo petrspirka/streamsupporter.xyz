@@ -143,7 +143,14 @@ namespace NewStreamSupporter
                 .AddSingleton<ITwitchEventSubManager, TwitchEventSubManager>()
                 .AddSingleton<ITwitchChatClient, TwitchChatClient>()
                 .AddSingleton<ITwitchEventSubWebhookReceiver, TwitchEventSubWebhookReceiver>()
-                .AddSingleton<TwitchListenerService>()
+                .AddSingleton<TwitchListenerService>(impl => new TwitchListenerService(
+                    impl.GetRequiredService<ITwitchEventSubManager>(),
+                    impl.GetRequiredService<ITwitchChatClient>(),
+                    impl.GetRequiredService<ITwitchEventSubWebhookReceiver>(),
+                    impl.GetRequiredService<ITwitchAPI>(),
+                    impl,
+                    bool.Parse(config["ShouldAllowDuplicateFollows"]!)
+                    ))
                 .AddSingleton<ListenerStartupService>()
                 .AddTransient<RewardManagerService>()
                 .AddTransient<Freecurrencyapi>(impl => new Freecurrencyapi(config["FreeCurrencyApiKey"]!))

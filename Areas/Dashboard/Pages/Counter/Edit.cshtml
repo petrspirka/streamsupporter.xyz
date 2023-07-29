@@ -5,7 +5,7 @@
 
 <h1>Edit counter</h1>
 
-<hr />
+<div class="border border-top my-2"></div>
 <div class="row mx-0">
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <form method="post">
@@ -40,7 +40,7 @@
                 <span asp-validation-for="CounterModel.FontColor" class="text-danger"></span>
             </div>
             <div class="form-group form-check pb-2">
-                <label class="form-check-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.TriggeredByDonations)))">
+                <label class="form-check-label" asp-for="CounterModel.TriggeredByDonations" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.TriggeredByDonations)))">
                     <input class="form-check-input" asp-for="CounterModel.TriggeredByDonations" /> @Html.DisplayNameFor(model => model.CounterModel.TriggeredByDonations)
                 </label>
             </div>

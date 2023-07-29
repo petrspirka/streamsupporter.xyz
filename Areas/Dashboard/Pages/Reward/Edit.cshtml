@@ -5,14 +5,13 @@
 
 <h1>Edit reward</h1>
 
-<hr />
+<div class="border border-top my-2"></div>
 <div class="row mx-0">
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <form method="post">
             <input type="hidden" asp-for="RewardModel.Id" />
             <input type="hidden" asp-for="RewardModel.OwnerId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="RewardModel.Id" />
             <div class="form-group pb-2">
                 <label asp-for="RewardModel.Name" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.Name)))"></label>
                 <input asp-for="RewardModel.Name" class="form-control" />
@@ -29,18 +28,18 @@
                 <span asp-validation-for="RewardModel.Cost" class="text-danger"></span>
             </div>
             <div class="form-group form-check pb-2">
-                <label class="form-check-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.HasTextField)))">
+                <label class="form-check-label" asp-for="RewardModel.HasTextField" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.HasTextField)))">
                     <input class="form-check-input" asp-for="RewardModel.HasTextField" /> @Html.DisplayNameFor(model => model.RewardModel.HasTextField)
                 </label>
             </div>
             <div class="form-group form-check pb-2">
-                <label class="form-check-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.AutoAccept)))">
+                <label class="form-check-label" asp-for="RewardModel.AutoAccept" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.AutoAccept)))">
                     <input class="form-check-input" asp-for="RewardModel.AutoAccept" /> @Html.DisplayNameFor(model => model.RewardModel.AutoAccept)
                 </label>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="RewardModel.TriggeredId" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.TriggeredId)))"></label>
-                <select class="form-control" name="chosenElement">
+                <select asp-for="RewardModel.TriggeredId" class="form-control" name="chosenElement">
                     <option value="">Select an option</option>
                     @foreach(var option in Model.UserOptions)
                     {
@@ -50,7 +49,7 @@
                         }
                         else
                         {
-                            <option selected="@(option.Item1):@(option.Item2)" value="@(option.Item1):@(option.Item2)">@option.Item1 - @option.Item3</option>
+                            <option selected value="@(option.Item1):@(option.Item2)">@option.Item1 - @option.Item3</option>
                         }
                     }
                 </select>

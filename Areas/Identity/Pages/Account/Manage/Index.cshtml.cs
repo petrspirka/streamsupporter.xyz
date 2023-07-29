@@ -58,7 +58,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
             [Display(Name = "Username")]
             [StringLength(255, ErrorMessage = "The {0} must be at most {1} characters long.")]
-            [RegularExpression("[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\\-._@+]*", ErrorMessage = "Your usernaem is not valid. It must only contain alphanumeric characters and \"-._@+\".")]
+            [RegularExpression("[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\\-._@+]*", ErrorMessage = "Your username is not valid. It must only contain alphanumeric characters and \"-._@+\".")]
             public string Username { get; set; }
         }
 

@@ -29,7 +29,7 @@
                 width: 100%;
                 height: 100%;
                 z-index: 5;
-                padding: 4px;
+                padding: 2px;
                 text-align: center;
                 white-space: nowrap;
             }
@@ -167,13 +167,26 @@
                 }
             }
 
+            .h-100 {
+                height: 100%;
+            }
+
+            .w-100 {
+                width: 100%;
+            }
+
             .goal-target {
                 text-align: right;
             }
 
             .div-center {
-                width: 100%;
-                padding: 4px;
+                padding: 2px;
+            }
+
+            .goal-current-wrapper div {
+                display: flex;
+                flex-direction: column;
+                align-content: center;
             }
         </style>
         <script src="~/microsoft/signalr/dist/browser/signalr.min.js"></script>
@@ -189,9 +202,9 @@
             </div>
             <p class="tip-display">@Model.Text</p>
             <div class="goal-current-wrapper">
-                <div class="goal-start div-center margin-x">$0</div>
-                <div class="goal-current div-center">$@Model.CurrentAmount</div>
-                <div class="goal-target div-center margin-x">$@Model.TargetAmount</div>
+                <div class="goal-start div-center margin-x w-100"><span>$0</span></div>
+                <div class="w-100"><span class="goal-current div-center">$@Model.CurrentAmount</span></div>
+                <div class="goal-target div-center margin-x w-100"><span>$@Model.TargetAmount</span></div>
             </div>
         </div>
         <p class="goal-end">@Model.ExpiryDate</p>
@@ -205,14 +218,24 @@
             tipDisplay,
             goalCurrentWrapper;
 
-        let currentDonated,
+        let isRunning = false,
+            currentDonated,
             tipGoal;
 
-        function trigger(user, amount) {
-            const sender = user;
-            currentDonated += Number(amount);
-            updateProgressBar();
-            updateTipDisplay(sender, amount);
+        function trigger(sender, amount) {
+            if(isRunning){
+                return setTimeout(async () => await trigger(sender, amount), 2000);
+            }
+            isRunning = true;
+            return new Promise(async (resolve, reject) => {
+                currentDonated += Number(amount);
+                updateProgressBar();
+                updateTipDisplay(sender, amount);
+                setTimeout(() => {
+                    isRunning = false;
+                    resolve();
+                }, @animationLength * 1000);
+            });
         };
 
         window.addEventListener('load', function (obj) {

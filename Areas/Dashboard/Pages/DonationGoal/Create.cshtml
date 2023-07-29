@@ -5,7 +5,7 @@
 
 <h1>Create donation goal</h1>
 
-<hr />
+<div class="border border-top my-2"></div>
 <div class="row mx-0">
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <form method="post">
@@ -18,34 +18,34 @@
                 <span asp-validation-for="DonationGoalModel.Name" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="DonationGoalModel.Text" class="control-label" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.Text)))"></label>
+                <label asp-for="DonationGoalModel.Text" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.Text)))"></label>
                 <input asp-for="DonationGoalModel.Text" class="form-control" />
                 <span asp-validation-for="DonationGoalModel.Text" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="DonationGoalModel.TargetAmount" class="control-label" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.TargetAmount)))"></label>
+                <label asp-for="DonationGoalModel.TargetAmount" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.TargetAmount)))"></label>
                 <input asp-for="DonationGoalModel.TargetAmount" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<DonationGoalModel>(nameof(DonationGoalModel.TargetAmount)))" max="@(ModelExtensions.GetMaximum<DonationGoalModel>(nameof(DonationGoalModel.TargetAmount)))" />
                 <span asp-validation-for="DonationGoalModel.TargetAmount" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="DonationGoalModel.CurrentAmount" class="control-label" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.CurrentAmount)))"></label>
+                <label asp-for="DonationGoalModel.CurrentAmount" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.CurrentAmount)))"></label>
                 <input asp-for="DonationGoalModel.CurrentAmount" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<DonationGoalModel>(nameof(DonationGoalModel.CurrentAmount)))" max="@(ModelExtensions.GetMaximum<DonationGoalModel>(nameof(DonationGoalModel.CurrentAmount)))" />
                 <span asp-validation-for="DonationGoalModel.CurrentAmount" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="DonationGoalModel.BackgroundColor" class="control-label" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.BackgroundColor)))"></label>
+                <label asp-for="DonationGoalModel.BackgroundColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.BackgroundColor)))"></label>
                 <br />
                 <input class="form-control js-color" asp-for="DonationGoalModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="DonationGoalModel.BackgroundColor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="DonationGoalModel.FontColor" class="control-label" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.FontColor)))"></label>
+                <label asp-for="DonationGoalModel.FontColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.FontColor)))"></label>
                 <br />
                 <input class="form-control js-color" asp-for="DonationGoalModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="DonationGoalModel.FontColor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
-                <label asp-for="DonationGoalModel.ExpiryDate" class="control-label" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.ExpiryDate)))"></label>
+                <label asp-for="DonationGoalModel.ExpiryDate" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.ExpiryDate)))"></label>
                 <input asp-for="DonationGoalModel.ExpiryDate" type="date" class="form-control" />
                 <span asp-validation-for="DonationGoalModel.ExpiryDate" class="text-danger"></span>
             </div>

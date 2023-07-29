@@ -9,7 +9,7 @@
 
 <h1>Edit alert</h1>
 
-<hr />
+<div class="border border-top my-2"></div>
 <div class="row mx-0">
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
         <form method="post">
@@ -17,12 +17,12 @@
             <input type="hidden" asp-for="AlertModel.Id" />
             <input type="hidden" asp-for="AlertModel.OwnerId" value="@Model.AlertModel.OwnerId" />
             <div class="form-group form-check pb-2">
-                <label class="form-check-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerFollows)))">
+                <label class="form-check-label" asp-for="AlertModel.ShouldTriggerFollows" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerFollows)))">
                     <input class="form-check-input" asp-for="AlertModel.ShouldTriggerFollows" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerFollows)
                 </label>
             </div>
             <div class="form-group form-check pb-2">
-                <label class="form-check-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerDonations)))">
+                <label class="form-check-label" asp-for="AlertModel.ShouldTriggerDonations" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerDonations)))">
                     <input class="form-check-input" asp-for="AlertModel.ShouldTriggerDonations" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerDonations)
                 </label>
             </div>
@@ -40,7 +40,7 @@
             </div>
             <div class="form-group pb-2">
                 <label asp-for="AlertModel.AlertDuration" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.AlertDuration)))"></label>
-                <input asp-for="AlertModel.AlertDuration" type="number" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<AlertModel>(nameof(AlertModel.AlertDuration)))" max="@(ModelExtensions.GetMaximum<AlertModel>(nameof(AlertModel.AlertDuration)))" />
+                <input asp-for="AlertModel.AlertDuration" type="number" class="form-control" min="@(ModelExtensions.GetMinimum<AlertModel>(nameof(AlertModel.AlertDuration)))" max="@(ModelExtensions.GetMaximum<AlertModel>(nameof(AlertModel.AlertDuration)))" />
                 <span asp-validation-for="AlertModel.AlertDuration" class="text-danger"></span>
             </div>
             <div class="form-group pt-2 pb-2">

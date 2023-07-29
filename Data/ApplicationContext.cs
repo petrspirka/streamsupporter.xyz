@@ -12,6 +12,7 @@ public class ApplicationContext : IdentityDbContext<ApplicationUser>
     public DbSet<ClaimedCurrencyModel> ClaimedCurrencies { get; set; } = default!;
     public DbSet<PurchaseModel> Purchases { get; set; } = default!;
     public DbSet<NotificationModel> Notifications { get; set; } = default!;
+    public DbSet<StreamerFollow> StreamerFollows { get; set; }
 
     public ApplicationContext(DbContextOptions<ApplicationContext> options)
         : base(options)

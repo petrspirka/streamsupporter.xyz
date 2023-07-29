@@ -59,6 +59,7 @@ TestResults/
 NewStreamSupporter.db
 NewStreamSupporter.db-shm
 NewStreamSupporter.db-wal
+NewStreamSupporter.db.old
 # OS generated files #
 ######################
 .DS_Store?
