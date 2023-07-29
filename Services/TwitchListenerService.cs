@@ -67,7 +67,7 @@ namespace NewStreamSupporter.Services
             };
             webhookReceiver.OnStreamFollow += (sender, e) =>
             {
-                //Kontrola, zda uživatel již nebyl
+                //Kontrola, zda uživatel již nebyl sledujícím
                 if (!_existingFollows.ContainsKey(e.Channel))
                 {
                     _existingFollows[e.Channel] = new List<string>();

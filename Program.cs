@@ -147,7 +147,11 @@ namespace NewStreamSupporter
                 .AddSingleton<ListenerStartupService>()
                 .AddTransient<RewardManagerService>()
                 .AddTransient<Freecurrencyapi>(impl => new Freecurrencyapi(config["FreeCurrencyApiKey"]!))
-                .AddSingleton<IYouTubePollingService, YouTubePollingService>()
+                .AddSingleton<IYouTubePollingService>(impl => new YouTubePollingService(
+                    impl.GetRequiredService<IYouTubeOptions>(),
+                    impl.GetRequiredService<IYouTubeProviderService>(),
+                    impl,
+                    impl.GetRequiredService<IRewardOptions>()))
                 .AddTransient<YouTubeService>()
                 .AddSingleton<ICurrencyService, CurrencyService>()
                 .AddSingleton<ValidClientFilter>()

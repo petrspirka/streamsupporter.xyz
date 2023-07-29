@@ -20,7 +20,7 @@
             text-align: center;
             letter-spacing: 2px;
             font-weight: bold;
-            padding: 4px
+            padding: 8px
         }
     </style>
     <script>
@@ -49,9 +49,6 @@
 <body>
     <div class="d-flex flex-column calign-content-center main-container">
         <div class="center-text"><span>@Html.Encode(Model.Text)</span></div>
-        <div class="counter-value-container">
-            <p class="offscreen-text"></p>
-        </div>
         <div class="center-text" id="counter-value">@Model.Value</div>
     </div>
 </body>

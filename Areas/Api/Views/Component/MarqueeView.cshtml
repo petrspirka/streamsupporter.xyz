@@ -102,10 +102,10 @@
         function startMarquee(marqueeText) {
             if (isRunning) {
                 console.log("Waiting...");
-                setTimeout(async () => await startMarquee(marqueeText), 1000);
+                return setTimeout(async () => await startMarquee(marqueeText), 1000);
             }
-            isRunning = true;
             return new Promise(async (resolve, reject) => {
+                isRunning = true;
                 if (marqueeText == null) {
                     marqueeText = defaultString;
                 }
@@ -121,14 +121,16 @@
         function setMarqueeText(text) {
             return new Promise((resolve, reject) => {
                 const time = @animationLength;
-                void marqueeText.elementWidth;
-                marqueeText.style.animation = "marqueeAnimation " + time + "s";
-                marqueeText.style.animationTimingFunction = "linear";
-                marqueeText.innerHTML = text;
-                setTimeout(function() {
+                setTimeout(function () {
+                    console.log("Clearing text");
                     clearMarqueeText();
                     resolve();
                 }, time * 1000);
+                void marqueeText.elementWidth;
+                marqueeText.style.animation = "marqueeAnimation " + time + "s";
+                marqueeText.style.animationTimingFunction = "linear";
+                marqueeText.style.animationFillMode = "forwards";
+                marqueeText.innerHTML = text;
             });
         }
 
@@ -140,7 +142,6 @@
         async function stopMarquee() {
             clearMarqueeText();
             await hideMarquee();
-            isRunning = false;
         }
 
         function showMarquee() {
@@ -203,9 +204,6 @@
         import("/js/component.js").then(res => {
             const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "marquee");
             signalClient.setTrigger((arg) => {
-                if (isPermanent) {
-                    return;
-                }
                 console.log("Triggering marquee with message " + arg);
                 trigger(arg);
             });

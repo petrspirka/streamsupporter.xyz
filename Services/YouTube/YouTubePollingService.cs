@@ -31,15 +31,17 @@ namespace NewStreamSupporter.Services.YouTube
         private readonly IYouTubeProviderService _youTubeProviderService;
         private readonly uint _streamPollingTime;
         private readonly uint _chatPollingTime;
+        private readonly long _rewardTime;
         private readonly Timer _streamTimer;
         private readonly Timer _chatTimer;
 
         //Uchovává uživatele, kteří nestreamují a kteří streamují
         private readonly IList<string> _inactiveUsers;
         private readonly IDictionary<string, Tuple<string, string?>> _activeUsers;
+        private readonly IDictionary<string, DateTime> _chatMap;
         private readonly IServiceProvider _serviceProvider;
 
-        public YouTubePollingService(IYouTubeOptions youtubeSettings, IYouTubeProviderService youTubeProviderService, IServiceProvider serviceProvider)
+        public YouTubePollingService(IYouTubeOptions youtubeSettings, IYouTubeProviderService youTubeProviderService, IServiceProvider serviceProvider, IRewardOptions rewardOptions)
         {
             _youTubeProviderService = youTubeProviderService;
             _serviceProvider = serviceProvider;
@@ -47,11 +49,15 @@ namespace NewStreamSupporter.Services.YouTube
             _streamPollingTime = youtubeSettings.StreamPollingTime;
             _chatPollingTime = youtubeSettings.ChatPollingTime;
 
+            _rewardTime = (long)rewardOptions.RewardCooldown;
+
             _inactiveUsers = new List<string>();
             _activeUsers = new Dictionary<string, Tuple<string, string?>>();
 
             _streamTimer = new Timer(OnStreamTimerTick);
             _chatTimer = new Timer(OnChatTimerTick);
+
+            _chatMap = new Dictionary<string, DateTime>();
         }
 
         /// <inheritdoc/>
@@ -211,7 +217,7 @@ namespace NewStreamSupporter.Services.YouTube
                     }
                     break;
                 case "textMessageEvent":
-                    OnStreamChatMessage?.Invoke(this, new StreamChatMessageEventArgs(userId, author, snippet.TextMessageDetails.MessageText));
+                    await AddStreamMessage(userId, author, snippet);
                     break;
 
                 case "membershipGiftingEvent":
@@ -220,6 +226,25 @@ namespace NewStreamSupporter.Services.YouTube
                     break;
             }
             return false;
+        }
+
+        private Task AddStreamMessage(string userId, PlatformUser author, LiveChatMessageSnippet snippet)
+        {
+            var sent = snippet.PublishedAt;
+            if (sent == null)
+            {
+                return Task.CompletedTask;
+            }
+            if (!_chatMap.ContainsKey(author.Id))
+            {
+                _chatMap[author.Id] = sent.Value;
+            }
+            else if (_chatMap[author.Id] + new TimeSpan(_rewardTime) < sent.Value)
+            {
+                OnStreamChatMessage?.Invoke(this, new StreamChatMessageEventArgs(userId, author, snippet.TextMessageDetails.MessageText));
+                _chatMap[author.Id] = sent.Value;
+            }
+            return Task.CompletedTask;
         }
 
         /// <inheritdoc/>
