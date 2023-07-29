@@ -67,30 +67,37 @@ namespace NewStreamSupporter.Services
             ApplicationContext context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
             Task addCurrencyTask = Task.CompletedTask;
 
-            //Zamkneme práci s cooldowny, aby se zamezilo duplicitnímu projití zpráv
-            lock (_cooldownLock)
+            if (e.User.Platform != Platform.YouTube)
             {
-                //Pokud neexistuje kanál v mapě, přidáme ho
-                if (!_cooldowns[e.User.Platform].ContainsKey(e.Channel))
+                //Zamkneme práci s cooldowny, aby se zamezilo duplicitnímu projití zpráv
+                lock (_cooldownLock)
                 {
-                    _cooldowns[e.User.Platform][e.Channel] = new Dictionary<string, DateTime>();
-                }
+                    //Pokud neexistuje kanál v mapě, přidáme ho
+                    if (!_cooldowns[e.User.Platform].ContainsKey(e.Channel))
+                    {
+                        _cooldowns[e.User.Platform][e.Channel] = new Dictionary<string, DateTime>();
+                    }
 
-                //Pokud uživatel existuje v mapě, zkontrolujeme jeho cooldown, jestli je menší než momentální čas, body mu přičteme
-                if (_cooldowns[e.User.Platform][e.Channel]!.ContainsKey(user))
-                {
-                    if (_cooldowns[e.User.Platform][e.Channel][user] < DateTime.Now)
+                    //Pokud uživatel existuje v mapě, zkontrolujeme jeho cooldown, jestli je menší než momentální čas, body mu přičteme
+                    if (_cooldowns[e.User.Platform][e.Channel]!.ContainsKey(user))
+                    {
+                        if (_cooldowns[e.User.Platform][e.Channel][user] < DateTime.Now)
+                        {
+                            addCurrencyTask = AddCurrency(e.User.Id, e.Channel, (long)_rewardAmount, e.User.Platform);
+                            _cooldowns[e.User.Platform][e.Channel][user] = DateTime.Now.AddMilliseconds(_rewardCooldown);
+                        }
+                    }
+                    //Pokud uživatel neexistuje, přidáme ho do mapy a přičteme mu body
+                    else
                     {
                         addCurrencyTask = AddCurrency(e.User.Id, e.Channel, (long)_rewardAmount, e.User.Platform);
                         _cooldowns[e.User.Platform][e.Channel][user] = DateTime.Now.AddMilliseconds(_rewardCooldown);
                     }
                 }
-                //Pokud uživatel neexistuje, přidáme ho do mapy a přičteme mu body
-                else
-                {
-                    addCurrencyTask = AddCurrency(e.User.Id, e.Channel, (long)_rewardAmount, e.User.Platform);
-                    _cooldowns[e.User.Platform][e.Channel][user] = DateTime.Now.AddMilliseconds(_rewardCooldown);
-                }
+            }
+            else
+            {
+                addCurrencyTask = AddCurrency(e.User.Id, e.Channel, (long)_rewardAmount, e.User.Platform);
             }
             await addCurrencyTask;
         }
