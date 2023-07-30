@@ -25,11 +25,13 @@ namespace NewStreamSupporter.Services
         //Reference na pollovací službu
         private readonly IYouTubePollingService _pollingService;
 
+        private readonly ILogger<YouTubeListenerService> _logger;
+
         /// <summary>
         /// Vytvoří novou instanci třídy YouTubeListenerService
         /// </summary>
         /// <param name="pollingService">Služby pro pollování YouTube API</param>
-        public YouTubeListenerService(IYouTubePollingService pollingService)
+        public YouTubeListenerService(IYouTubePollingService pollingService, ILogger<YouTubeListenerService> logger)
         {
             _userListeners = new Dictionary<string, IList<StreamEventType>>();
             _pollingService = pollingService;
@@ -40,11 +42,13 @@ namespace NewStreamSupporter.Services
             pollingService.OnStreamDown += (sender, e) => OnStreamDown?.Invoke(sender, e);
             pollingService.OnStreamUp += (sender, e) => OnStreamUp?.Invoke(sender, e);
             pollingService.OnStreamDonation += (sender, e) => OnStreamDonation?.Invoke(sender, e);
+            _logger = logger;
         }
 
         /// <inheritdoc/>
         public override Task<bool> AddUserListener(string userId, StreamEventType eventType)
         {
+            _logger.LogInformation("Adding user " + userId);
             if (!_userListeners.ContainsKey(userId))
             {
                 _userListeners[userId] = new List<StreamEventType>();
@@ -57,6 +61,7 @@ namespace NewStreamSupporter.Services
         /// <inheritdoc/>
         public override Task<bool> RemoveUserListener(string userId, StreamEventType eventType, bool bypassExistenceCheck = false)
         {
+            _logger.LogInformation("Removing user " + userId);
             bool success = _userListeners[userId].Remove(eventType);
             if (_userListeners.Count == 0)
             {

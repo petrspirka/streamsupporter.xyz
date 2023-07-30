@@ -120,6 +120,7 @@ namespace NewStreamSupporter.Services.YouTube
             Data.ApplicationContext context = scope.ServiceProvider.GetRequiredService<Data.ApplicationContext>();
             IDataStore store = scope.ServiceProvider.GetRequiredService<IDataStore>();
             NotificationService notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();
+            YouTubeListenerService youTubeListener = scope.ServiceProvider.GetRequiredService<YouTubeListenerService>();
             Data.ApplicationUser? user = await context.Users.Where(u => u.GoogleBrandId == userId).FirstOrDefaultAsync();
             if (user == null)
             {
@@ -129,6 +130,7 @@ namespace NewStreamSupporter.Services.YouTube
             user.GoogleBrandId = null;
             user.GoogleBrandName = null;
             user.IsGoogleActive = false;
+            await youTubeListener.RemoveAllUserListeners(userId);
             await store.DeleteAsync<TokenResponse>(userId);
             await context.SaveChangesAsync();
         }

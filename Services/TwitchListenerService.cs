@@ -20,8 +20,6 @@ namespace NewStreamSupporter.Services
         private readonly ITwitchAPI _twitchApi;
         private readonly IServiceProvider _serviceProvider;
 
-        private bool _shouldFollowsRetrigger;
-
         /// <inheritdoc/>
         public override event EventHandler<StreamChatMessageEventArgs>? OnStreamChatMessage;
         /// <inheritdoc/>
@@ -51,8 +49,6 @@ namespace NewStreamSupporter.Services
             _chatClient = chatClient;
             _twitchApi = twitchApi;
             _serviceProvider = serviceProvider;
-
-            _shouldFollowsRetrigger = shouldFollowsRetrigger;
 
             _activeStreams = new List<string>();
             _existingFollows = new Dictionary<string, IList<string>?>();
