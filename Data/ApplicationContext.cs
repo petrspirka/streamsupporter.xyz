@@ -40,6 +40,21 @@ public class ApplicationContext : IdentityDbContext<ApplicationUser>
         builder.Entity<ApplicationUser>()
             .HasMany(u => u.OwnedRewards)
             .WithOne(m => m.Owner);
+
+        builder.Entity<ApplicationUser>()
+            .HasMany(u => u.OwnedDonationGoals)
+            .WithOne(d => d.Owner);
+
+        builder.Entity<ApplicationUser>()
+            .HasMany(u => u.OwnedTimers)
+            .WithOne(t => t.Owner);
+
+        builder.Entity<ApplicationUser>()
+            .HasMany(u => u.OwnedCounters)
+            .WithOne(c => c.Owner);
+
+        builder.Entity<ClaimedCurrencyModel>()
+            .HasAlternateKey(c => new { c.ShopOwnerId, c.OwnerId });
     }
 
     public DbSet<NewStreamSupporter.Data.CounterModel> CounterModel { get; set; } = default!;
