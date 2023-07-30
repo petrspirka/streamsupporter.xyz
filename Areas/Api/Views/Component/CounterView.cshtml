@@ -26,13 +26,16 @@
     <script>
         const animationTime = 1;
 
-        const counter = document.getElementById("counter-value");
+        let counter;
 
         function trigger() {
             const original = Number(counter.innerHTML);
             counter.innerHTML = original + 1;
         }
 
+        window.onload = function(){
+            counter = document.getElementById("counter-value");
+        }
     </script>
     <script src="~/microsoft//signalr/dist/browser/signalr.js"></script>
     <script>
@@ -49,7 +52,7 @@
 <body>
     <div class="d-flex flex-column calign-content-center main-container">
         <div class="center-text"><span>@Html.Encode(Model.Text)</span></div>
-        <div class="center-text" id="counter-value">@Model.Value</div>
+        <div class="center-text"><span id="counter-value">@Model.Value</span></div>
     </div>
 </body>
 </html>

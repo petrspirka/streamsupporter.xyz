@@ -8,12 +8,12 @@
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2 d-flex justify-content-center">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group form-check">
+            <div class="form-group form-check pb-2">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Model.IsGoogleActive" /> @Html.DisplayNameFor(model => model.Model.IsGoogleActive)
                 </label>
             </div>
-            <div class="form-group form-check">
+            <div class="form-group form-check pb-2">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="Model.IsTwitchActive" /> @Html.DisplayNameFor(model => model.Model.IsTwitchActive)
                 </label>

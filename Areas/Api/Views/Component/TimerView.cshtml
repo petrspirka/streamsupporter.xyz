@@ -140,23 +140,31 @@
         }
 
         function startWidget() {
-            if (isRunning) return;
-            const time = @Model.Length;
-            setTimer(time);
-            showWidget();
-            currentStartTimer = setTimeout(() => {
-                startTimer(time);
-                progressBar.classList.remove("hidden");
-                currentStepInterval = setInterval(() => {
-                    currentTargetTime--;
-                    if (currentTargetTime == 0) clearInterval(currentStepInterval);
-                    setTimerTime(currentTargetTime);
-                }, 1000);
-            }, fadeTime * 1000 + stayTime * 1000);
-            currentStopTimer = setTimeout(() => {
-                stopWidget();
-                isRunning = false;
-            }, ((fadeTime * 1000) * 2) + stayTime * 1000 * 2 + time * 1000);
+            if (isRunning) {
+                return setTimeout(startWidget, 10000);
+            }
+            isRunning = true;
+            return new Promise((resolve, reject) => {
+                const time = @Model.Length;
+                setTimer(time);
+                showWidget();
+                currentStartTimer = setTimeout(() => {
+                    startTimer(time);
+                    progressBar.classList.remove("hidden");
+                    currentStepInterval = setInterval(() => {
+                        currentTargetTime--;
+                        if (currentTargetTime == 0) clearInterval(currentStepInterval);
+                        setTimerTime(currentTargetTime);
+                    }, 1000);
+                }, fadeTime * 1000 + stayTime * 1000);
+                currentStopTimer = setTimeout(() => {
+                    stopWidget();
+                    setTimeout(() => {
+                        isRunning = false;
+                        resolve();
+                    }, fadeTime * 1000);
+                }, ((fadeTime * 1000) * 2) + stayTime * 1000 * 2 + time * 1000);
+            });
         }
 
         function stopWidget() {

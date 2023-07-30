@@ -71,7 +71,7 @@
             alertText;
 
         let isActive = false,
-            stopTimeout;
+            isRunning = false;
 
         window.addEventListener("load", () => {
             audioSource = document.getElementsByClassName("audio-source")[0];
@@ -80,13 +80,23 @@
         });
 
         function startAlert(message) {
-            alertText.innerHTML = message;
-            audioSource.currentTime = 0;
-            audioSource.play();
-            showAlert();
-            stopTimeout = setTimeout(() => {
-                stopAlert();
-            }, @fadeAnimationLength * 1000 + @animationLength * 1000);
+            if(isRunning){
+                return setTimeout(async () => await startAlert(message), 2000);
+            }
+            isRunning = true;
+            return new Promise((resolve, reject) => {
+                alertText.innerHTML = message;
+                audioSource.currentTime = 0;
+                audioSource.play();
+                showAlert();
+                setTimeout(() => {
+                    stopAlert();
+                    setTimeout(function(){
+                        isRunning = false;
+                        resolve();
+                    }, @fadeAnimationLength * 1000);
+                }, @fadeAnimationLength * 1000 + @animationLength * 1000);
+            });
         }
 
         function stopAlert() {
