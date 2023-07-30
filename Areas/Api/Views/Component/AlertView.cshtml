@@ -1,5 +1,7 @@
-﻿@using NewStreamSupporter.Data;
+﻿@using NewStreamSupporter.Contracts;
+@using NewStreamSupporter.Data;
 @model AlertModel;
+@inject IFileStore fileStore;
 @{
     var fadeAnimationLength = 1;
     var animationLength = Model.AlertDuration;
@@ -129,6 +131,17 @@
 <body>
     <div class="main-container">
         <audio class="audio-source" src="~/assets/service-bell-ring-14610.mp3"></audio>
+        @*
+        @if(!(await fileStore.Exists(Model.OwnerId))){
+            <audio class="audio-source" src="~/assets/service-bell-ring-14610.mp3"></audio>
+        }
+        else
+        {
+            var streamReader = new StreamReader((await fileStore.Load(Model.OwnerId))!);
+            var contents = await streamReader.ReadToEndAsync();
+            <audio class="audio-source" src="@contents"></audio>
+        }
+        *@
         <p class="alert-text text-shadow"></p>
     </div>
     <script src="~/microsoft//signalr/dist/browser/signalr.js"></script>

@@ -67,6 +67,7 @@ namespace NewStreamSupporter
             IConfigurationSection twitchAuth = config.GetRequiredSection("Auth:Twitch");
             IConfigurationSection googleAuth = config.GetRequiredSection("Auth:Google");
             IConfigurationSection rewardModule = config.GetRequiredSection("RewardModule");
+            IConfigurationSection storeModule = config.GetRequiredSection("StoreModule");
 
             //Kontrola validity WebhookCallback
             string twitchUriString = twitchAuth["WebhookCallback"]!;
@@ -153,7 +154,7 @@ namespace NewStreamSupporter
                     ))
                 .AddSingleton<ListenerStartupService>()
                 .AddTransient<RewardManagerService>()
-                .AddTransient<IFileStore, LocalFileStore>()
+                .AddTransient<IFileStore, LocalFileStore>(impl => new LocalFileStore(storeModule["FileStorePath"]!, long.Parse(storeModule["MaxFileSize"]!)))
                 .AddTransient<Freecurrencyapi>(impl => new Freecurrencyapi(config["FreeCurrencyApiKey"]!))
                 .AddSingleton<IYouTubePollingService>(impl => new YouTubePollingService(
                     impl.GetRequiredService<IYouTubeOptions>(),
