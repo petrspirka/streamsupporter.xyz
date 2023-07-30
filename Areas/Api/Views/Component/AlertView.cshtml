@@ -130,18 +130,21 @@
 </head>
 <body>
     <div class="main-container">
-        <audio class="audio-source" src="~/assets/service-bell-ring-14610.mp3"></audio>
-        @*
         @if(!(await fileStore.Exists(Model.OwnerId))){
             <audio class="audio-source" src="~/assets/service-bell-ring-14610.mp3"></audio>
         }
         else
         {
-            var streamReader = new StreamReader((await fileStore.Load(Model.OwnerId))!);
-            var contents = await streamReader.ReadToEndAsync();
-            <audio class="audio-source" src="@contents"></audio>
+            var test = (await fileStore.Load(Model.OwnerId));
+            var stream = new MemoryStream();
+            test!.CopyTo(stream);
+            test.Close();
+            var data = stream.ToArray();
+            <audio class="audio-source">
+                <source
+                    src="data:@Model.AudioType;base64,@Convert.ToBase64String(data)">
+            </audio>
         }
-        *@
         <p class="alert-text text-shadow"></p>
     </div>
     <script src="~/microsoft//signalr/dist/browser/signalr.js"></script>

@@ -1,4 +1,5 @@
-﻿using NewStreamSupporter.Data.Abstraction;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding.Validation;
+using NewStreamSupporter.Data.Abstraction;
 using NewStreamSupporter.Data.Abstractions;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -24,5 +25,7 @@ namespace NewStreamSupporter.Data
         [Column(TypeName = "decimal(9, 2)")]
         [Range(3.0, 15.0)]
         public decimal AlertDuration { get; set; } = 5.0M;
+        [ValidateNever]
+        public string? AudioType { get; set; } 
     }
 }

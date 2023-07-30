@@ -47,14 +47,16 @@ namespace NewStreamSupporter.Services
             return Task.FromResult(File.OpenRead(filePath) as Stream) as Task<Stream?>;
         }
 
-        public Task Store(string key, Stream data)
+        public async Task Store(string key, Stream data)
         {
             if(data.Length > _sizeLimit)
             {
                 throw new ArgumentException("Data provided is too large");
             }
             var stream = File.OpenWrite(GetPath(key));
-            return data.CopyToAsync(stream);
+            await data.CopyToAsync(stream);
+            stream.Close();
+            return;
         }
 
         public Task<bool> Exists(string key)

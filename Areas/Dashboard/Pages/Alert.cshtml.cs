@@ -67,6 +67,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
                     return Page();
                 }
                 await _store.Store(AlertModel.OwnerId, file.OpenReadStream());
+                AlertModel.AudioType = file.ContentType;
             }
 
             _context.Attach(AlertModel).State = EntityState.Modified;

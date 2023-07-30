@@ -5,7 +5,13 @@ export class SignalComponent {
 
     constructor(id, uid, type) {
         this.#connection = new signalR.HubConnectionBuilder()
-            .withAutomaticReconnect()
+            .withAutomaticReconnect({
+                nextRetryDelayInMilliseconds: retryContext => {
+                    if (retryContext.elapsedMilliseconds < 60000) {
+                        return 10000;
+                    }
+                    return 30000 + Math.random() * 30;
+            })
             .withUrl(`/Api/Dispatcher?oid=${id}&uid=${uid}&type=${type}`);
     }
 
