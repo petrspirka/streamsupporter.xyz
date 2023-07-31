@@ -11,6 +11,7 @@ export class SignalComponent {
                         return 10000;
                     }
                     return 30000 + Math.random() * 30;
+                }
             })
             .withUrl(`/Api/Dispatcher?oid=${id}&uid=${uid}&type=${type}`);
     }

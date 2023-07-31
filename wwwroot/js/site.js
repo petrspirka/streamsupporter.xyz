@@ -44,3 +44,8 @@ function GetCookie(name) {
     }
     return match[0];
 }
+
+function TestWidget(id) {
+    const form = document.getElementById("testWidgetForm-"+id);
+    form.submit();
+}

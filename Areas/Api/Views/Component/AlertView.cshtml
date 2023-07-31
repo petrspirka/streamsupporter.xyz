@@ -79,6 +79,8 @@
             audioSource = document.getElementsByClassName("audio-source")[0];
             mainContainer = document.getElementsByClassName("main-container")[0];
             alertText = document.getElementsByClassName("alert-text")[0];
+
+            audioSource.load();
         });
 
         function startAlert(message) {
@@ -93,7 +95,9 @@
                 showAlert();
                 setTimeout(() => {
                     stopAlert();
-                    setTimeout(function(){
+                    setTimeout(function () {
+                        audioSource.pause();
+                        audioSource.currentTime = 0;
                         isRunning = false;
                         resolve();
                     }, @fadeAnimationLength * 1000);
@@ -103,8 +107,6 @@
 
         function stopAlert() {
             hideAlert();
-            audioSource.pause();
-            audioSource.currentTime = 0;
         }
 
         function showAlert() {
@@ -130,8 +132,9 @@
 </head>
 <body>
     <div class="main-container">
+        <audio class="audio-source" preload="auto">
         @if(!(await fileStore.Exists(Model.OwnerId))){
-            <audio class="audio-source" src="~/assets/service-bell-ring-14610.mp3"></audio>
+                <source src="~/assets/service-bell-ring-14610.mp3">
         }
         else
         {
@@ -140,11 +143,10 @@
             test!.CopyTo(stream);
             test.Close();
             var data = stream.ToArray();
-            <audio class="audio-source">
                 <source
                     src="data:@Model.AudioType;base64,@Convert.ToBase64String(data)">
-            </audio>
-        }
+            }
+        </audio>
         <p class="alert-text text-shadow"></p>
     </div>
     <script src="~/microsoft//signalr/dist/browser/signalr.js"></script>

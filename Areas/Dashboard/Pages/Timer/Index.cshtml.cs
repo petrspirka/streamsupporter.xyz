@@ -1,27 +1,50 @@
-﻿using Microsoft.AspNetCore.Mvc.RazorPages;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
+using NewStreamSupporter.Services;
 
 namespace NewStreamSupporter.Areas.Dashboard.Pages.Timer
 {
     public class IndexModel : PageModel
     {
         private readonly NewStreamSupporter.Data.ApplicationContext _context;
+        private readonly DispatcherHubStateService _hub;
 
-        public IndexModel(NewStreamSupporter.Data.ApplicationContext context)
+        public IndexModel(NewStreamSupporter.Data.ApplicationContext context, DispatcherHubStateService hub)
         {
             _context = context;
+            _hub = hub;
+        }
+
+        public async Task<IActionResult> OnPostTestTriggerAsync()
+        {
+            var form = HttpContext.Request.Form;
+            var timer = await _context.TimerModel.FirstOrDefaultAsync(a => a.Id == form["TimerModel.Id"].ToString());
+            if (timer == null || timer.OwnerId != HttpContext.GetUserId())
+            {
+                return Forbid();
+            }
+            await _hub.Trigger("timer", timer.Id, null);
+            await LoadWidgets();
+            return Page();
+        }
+
+        private async Task LoadWidgets()
+        {
+            if (_context.TimerModel != null)
+            {
+                TimerModel = await _context.TimerModel.Where(t => t.OwnerId == HttpContext.GetUserId()).ToListAsync();
+            }
         }
 
         public IList<TimerModel> TimerModel { get; set; } = default!;
 
         public async Task OnGetAsync()
         {
-            if (_context.TimerModel != null)
-            {
-                TimerModel = await _context.TimerModel.Where(t => t.OwnerId == HttpContext.GetUserId()).ToListAsync();
-            }
+            await LoadWidgets();
         }
     }
 }

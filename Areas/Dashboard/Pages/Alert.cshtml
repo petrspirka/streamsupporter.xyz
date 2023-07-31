@@ -19,6 +19,7 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AlertModel.Id" />
             <input type="hidden" asp-for="AlertModel.OwnerId" value="@Model.AlertModel.OwnerId" />
+            <input type="hidden" asp-for="AlertModel.AudioType" value="@Model.AlertModel.AudioType" />
             <div class="form-group form-check pb-2">
                 <label class="form-check-label" asp-for="AlertModel.ShouldTriggerFollows" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerFollows)))">
                     <input class="form-check-input" asp-for="AlertModel.ShouldTriggerFollows" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerFollows)
@@ -57,10 +58,11 @@
                 {
                     <input id="AlertModel_CustomAudio" type="file" name="AlertModel.CustomAudio" accept=".mp3,.wav" class="form-control">
                 }
-                <span for="AlertModel.AlertDuration" class="text-danger">@Model.FileStatusMessage</span>
+                <span class="text-danger">@Model.FileStatusMessage</span>
             </div>
             <div class="form-group pt-2 pb-2">
                 <input type="submit" value="Save" asp-page-handler="" class="btn btn-primary mb-1" />
+                <button asp-page-handler="TestTrigger" class="btn btn-primary mb-1" data-bs-toggle="tooltip" title="Test this widget. Keep in mind you must first save if you've modified the alert.">Test alert</button>
                 <a asp-area="Api" asp-controller="Component" asp-action="Alert" asp-route-uid="@Model.AlertModel.OwnerId" asp-route-id="@Model.AlertModel.Id" class="btn btn-primary mb-1" target="_blank">Show</a>
                 <a asp-page="./Index" class="btn btn-danger mb-1">Back to overview</a>
             </div>
