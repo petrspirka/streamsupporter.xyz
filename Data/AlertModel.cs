@@ -23,7 +23,7 @@ namespace NewStreamSupporter.Data
 
         [Display(Name = "Duration", Description = "How long the alert stays on screen.")]
         [Column(TypeName = "decimal(5, 2)")]
-        [Range(1.0, 15.0)]
+        [Range(1.0, 30.0)]
         public decimal AlertDuration { get; set; } = 5.0M;
         [ValidateNever]
         public string? AudioType { get; set; } 
