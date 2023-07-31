@@ -10,6 +10,7 @@ using TwitchLib.Api.Core.Exceptions;
 
 namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
 {
+    [RequestSizeLimit(30_000_000)]
     public class AlertPageModel : PageModel
     {
         private readonly DispatcherHubStateService _hubService;
