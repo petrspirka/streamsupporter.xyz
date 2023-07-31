@@ -43,6 +43,14 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.ExpiryDate)))">
+                    @Html.DisplayNameFor(model => model.DonationGoalModel.ExpiryDate)
+                </dt>
+                <dd class="col-sm-8 text-break my-1">
+                    @Html.DisplayFor(model => model.DonationGoalModel.ExpiryDate)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
                 <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.BackgroundColor)))">
                     @Html.DisplayNameFor(model => model.DonationGoalModel.BackgroundColor)
                 </dt>
@@ -56,14 +64,6 @@
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
                     <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.DonationGoalModel.FontColor'}" disabled />
-                </dd>
-            </div>
-            <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<DonationGoalModel>(nameof(DonationGoalModel.ExpiryDate)))">
-                    @Html.DisplayNameFor(model => model.DonationGoalModel.ExpiryDate)
-                </dt>
-                <dd class="col-sm-8 text-break my-1">
-                    @Html.DisplayFor(model => model.DonationGoalModel.ExpiryDate)
                 </dd>
             </div>
         </dl>

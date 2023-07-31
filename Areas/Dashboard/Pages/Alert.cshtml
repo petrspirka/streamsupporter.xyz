@@ -20,15 +20,10 @@
             <input type="hidden" asp-for="AlertModel.Id" />
             <input type="hidden" asp-for="AlertModel.OwnerId" value="@Model.AlertModel.OwnerId" />
             <input type="hidden" asp-for="AlertModel.AudioType" value="@Model.AlertModel.AudioType" />
-            <div class="form-group form-check pb-2">
-                <label class="form-check-label" asp-for="AlertModel.ShouldTriggerFollows" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerFollows)))">
-                    <input class="form-check-input" asp-for="AlertModel.ShouldTriggerFollows" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerFollows)
-                </label>
-            </div>
-            <div class="form-group form-check pb-2">
-                <label class="form-check-label" asp-for="AlertModel.ShouldTriggerDonations" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerDonations)))">
-                    <input class="form-check-input" asp-for="AlertModel.ShouldTriggerDonations" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerDonations)
-                </label>
+            <div class="form-group pb-2">
+                <label asp-for="AlertModel.AlertDuration" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.AlertDuration)))"></label>
+                <input asp-for="AlertModel.AlertDuration" type="number" class="form-control" min="@(ModelExtensions.GetMinimum<AlertModel>(nameof(AlertModel.AlertDuration)))" max="@(ModelExtensions.GetMaximum<AlertModel>(nameof(AlertModel.AlertDuration)))" />
+                <span asp-validation-for="AlertModel.AlertDuration" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="AlertModel.BackgroundColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.BackgroundColor)))"></label>
@@ -42,13 +37,18 @@
                 <input class="form-control js-color" asp-for="AlertModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="AlertModel.FontColor" class="text-danger"></span>
             </div>
-            <div class="form-group pb-2">
-                <label asp-for="AlertModel.AlertDuration" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.AlertDuration)))"></label>
-                <input asp-for="AlertModel.AlertDuration" type="number" class="form-control" min="@(ModelExtensions.GetMinimum<AlertModel>(nameof(AlertModel.AlertDuration)))" max="@(ModelExtensions.GetMaximum<AlertModel>(nameof(AlertModel.AlertDuration)))" />
-                <span asp-validation-for="AlertModel.AlertDuration" class="text-danger"></span>
+            <div class="form-group form-check pb-2">
+                <label class="form-check-label" asp-for="AlertModel.ShouldTriggerFollows" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerFollows)))">
+                    <input class="form-check-input" asp-for="AlertModel.ShouldTriggerFollows" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerFollows)
+                </label>
+            </div>
+            <div class="form-group form-check pb-2">
+                <label class="form-check-label" asp-for="AlertModel.ShouldTriggerDonations" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.ShouldTriggerDonations)))">
+                    <input class="form-check-input" asp-for="AlertModel.ShouldTriggerDonations" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerDonations)
+                </label>
             </div>
             <div class="form-group pb-2">
-                <label for="AlertModel_CustomAudio" class="control-label">Choose custom audio</label>
+                <label for="AlertModel_CustomAudio" class="control-label" data-bs-toggle="tooltip" title="Lets you upload a custom audio sound to be used. Must be .mp3 or .wav. Uploading files beyond 30MB is not supported.">Choose custom audio</label>
                 @if (await fileStore.Exists(HttpContext.GetUserId()))
                 {
                     <br />

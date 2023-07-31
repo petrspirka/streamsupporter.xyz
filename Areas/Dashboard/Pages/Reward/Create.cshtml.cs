@@ -50,17 +50,18 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Rewards
         public async Task<IActionResult> OnPostAsync()
         {
             string userId = HttpContext.GetUserId();
-            if (RewardModel.Owner == null)
-            {
-                RewardModel.Owner = await HttpContext.GetUser(_context);
-            }
-            else if (RewardModel.Owner != await HttpContext.GetUser(_context))
-            {
-                return Unauthorized();
-            }
+
             if (!ModelState.IsValid || _context.Rewards == null || RewardModel == null)
             {
                 return Page();
+            }
+            else if (RewardModel.OwnerId == null)
+            {
+                RewardModel.OwnerId = HttpContext.GetUserId();
+            }
+            else if (RewardModel.OwnerId != HttpContext.GetUserId())
+            {
+                return Unauthorized();
             }
 
 

@@ -54,9 +54,9 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Counter
                 CounterModel = countermodel;
                 _context.CounterModel.Remove(CounterModel);
                 await _context.SaveChangesAsync();
+                await _hubService.Reload("counter", id);
             }
 
-            await _hubService.Reload("counter", id);
 
             return RedirectToPage("./Index");
         }

@@ -23,7 +23,7 @@ namespace NewStreamSupporter.Data
         [Display(Name = "Delay", Description = "Takes effect when marquee is in permanent mode. Specifies time between activations.")]
         [Column(TypeName = "decimal(7, 2)")]
         [Range(0.0, 86400.0)]
-        public float Delay { get; set; } = 0;
+        public decimal Delay { get; set; } = 0;
         [Display(Name = "Permanent?", Description = "Specifies whether the marquee should keep cycling the \"Text\" property continuously.")]
         public bool Permanent { get; set; } = false;
     }

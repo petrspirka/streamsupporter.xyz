@@ -46,10 +46,13 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal
                 return Page();
             }
 
-            if (DonationGoalModel.OwnerId != HttpContext.GetUserId())
+            if (DonationGoalModel.OwnerId == null || DonationGoalModel.OwnerId != HttpContext.GetUserId())
             {
                 return Unauthorized();
             }
+
+            DonationGoalModel.TargetAmount = Math.Round(DonationGoalModel.TargetAmount, 2);
+            DonationGoalModel.CurrentAmount = Math.Round(DonationGoalModel.CurrentAmount, 2);
 
             _context.Attach(DonationGoalModel).State = EntityState.Modified;
 

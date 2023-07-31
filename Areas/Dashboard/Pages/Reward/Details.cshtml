@@ -34,19 +34,11 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.HasTextField)))">
-                    @Html.DisplayNameFor(model => model.RewardModel.HasTextField)
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.Cost)))">
+                    @Html.DisplayNameFor(model => model.RewardModel.TriggeredId)
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
-                    @Html.DisplayFor(model => model.RewardModel.HasTextField)
-                </dd>
-            </div>
-            <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.AutoAccept)))">
-                    @Html.DisplayNameFor(model => model.RewardModel.AutoAccept)
-                </dt>
-                <dd class="col-sm-8 text-break my-1">
-                    @Html.DisplayFor(model => model.RewardModel.AutoAccept)
+                    @Model.SelectedWidget
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
@@ -63,6 +55,22 @@
                 </dt>
                 <dd class="col-sm-8 text-break mb-0">
                     <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.RewardModel.FontColor'}" disabled />
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.HasTextField)))">
+                    @Html.DisplayNameFor(model => model.RewardModel.HasTextField)
+                </dt>
+                <dd class="col-sm-8 text-break my-1">
+                    @Html.DisplayFor(model => model.RewardModel.HasTextField)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.AutoAccept)))">
+                    @Html.DisplayNameFor(model => model.RewardModel.AutoAccept)
+                </dt>
+                <dd class="col-sm-8 text-break my-1">
+                    @Html.DisplayFor(model => model.RewardModel.AutoAccept)
                 </dd>
             </div>
         </dl>

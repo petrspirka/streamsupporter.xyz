@@ -70,6 +70,7 @@ namespace NewStreamSupporter.Services
             {
                 var scope = _serviceProvider.CreateAsyncScope();
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                //Either trigger a follow if the configuration property is set or see if the follow is in database, and if not, trigger a follow message and add it
                 if (shouldFollowsRetrigger || !(await context.StreamerFollows.Where(s => s.FollowerId == e.User.Id).Where(s => s.Platform == e.User.Platform).AnyAsync(s => s.StreamerId == e.Channel)))
                 {
                     OnStreamFollow?.Invoke(sender, e);

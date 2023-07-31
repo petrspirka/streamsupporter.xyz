@@ -31,10 +31,17 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal
                 return Page();
             }
 
-            if (DonationGoalModel.Owner == null)
+            if(DonationGoalModel.OwnerId == null)
             {
-                DonationGoalModel.Owner = await HttpContext.GetUser(_context);
+                DonationGoalModel.OwnerId = HttpContext.GetUserId();
             }
+            else if (DonationGoalModel.OwnerId != HttpContext.GetUserId())
+            {
+                return Unauthorized();
+            }
+
+            DonationGoalModel.TargetAmount = Math.Round(DonationGoalModel.TargetAmount, 2);
+            DonationGoalModel.CurrentAmount = Math.Round(DonationGoalModel.CurrentAmount, 2);
 
             _context.DonationGoalModel.Add(DonationGoalModel);
             await _context.SaveChangesAsync();

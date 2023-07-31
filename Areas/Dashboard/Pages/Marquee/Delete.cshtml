@@ -26,22 +26,6 @@
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.BackgroundColor)))">
-                    @Html.DisplayNameFor(model => model.MarqueeModel.BackgroundColor)
-                </dt>
-                <dd class="col-sm-8 text-break mb-0">
-                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.MarqueeModel.BackgroundColor'}" disabled />
-                </dd>
-            </div>
-            <div class="border-1 border-bottom row py-1">
-                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.FontColor)))">
-                    @Html.DisplayNameFor(model => model.MarqueeModel.FontColor)
-                </dt>
-                <dd class="col-sm-8 text-break mb-0">
-                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.MarqueeModel.FontColor'}" disabled />
-                </dd>
-            </div>
-            <div class="border-1 border-bottom row py-1">
                 <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))">
                     @Html.DisplayNameFor(model => model.MarqueeModel.SpeedFactor)
                 </dt>
@@ -71,6 +55,22 @@
                 </dt>
                 <dd class="col-sm-8 text-break my-1">
                     @Html.DisplayFor(model => model.MarqueeModel.Delay)
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.BackgroundColor)))">
+                    @Html.DisplayNameFor(model => model.MarqueeModel.BackgroundColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.MarqueeModel.BackgroundColor'}" disabled />
+                </dd>
+            </div>
+            <div class="border-1 border-bottom row py-1">
+                <dt class="col-sm-4" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.FontColor)))">
+                    @Html.DisplayNameFor(model => model.MarqueeModel.FontColor)
+                </dt>
+                <dd class="col-sm-8 text-break mb-0">
+                    <input class="js-color form-control" data-jscolor="{preset: 'ThemedPreset', value: '@Model.MarqueeModel.FontColor'}" disabled />
                 </dd>
             </div>
             <div class="border-1 border-bottom row py-1">

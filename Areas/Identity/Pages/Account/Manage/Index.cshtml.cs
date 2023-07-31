@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NewStreamSupporter.Data;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 
 namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
 {
@@ -55,6 +56,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
             /// </summary>
             [Phone]
             [Display(Name = "Phone number")]
+            [RegularExpression("^\\s*\\+?\\s*([0-9][\\s-]*){9,}$", ErrorMessage = "The specified number is not a valid phone number.")]
             public string PhoneNumber { get; set; }
             [Display(Name = "Username")]
             [StringLength(255, ErrorMessage = "The {0} must be at most {1} characters long.")]

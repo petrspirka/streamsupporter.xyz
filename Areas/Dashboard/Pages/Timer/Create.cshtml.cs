@@ -31,9 +31,13 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Timer
                 return Page();
             }
 
-            if (TimerModel.Owner == null)
+            if (TimerModel.OwnerId == null)
             {
-                TimerModel.Owner = await HttpContext.GetUser(_context);
+                TimerModel.OwnerId = HttpContext.GetUserId();
+            }
+            else if (TimerModel.OwnerId != HttpContext.GetUserId())
+            {
+                return Unauthorized();
             }
 
             _context.TimerModel.Add(TimerModel);

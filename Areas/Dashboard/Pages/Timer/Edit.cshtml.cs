@@ -46,7 +46,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Timer
                 return Page();
             }
 
-            if (HttpContext.GetUserId() == null || TimerModel.OwnerId != HttpContext.GetUserId())
+            if (TimerModel.OwnerId == null || TimerModel.OwnerId != HttpContext.GetUserId())
             {
                 return Unauthorized();
             }

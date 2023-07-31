@@ -75,6 +75,15 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
                 return Page();
             }
 
+            if (AlertModel.OwnerId == null)
+            { 
+                AlertModel.OwnerId = HttpContext.GetUserId();
+            } 
+            else if(AlertModel.OwnerId != HttpContext.GetUserId())
+            {
+                return Forbid();
+            }
+
             if (HttpContext.Request.Form.Files.Count == 1)
             {
                 var file = HttpContext.Request.Form.Files[0];
@@ -97,10 +106,19 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
                     FileStatusMessage = "Invalid file signature detected. Audio files must be of mp3 or wav format.";
                     return Page();
                 }
-                await _store.Store(AlertModel.OwnerId, file.OpenReadStream());
+                try
+                {
+                    await _store.Store(AlertModel.OwnerId, file.OpenReadStream());
+                }
+                catch(Exception)
+                {
+                    FileStatusMessage = "Could not save your file. Contact application developers for more help.";
+                    return Page();
+                }
                 AlertModel.AudioType = file.ContentType;
             }
-
+            
+            AlertModel.AlertDuration = Math.Round(AlertModel.AlertDuration, 2);
             _context.Attach(AlertModel).State = EntityState.Modified;
 
             try

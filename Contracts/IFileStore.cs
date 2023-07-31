@@ -1,5 +1,8 @@
 ﻿namespace NewStreamSupporter.Contracts
 {
+    /// <summary>
+    /// Rozhraní umožňující práci se soubory ve formě Streamů
+    /// </summary>
     public interface IFileStore
     {
         /// <summary>

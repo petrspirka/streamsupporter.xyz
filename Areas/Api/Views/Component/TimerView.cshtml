@@ -246,6 +246,7 @@
     <div class="main-container hidden">
         <p class="timer-title">@Model.Text</p>
         <div class="timer-progress-container">
+            <!-- Hack to force progress bar to be the size of a paragraph. &#8203; is a blank character. -->
             <p><span>&#8203;</span></p>
             <div class="timer-progress-bar hidden"></div>
             <p class="timer-progress-text">0:00</p>

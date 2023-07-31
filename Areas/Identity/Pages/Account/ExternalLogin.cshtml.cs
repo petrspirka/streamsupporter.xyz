@@ -244,7 +244,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
                         }
                         catch(Exception ex)
                         {
-                            _logger.LogError(ex.Message);
+                            _logger.LogError("Failed sending email: " + ex.Message);
                             await _userManager.DeleteAsync(user);
                             ErrorMessage = "Could not send verification email. Registering has been aborted";
                             return RedirectToPage("./Login");

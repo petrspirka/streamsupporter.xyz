@@ -31,9 +31,13 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Counter
                 return Page();
             }
 
-            if (CounterModel.Owner == null)
+            if (CounterModel.OwnerId == null)
             {
-                CounterModel.Owner = await HttpContext.GetUser(_context);
+                CounterModel.OwnerId = HttpContext.GetUserId();
+            }
+            else if (CounterModel.OwnerId != HttpContext.GetUserId() || CounterModel.Id != null)
+            {
+                return Unauthorized();
             }
 
             _context.CounterModel.Add(CounterModel);

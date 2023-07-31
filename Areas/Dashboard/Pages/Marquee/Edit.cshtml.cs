@@ -47,17 +47,12 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Marquee
                 return Page();
             }
 
-            if (MarqueeModel.Owner != null && MarqueeModel.OwnerId != HttpContext.GetUserId())
+            if (MarqueeModel.OwnerId == null || MarqueeModel.OwnerId != HttpContext.GetUserId())
             {
                 return Unauthorized();
             }
 
             _context.Attach(MarqueeModel).State = EntityState.Modified;
-
-            if (MarqueeModel.Owner == null)
-            {
-                MarqueeModel.Owner = await HttpContext.GetUser(_context);
-            }
 
             try
             {

@@ -9,6 +9,8 @@ namespace NewStreamSupporter.Services
         //Mapa pro převod typu widgetu + id widgetu na všechny připojené widgety
         private readonly IDictionary<string, IDictionary<string, IList<string>>> _connectedClients = new Dictionary<string, IDictionary<string, IList<string>>>();
 
+        private readonly object _lock = new object();
+
         //Zpětná mapa pro převod připojených klientů na typ a Id
         private readonly IDictionary<string, Tuple<string, string>> _reverseConnectedClients = new Dictionary<string, Tuple<string, string>>();
         private IServiceProvider _serviceProvider;
@@ -22,56 +24,60 @@ namespace NewStreamSupporter.Services
 
         internal Task ClientConnected(string type, string id, string connectionId)
         {
-            //Pokud neexistuje daný typ v mapě, vytvoříme jej
-            if (!_connectedClients.ContainsKey(type))
-            {
-                _connectedClients[type] = new Dictionary<string, IList<string>>();
+            lock (_lock) { 
+                //Pokud neexistuje daný typ v mapě, vytvoříme jej
+                if (!_connectedClients.ContainsKey(type))
+                {
+                    _connectedClients[type] = new Dictionary<string, IList<string>>();
+                }
+
+                //Mapa id -> seznam připojených widgetů
+                IDictionary<string, IList<string>> typedDictionary = _connectedClients[type];
+
+                //Pokud neexistuje Id widgetu v mapě, vytvoříme jej
+                if (!typedDictionary.ContainsKey(id))
+                {
+                    typedDictionary[id] = new List<string>();
+                }
+
+                //Přidáme připojeného posluchače do map
+                typedDictionary[id]!.Add(connectionId);
+                _reverseConnectedClients[connectionId] = new(type, id);
             }
-
-            //Mapa id -> seznam připojených widgetů
-            IDictionary<string, IList<string>> typedDictionary = _connectedClients[type];
-
-            //Pokud neexistuje Id widgetu v mapě, vytvoříme jej
-            if (!typedDictionary.ContainsKey(id))
-            {
-                typedDictionary[id] = new List<string>();
-            }
-
-            //Přidáme připojeného posluchače do map
-            typedDictionary[id]!.Add(connectionId);
-            _reverseConnectedClients[connectionId] = new(type, id);
 
             return Task.CompletedTask;
         }
 
         internal Task ClientDisconnected(string connectionId)
         {
-            //Získáme typ a id widgetu
-            Tuple<string, string> reverseLookup = _reverseConnectedClients[connectionId];
-            if (reverseLookup == null)
-            {
-                return Task.CompletedTask;
+            lock (_lock) { 
+                //Získáme typ a id widgetu
+                Tuple<string, string> reverseLookup = _reverseConnectedClients[connectionId];
+                if (reverseLookup == null)
+                {
+                    return Task.CompletedTask;
+                }
+
+                string type = reverseLookup.Item1;
+                string id = reverseLookup.Item2;
+
+
+                //Jestliže existují v mapě připojených tento klient, odstraníme ho
+                //Pokud je navíc seznam klientů pro dané id nebo typ prázdný, smažeme ho
+                _connectedClients[type]?[id]?.Remove(connectionId);
+                if (_connectedClients?[type]?[id]?.Count == 0)
+                {
+                    _connectedClients[type].Remove(id);
+                }
+
+                if (_connectedClients?[type]?.Count == 0)
+                {
+                    _connectedClients.Remove(type);
+                }
+
+                //Odstraníme klienta z reverse mapy
+                _reverseConnectedClients.Remove(connectionId);
             }
-
-            string type = reverseLookup.Item1;
-            string id = reverseLookup.Item2;
-
-
-            //Jestliže existují v mapě připojených tento klient, odstraníme ho
-            //Pokud je navíc seznam klientů pro dané id nebo typ prázdný, smažeme ho
-            _connectedClients[type]?[id]?.Remove(connectionId);
-            if (_connectedClients?[type]?[id]?.Count == 0)
-            {
-                _connectedClients[type].Remove(id);
-            }
-
-            if (_connectedClients?[type]?.Count == 0)
-            {
-                _connectedClients.Remove(type);
-            }
-
-            //Odstraníme klienta z reverse mapy
-            _reverseConnectedClients.Remove(connectionId);
 
             return Task.CompletedTask;
         }
@@ -107,13 +113,21 @@ namespace NewStreamSupporter.Services
         /// <returns></returns>
         private async Task SendMessage(string type, string id, string method, object? arg = null)
         {
-            //Jestli nejsou připojení žádní klienti ke zmíněnému widgetu, končíme
-            if (!_connectedClients.ContainsKey(type) || !_connectedClients[type]!.ContainsKey(id))
+            IList<string>? clientIds;
+            lock (_lock) {
+                //Jestli nejsou připojení žádní klienti ke zmíněnému widgetu, končíme
+                if (!_connectedClients.ContainsKey(type) || !_connectedClients[type]!.ContainsKey(id))
+                {
+                    return;
+                }
+
+                clientIds = _connectedClients[type][id];
+            }
+
+            if(clientIds == null)
             {
                 return;
             }
-
-            IList<string> clientIds = _connectedClients[type][id];
 
             using var scope = _serviceProvider.CreateAsyncScope();
             var hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<DispatcherHub>>();

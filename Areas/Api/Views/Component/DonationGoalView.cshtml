@@ -15,7 +15,7 @@
             }
 
             * {
-                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif, sans-serif;
+                font-family: sans-serif;
                 font-weight: bold;
                 color: @Model.FontColor;
                 overflow: hidden;
@@ -194,7 +194,8 @@
     <body>
     <div class="main-container">
         <p class="goal-name">@Model.Text</p>
-        <div class=progress-bar-container>  
+        <div class=progress-bar-container>
+            <!-- Hack to force progress bar to be the size of a paragraph. &#8203; is a blank character. -->
             <p style="padding: 6px 0 0 0;"><span>&#8203;</span></p>
             <div class=progress-bar-background>
                 <div class="progress-bar-filler"></div>

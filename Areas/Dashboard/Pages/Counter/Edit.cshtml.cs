@@ -45,17 +45,12 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Counter
                 return Page();
             }
 
-            if (CounterModel.OwnerId != HttpContext.GetUserId())
+            if(CounterModel.OwnerId == null || CounterModel.OwnerId != HttpContext.GetUserId())
             {
                 return Unauthorized();
             }
 
             _context.Attach(CounterModel).State = EntityState.Modified;
-
-            if (CounterModel.Owner == null)
-            {
-                CounterModel.Owner = await HttpContext.GetUser(_context);
-            }
 
             try
             {

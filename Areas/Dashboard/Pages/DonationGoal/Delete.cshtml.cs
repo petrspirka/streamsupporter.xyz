@@ -54,9 +54,9 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal
                 DonationGoalModel = donationgoalmodel;
                 _context.DonationGoalModel.Remove(DonationGoalModel);
                 await _context.SaveChangesAsync();
+                await _hubService.Reload("donationGoal", id);
             }
 
-            await _hubService.Reload("donationGoal", id);
 
             return RedirectToPage("./Index");
         }
