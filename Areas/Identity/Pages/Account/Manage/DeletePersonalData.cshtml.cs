@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NewStreamSupporter.Data;
+using NewStreamSupporter.Services;
 using System.ComponentModel.DataAnnotations;
 
 namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
@@ -18,16 +19,22 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IDataStore _dataStore;
         private readonly ILogger<DeletePersonalDataModel> _logger;
+        private readonly TwitchListenerService _twitchListenerService;
+        private readonly YouTubeListenerService _youTubeListenerService;
 
         public DeletePersonalDataModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IDataStore dataStore,
+            TwitchListenerService twitchListenerService,
+            YouTubeListenerService youTubeListenerService,
             ILogger<DeletePersonalDataModel> logger)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _dataStore = dataStore;
+            _twitchListenerService = twitchListenerService;
+            _youTubeListenerService = youTubeListenerService;
             _logger = logger;
         }
 
@@ -87,6 +94,15 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
                     ModelState.AddModelError(string.Empty, "Incorrect password.");
                     return Page();
                 }
+            }
+
+            if(user.TwitchId != null && user.IsTwitchActive)
+            {
+                await _twitchListenerService.RemoveAllUserListeners(user.TwitchId);
+            }
+            if(user.GoogleBrandId != null && user.IsGoogleActive)
+            {
+                await _youTubeListenerService.RemoveAllUserListeners(user.GoogleBrandId);
             }
 
             if (user.GoogleBrandId != null)

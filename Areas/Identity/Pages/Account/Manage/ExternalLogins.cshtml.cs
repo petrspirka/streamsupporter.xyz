@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
+using NewStreamSupporter.Services;
 using System.Security.Claims;
 
 namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
@@ -22,6 +23,9 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
         private readonly IYouTubeProviderService _youtubeProviderService;
         private readonly IDataStore _dataStore;
         private readonly ICurrencyService _currencyService;
+        private readonly TwitchListenerService _twitchService;
+        private readonly YouTubeListenerService _youtubeService;
+        private readonly NotificationService _notificationService;
 
         public ExternalLoginsModel(
             UserManager<ApplicationUser> userManager,
@@ -29,7 +33,10 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
             IUserStore<ApplicationUser> userStore,
             IYouTubeProviderService youtubeProviderService,
             IDataStore dataStore,
-            ICurrencyService currencyService)
+            ICurrencyService currencyService,
+            TwitchListenerService twitchService,
+            YouTubeListenerService youtubeService,
+            NotificationService notificationService)
         {
             _userManager = userManager;
             _signInManager = signInManager;
@@ -37,6 +44,9 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
             _youtubeProviderService = youtubeProviderService;
             _dataStore = dataStore;
             _currencyService = currencyService;
+            _twitchService = twitchService;
+            _youtubeService = youtubeService;
+            _notificationService = notificationService;
         }
 
         /// <summary>
@@ -101,20 +111,34 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
                 StatusMessage = "The external login was not removed.";
                 return RedirectToPage();
             }
-
+            string oldId;
             switch (loginProvider)
             {
                 case "Twitch":
+                    oldId = user.TwitchId;
                     user.TwitchId = null;
                     user.TwitchUsername = null;
                     user.TwitchAccessToken = null;
                     user.TwitchRefreshToken = null;
                     user.TwitchAccessTokenExpiry = null;
+                    if (user.IsTwitchActive)
+                    {
+                        await _twitchService.RemoveAllUserListeners(oldId);
+                        user.IsTwitchActive = false;
+                        await _notificationService.AddNotification(user.Id, "You have removed your external login to Twitch. Your settings have been adjusted accordingly.", "#FF0000FF");
+                    }
                     break;
                 case "Google":
                     await _dataStore.DeleteAsync<TokenResponse>(user.GoogleBrandId);
+                    oldId = user.GoogleBrandId;
                     user.GoogleBrandId = null;
                     user.GoogleBrandName = null;
+                    if (user.IsGoogleActive)
+                    {
+                        await _youtubeService.RemoveAllUserListeners(oldId);
+                        user.IsGoogleActive = false;
+                        await _notificationService.AddNotification(user.Id, "You have removed your external login to Google. Your settings have been adjusted accordingly.", "#FF0000FF");
+                    }
                     break;
             }
             await _userStore.UpdateAsync(user, new CancellationToken());
@@ -165,6 +189,10 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
                     user.TwitchAccessToken = info.AuthenticationTokens.Where(token => token.Name == "access_token").First().Value;
                     user.TwitchRefreshToken = info.AuthenticationTokens.Where(token => token.Name == "refresh_token").First().Value;
                     user.TwitchAccessTokenExpiry = DateTime.Parse(info.AuthenticationTokens.Where(token => token.Name == "expires_at").First().Value);
+                    if (user.IsTwitchActive)
+                    {
+                        await _twitchService.AddAllUserListeners(user.TwitchId);
+                    }
                     break;
                 case "Google":
                     if (!info.AuthenticationTokens.Any(t => t.Name == "refresh_token") || !info.AuthenticationTokens.Any(t => t.Name == "access_token"))
@@ -196,6 +224,9 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
                         user.GoogleBrandName = youtubeInfo.Name;
                     }
                     await _youtubeProviderService.SaveUserCredential(user.GoogleBrandId, googleRefreshToken);
+                    if(user.IsGoogleActive) {
+                        await _youtubeService.AddAllUserListeners(user.GoogleBrandId);
+                    }
                     break;
             }
 
