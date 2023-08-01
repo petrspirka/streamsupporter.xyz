@@ -56,7 +56,7 @@ TestResults/
 ######################
 *.log
 *.sqlite
-NewStreamSupporter.db
+#NewStreamSupporter.db
 NewStreamSupporter.db-shm
 NewStreamSupporter.db-wal
 NewStreamSupporter.db.old
@@ -86,5 +86,5 @@ _[Ss]cripts
 #######################
 # Configuration files #
 #######################
-appsettings.json
+#appsettings.json
 appsettings.Development.json
