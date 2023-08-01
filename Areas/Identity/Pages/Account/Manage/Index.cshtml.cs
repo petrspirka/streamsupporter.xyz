@@ -59,7 +59,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
             [RegularExpression("^\\s*\\+?\\s*([0-9][\\s-]*){9,}$", ErrorMessage = "The specified number is not a valid phone number.")]
             public string PhoneNumber { get; set; }
             [Display(Name = "Username")]
-            [StringLength(255, ErrorMessage = "The {0} must be at most {1} characters long.")]
+            [StringLength(64, ErrorMessage = "The username must be at least 5 characters long and 64 characters long at most", MinimumLength = 5)]
             [RegularExpression("[abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789\\-._@+]*", ErrorMessage = "Your username is not valid. It must only contain alphanumeric characters and \"-._@+\".")]
             public string Username { get; set; }
         }
