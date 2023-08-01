@@ -28,7 +28,7 @@
             </div>
             <div class="form-group pb-2">
                 <label asp-for="TimerModel.Length" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<TimerModel>(nameof(TimerModel.Length)))"></label>
-                <input asp-for="TimerModel.Length" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<TimerModel>(nameof(TimerModel.Length)))" max="@(ModelExtensions.GetMaximum<TimerModel>(nameof(TimerModel.Length)))" />
+                <input asp-for="TimerModel.Length" required class="form-control" type="number" step="1" min="@(ModelExtensions.GetMinimum<TimerModel>(nameof(TimerModel.Length)))" max="@(ModelExtensions.GetMaximum<TimerModel>(nameof(TimerModel.Length)))" />
                 <span asp-validation-for="TimerModel.Length" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
@@ -58,6 +58,9 @@
         isSubmitting = valid;
         console.log(valid)
     });
+
+    for (let colorPicker of $(".js-color"))
+        colorPicker.value = "#FFFFFFFF";
 
     $('#mainForm').data('serialize', $('#mainForm').serialize());
     $(window).bind('beforeunload', function (e) {

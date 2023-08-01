@@ -45,7 +45,19 @@ function GetCookie(name) {
     return match[0];
 }
 
+/*
 function TestWidget(id) {
     const form = document.getElementById("testWidgetForm-"+id);
     form.submit();
+}
+*/
+
+function TestWidget(id, aft) {
+    $.ajax({
+        method: "POST",
+        url: "?handler=TestTrigger&id="+id,
+        headers: {
+            "RequestVerificationToken": aft
+        }
+    });
 }

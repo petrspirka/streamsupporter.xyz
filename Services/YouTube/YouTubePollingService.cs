@@ -172,7 +172,7 @@ namespace NewStreamSupporter.Services.YouTube
 
                 //Kontrola ukončení streamu
                 IEnumerable<LiveBroadcast>? streamRequest = await _youTubeProviderService.GetActiveStreamsForUser(userChatPair.Key);
-                if (streamRequest == null || streamRequest.Count() == 0)
+                if (streamRequest == null || !streamRequest.Any())
                 {
                     streamEnded = true;
                 }

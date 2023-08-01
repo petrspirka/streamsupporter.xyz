@@ -7,7 +7,8 @@ namespace NewStreamSupporter.Services
         private readonly ILogger<DispatcherHub> _logger;
         private readonly DispatcherHubStateService _hubService;
 
-        public DispatcherHub(DispatcherHubStateService hubService, ILogger<DispatcherHub> logger) {
+        public DispatcherHub(DispatcherHubStateService hubService, ILogger<DispatcherHub> logger)
+        {
             _logger = logger;
             _hubService = hubService;
         }

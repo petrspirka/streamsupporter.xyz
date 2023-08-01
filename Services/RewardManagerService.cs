@@ -64,11 +64,11 @@ namespace NewStreamSupporter.Services
                 Text = $"{user.UserName} purchased {reward.Name}."
             };
 
-            if(message != null)
+            if (message != null)
             {
                 purchase.Text += $"\nMessage: {message}";
             }
-            else if(reward.TriggeredType == "alert")
+            else if (reward.TriggeredType == "alert")
             {
                 message = purchase.Text;
             }

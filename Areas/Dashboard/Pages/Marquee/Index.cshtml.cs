@@ -21,17 +21,15 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Marquee
             _hub = hub;
         }
 
-        public async Task<IActionResult> OnPostTestTriggerAsync()
+        public async Task<IActionResult> OnPostTestTriggerAsync(string id)
         {
-            var form = HttpContext.Request.Form;
-            var marquee = await _context.Marquees.FirstOrDefaultAsync(a => a.Id == form["MarqueeModel.Id"].ToString());
+            var marquee = await _context.Marquees.FirstOrDefaultAsync(a => a.Id == id);
             if (marquee == null || marquee.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();
             }
             await _hub.Trigger("marquee", marquee.Id, "I am a test trigger");
-            await LoadWidgets();
-            return Page();
+            return new EmptyResult();
         }
 
         public async Task OnGetAsync()

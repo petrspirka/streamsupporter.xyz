@@ -19,17 +19,15 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Timer
             _hub = hub;
         }
 
-        public async Task<IActionResult> OnPostTestTriggerAsync()
+        public async Task<IActionResult> OnPostTestTriggerAsync(string id)
         {
-            var form = HttpContext.Request.Form;
-            var timer = await _context.TimerModel.FirstOrDefaultAsync(a => a.Id == form["TimerModel.Id"].ToString());
+            var timer = await _context.TimerModel.FirstOrDefaultAsync(a => a.Id == id);
             if (timer == null || timer.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();
             }
             await _hub.Trigger("timer", timer.Id, null);
-            await LoadWidgets();
-            return Page();
+            return new EmptyResult();
         }
 
         private async Task LoadWidgets()

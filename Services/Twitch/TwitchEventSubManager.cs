@@ -61,7 +61,8 @@ namespace NewStreamSupporter.Services.Twitch
             try
             {
                 succeeded = await _eventSubApi.DeleteEventSubSubscriptionAsync(subscriptionId);
-            } catch(BadResourceException ex)
+            }
+            catch (BadResourceException ex)
             {
                 _logger.LogCritical("Something has gone seriously wrong! {message}", ex.Message);
             }

@@ -44,7 +44,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Rewards
             {
                 var type = char.ToUpper(RewardModel.TriggeredType[0]) + RewardModel.TriggeredType[1..];
                 var triggeredWidget = await GetWidget(type, RewardModel.TriggeredId);
-                if(triggeredWidget != null)
+                if (triggeredWidget != null)
                 {
                     SelectedWidget = $"{type} - {triggeredWidget.Name}";
                 }

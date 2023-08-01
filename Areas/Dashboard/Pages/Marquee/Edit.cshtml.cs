@@ -52,6 +52,11 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Marquee
                 return Unauthorized();
             }
 
+            MarqueeModel.Delay = Math.Round(MarqueeModel.Delay * 20) / 20;
+            MarqueeModel.FadeTime = Math.Round(MarqueeModel.FadeTime * 20) / 20;
+            MarqueeModel.SpeedFactor = Math.Round(MarqueeModel.SpeedFactor * 20) / 20;
+            MarqueeModel.SpeedFactorPerCharacter = Math.Round(MarqueeModel.SpeedFactorPerCharacter * 20) / 20;
+
             _context.Attach(MarqueeModel).State = EntityState.Modified;
 
             try

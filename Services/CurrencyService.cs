@@ -170,7 +170,7 @@ namespace NewStreamSupporter.Services
             using AsyncServiceScope scope = _serviceProvider.CreateAsyncScope();
             ApplicationContext context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
             ApplicationUser? shopOwner = await context.Users.Where(u => u.TwitchId == channel).FirstOrDefaultAsync();
-            if(shopOwner == null)
+            if (shopOwner == null)
             {
                 return false;
             }
@@ -291,7 +291,7 @@ namespace NewStreamSupporter.Services
             using AsyncServiceScope scope = _serviceProvider.CreateAsyncScope();
             ApplicationContext context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
             ApplicationUser? shopOwner = await context.Users.Where(u => u.GoogleBrandId == channel).FirstOrDefaultAsync();
-            if(shopOwner == null)
+            if (shopOwner == null)
             {
                 return false;
             }
@@ -314,10 +314,10 @@ namespace NewStreamSupporter.Services
             var googleId = user.GoogleBrandId;
 
             var existingTwitchCurrencies = await context.UnclaimedCurrencies.Where(c => c.TwitchId == twitchId).ToListAsync();
-            foreach(var currency in existingTwitchCurrencies)
+            foreach (var currency in existingTwitchCurrencies)
             {
                 ClaimedCurrencyModel? claimedCurrency = await context.ClaimedCurrencies.Where(c => c.OwnerId == user.Id).FirstOrDefaultAsync();
-                if(claimedCurrency != null)
+                if (claimedCurrency != null)
                 {
                     claimedCurrency.Currency += currency.Currency;
                 }
@@ -335,7 +335,7 @@ namespace NewStreamSupporter.Services
                 context.UnclaimedCurrencies.Remove(currency);
             }
             await context.SaveChangesAsync();
-        
+
             var existingGoogleCurrencies = await context.UnclaimedCurrencies.Where(c => c.GoogleId == googleId).ToListAsync();
             foreach (var currency in existingGoogleCurrencies)
             {

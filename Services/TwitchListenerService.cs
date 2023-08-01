@@ -149,14 +149,14 @@ namespace NewStreamSupporter.Services
                         return false;
                     }
 
-                    if(detail.Topic == "stream.online")
+                    if (detail.Topic == "stream.online")
                     {
                         var broadcasterId = detail.Condition["broadcaster_user_id"];
                         var streamResponse = await _twitchApi.Helix.Streams.GetStreamsAsync(userIds: new()
                         {
                             { broadcasterId }
                         });
-                        if(streamResponse.Streams.Length != 0)
+                        if (streamResponse.Streams.Length != 0)
                         {
                             _activeStreams.Add(broadcasterId);
                         }

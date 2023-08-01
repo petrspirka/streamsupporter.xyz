@@ -31,7 +31,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal
                 return Page();
             }
 
-            if(DonationGoalModel.OwnerId == null)
+            if (DonationGoalModel.OwnerId == null)
             {
                 DonationGoalModel.OwnerId = HttpContext.GetUserId();
             }

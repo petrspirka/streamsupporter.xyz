@@ -185,7 +185,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
                         user.TwitchAccessTokenExpiry = DateTime.Parse(info.AuthenticationTokens.Where(token => token.Name == "expires_at").First().Value);
                         break;
                     case "Google":
-                        if(!info.AuthenticationTokens.Any(t => t.Name == "refresh_token") || !info.AuthenticationTokens.Any(t => t.Name == "access_token"))
+                        if (!info.AuthenticationTokens.Any(t => t.Name == "refresh_token") || !info.AuthenticationTokens.Any(t => t.Name == "access_token"))
                         {
                             return RedirectToPage("/Account/GoogleError");
                         }
@@ -242,7 +242,7 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account
                             await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
                                 $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             _logger.LogError("Failed sending email: " + ex.Message);
                             await _userManager.DeleteAsync(user);

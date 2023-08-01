@@ -23,7 +23,7 @@
             </div>
             <div class="form-group pb-2">
                 <label asp-for="CounterModel.Value" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.Value)))"></label>
-                <input asp-for="CounterModel.Value" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<CounterModel>(nameof(CounterModel.Value)))" max="@(ModelExtensions.GetMaximum<CounterModel>(nameof(CounterModel.Value)))" />
+                <input asp-for="CounterModel.Value" required class="form-control" type="number" step="1" min="@(ModelExtensions.GetMinimum<CounterModel>(nameof(CounterModel.Value)))" max="@(ModelExtensions.GetMaximum<CounterModel>(nameof(CounterModel.Value)))" />
                 <span asp-validation-for="CounterModel.Value" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
@@ -60,6 +60,9 @@
             isSubmitting = true;
         }
     });
+
+    for(let colorPicker of $(".js-color"))
+        colorPicker.value = "#FFFFFFFF";
 
     $('#mainForm').data('serialize', $('#mainForm').serialize());
     $(window).bind('beforeunload', function (e) {

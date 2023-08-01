@@ -113,7 +113,7 @@ namespace NewStreamSupporter.Services
                 .Where(c => c.TriggeredByDonations)
                 .ToListAsync();
 
-            foreach(var subCounter in subCounters)
+            foreach (var subCounter in subCounters)
             {
                 await _hubService.Trigger("counter", subCounter.Id);
                 subCounter.Value += 1;

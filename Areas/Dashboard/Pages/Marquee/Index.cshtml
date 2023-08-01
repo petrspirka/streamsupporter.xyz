@@ -1,6 +1,12 @@
 ﻿@page
 @using NewStreamSupporter.Helpers;
 @model NewStreamSupporter.Areas.Dashboard.Pages.Marquee.IndexModel
+@using Microsoft.AspNetCore.Antiforgery;
+@inject IAntiforgery antiforgery;
+@{
+    var tokenStore = antiforgery.GetAndStoreTokens(HttpContext);
+    var afToken = tokenStore.RequestToken;
+}
 
 <h1>
     Marquees
@@ -25,17 +31,13 @@
                     @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 <td>
-                    <form id="testWidgetForm-@item.Id" method="post" asp-page-handler="TestTrigger">
-                        <a asp-page="./Edit" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">edit</span></a>
+                    <a asp-page="./Edit" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">edit</span></a>
 
-                        <!-- Simulates a submit action. Button is not used due to weird interaction of material-icons with line height. -->
-                        <input type="hidden" name="MarqueeModel.Id" value="@item.Id">
-                        <a href="#" onclick="TestWidget('@item.Id')"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Test widget">play_arrow</span></a>
+                    <a href="#" onclick="TestWidget('@item.Id', '@afToken')"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Test widget">play_arrow</span></a>
 
-                        <a asp-page="./Details" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Details">info</span></a>
-                        <a asp-area="Api" asp-controller="Component" asp-action="Marquee" asp-route-uid="@item.OwnerId" asp-route-id="@item.Id" target="_blank"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Open widget">visibility</span></a>
-                        <a asp-page="./Delete" asp-route-id="@item.Id"><span class="material-icons border border-1 border-danger text-danger rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">delete</span></a>
-                    </form>
+                    <a asp-page="./Details" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Details">info</span></a>
+                    <a asp-area="Api" asp-controller="Component" asp-action="Marquee" asp-route-uid="@item.OwnerId" asp-route-id="@item.Id" target="_blank"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Open widget">visibility</span></a>
+                    <a asp-page="./Delete" asp-route-id="@item.Id"><span class="material-icons border border-1 border-danger text-danger rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">delete</span></a>
                 </td>
             </tr>
         }

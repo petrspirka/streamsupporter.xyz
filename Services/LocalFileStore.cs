@@ -49,7 +49,7 @@ namespace NewStreamSupporter.Services
 
         public async Task Store(string key, Stream data)
         {
-            if(data.Length > _sizeLimit)
+            if (data.Length > _sizeLimit)
             {
                 throw new ArgumentException("Data provided is too large");
             }

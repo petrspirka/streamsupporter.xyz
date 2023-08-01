@@ -1,6 +1,12 @@
 ﻿@page
 @using NewStreamSupporter.Helpers;
-@model NewStreamSupporter.Areas.Dashboard.Pages.Rewards.IndexModel
+@model NewStreamSupporter.Areas.Dashboard.Pages.Rewards.IndexModel;
+@using Microsoft.AspNetCore.Antiforgery;
+@inject IAntiforgery antiforgery;
+@{
+    var tokenStore = antiforgery.GetAndStoreTokens(HttpContext);
+    var afToken = tokenStore.RequestToken;
+}
 
 <h1>
     Rewards

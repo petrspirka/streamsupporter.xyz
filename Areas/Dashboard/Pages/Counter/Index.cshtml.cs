@@ -22,17 +22,15 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Counter
 
         public IList<CounterModel> CounterModel { get; set; } = default!;
 
-        public async Task<IActionResult> OnPostTestTriggerAsync()
+        public async Task<IActionResult> OnPostTestTriggerAsync(string id)
         {
-            var form = HttpContext.Request.Form;
-            var counter = await _context.CounterModel.FirstOrDefaultAsync(a => a.Id == form["CounterModel.Id"].ToString());
+            var counter = await _context.CounterModel.FirstOrDefaultAsync(a => a.Id == id);
             if (counter == null || counter.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();
             }
             await _hub.Trigger("counter", counter.Id, null);
-            await LoadWidgets();
-            return Page();
+            return new EmptyResult();
         }
 
         private async Task LoadWidgets()

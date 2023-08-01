@@ -79,10 +79,10 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
             }
 
             if (AlertModel.OwnerId == null)
-            { 
+            {
                 AlertModel.OwnerId = HttpContext.GetUserId();
-            } 
-            else if(AlertModel.OwnerId != HttpContext.GetUserId())
+            }
+            else if (AlertModel.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();
             }
@@ -113,15 +113,15 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
                 {
                     await _store.Store(AlertModel.OwnerId, file.OpenReadStream());
                 }
-                catch(Exception)
+                catch (Exception)
                 {
                     FileStatusMessage = "Could not save your file. Contact application developers for more help.";
                     return Page();
                 }
                 AlertModel.AudioType = file.ContentType;
             }
-            
-            AlertModel.AlertDuration = Math.Round(AlertModel.AlertDuration, 2);
+
+            AlertModel.AlertDuration = Math.Round(AlertModel.AlertDuration * 20) / 20;
             _context.Attach(AlertModel).State = EntityState.Modified;
 
             try
@@ -149,32 +149,29 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
             return (_context.Alerts?.Any(e => e.Id == id)).GetValueOrDefault();
         }
 
-        private bool VerifySignature(IFormFile file, byte[] array)
+        private static bool VerifySignature(IFormFile file, byte[] array)
         {
             if (array.Length < 1)
             {
                 return false;
             }
-            switch (Path.GetExtension(file.FileName))
+            return Path.GetExtension(file.FileName) switch
             {
-                case ".mp3":
-                    return array.Length >= 3 && (
-                        (array[0] == 'I' &&
-                            array[1] == 'D' &&
-                            array[2] == '3') 
-                            || 
-                            (array[0] == 255 &&
-                            (array[1] & 0xE0) == 224)
-                        );
-                case ".wav":
-                    return array.Length >= 4 &&
-                        array[0] == 'R' &&
-                        array[1] == 'I' &&
-                        array[2] == 'F' &&
-                        array[3] == 'F';
-                default:
-                    return false;
-            }
+                ".mp3" => array.Length >= 3 && (
+                                        (array[0] == 'I' &&
+                                            array[1] == 'D' &&
+                                            array[2] == '3')
+                                            ||
+                                            (array[0] == 255 &&
+                                            (array[1] & 0xE0) == 224)
+                                        ),
+                ".wav" => array.Length >= 4 &&
+                                        array[0] == 'R' &&
+                                        array[1] == 'I' &&
+                                        array[2] == 'F' &&
+                                        array[3] == 'F',
+                _ => false,
+            };
         }
     }
 }

@@ -24,7 +24,8 @@ namespace NewStreamSupporter.Services
 
         internal Task ClientConnected(string type, string id, string connectionId)
         {
-            lock (_lock) { 
+            lock (_lock)
+            {
                 //Pokud neexistuje daný typ v mapě, vytvoříme jej
                 if (!_connectedClients.ContainsKey(type))
                 {
@@ -50,7 +51,8 @@ namespace NewStreamSupporter.Services
 
         internal Task ClientDisconnected(string connectionId)
         {
-            lock (_lock) { 
+            lock (_lock)
+            {
                 //Získáme typ a id widgetu
                 Tuple<string, string> reverseLookup = _reverseConnectedClients[connectionId];
                 if (reverseLookup == null)
@@ -114,7 +116,8 @@ namespace NewStreamSupporter.Services
         private async Task SendMessage(string type, string id, string method, object? arg = null)
         {
             IList<string>? clientIds;
-            lock (_lock) {
+            lock (_lock)
+            {
                 //Jestli nejsou připojení žádní klienti ke zmíněnému widgetu, končíme
                 if (!_connectedClients.ContainsKey(type) || !_connectedClients[type]!.ContainsKey(id))
                 {
@@ -124,7 +127,7 @@ namespace NewStreamSupporter.Services
                 clientIds = _connectedClients[type][id];
             }
 
-            if(clientIds == null)
+            if (clientIds == null)
             {
                 return;
             }

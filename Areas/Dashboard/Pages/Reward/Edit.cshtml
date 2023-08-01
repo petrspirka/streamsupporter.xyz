@@ -24,7 +24,7 @@
             </div>
             <div class="form-group pb-2">
                 <label asp-for="RewardModel.Cost" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<RewardModel>(nameof(RewardModel.Cost)))"></label>
-                <input asp-for="RewardModel.Cost" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<RewardModel>(nameof(RewardModel.Cost)))" max="@(ModelExtensions.GetMaximum<RewardModel>(nameof(RewardModel.Cost)))" />
+                <input asp-for="RewardModel.Cost" required class="form-control" type="number" step="1" min="@(ModelExtensions.GetMinimum<RewardModel>(nameof(RewardModel.Cost)))" max="@(ModelExtensions.GetMaximum<RewardModel>(nameof(RewardModel.Cost)))" />
                 <span asp-validation-for="RewardModel.Cost" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">

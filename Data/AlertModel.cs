@@ -26,6 +26,6 @@ namespace NewStreamSupporter.Data
         [Range(1.0, 30.0)]
         public decimal AlertDuration { get; set; } = 5.0M;
         [ValidateNever]
-        public string? AudioType { get; set; } 
+        public string? AudioType { get; set; }
     }
 }

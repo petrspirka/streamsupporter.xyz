@@ -24,22 +24,22 @@
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.SpeedFactor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))"></label>
-                <input asp-for="MarqueeModel.SpeedFactor" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))" />
+                <input asp-for="MarqueeModel.SpeedFactor" required class="form-control" type="number" step="0.05" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))" />
                 <span asp-validation-for="MarqueeModel.SpeedFactor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.SpeedFactorPerCharacter" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))"></label>
-                <input asp-for="MarqueeModel.SpeedFactorPerCharacter" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))" />
+                <input asp-for="MarqueeModel.SpeedFactorPerCharacter" required class="form-control" type="number" step="0.05" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))" />
                 <span asp-validation-for="MarqueeModel.SpeedFactorPerCharacter" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.FadeTime" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.FadeTime)))"></label>
-                <input asp-for="MarqueeModel.FadeTime" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.FadeTime)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.FadeTime)))" />
+                <input asp-for="MarqueeModel.FadeTime" required class="form-control" type="number" step="0.05" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.FadeTime)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.FadeTime)))" />
                 <span asp-validation-for="MarqueeModel.FadeTime" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.Delay" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.Delay)))"></label>
-                <input asp-for="MarqueeModel.Delay" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.Delay)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.Delay)))" />
+                <input asp-for="MarqueeModel.Delay" required class="form-control" type="number" step="0.05" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.Delay)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.Delay)))" />
                 <span asp-validation-for="MarqueeModel.Delay" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
@@ -76,6 +76,9 @@
             isSubmitting = true;
         }
     });
+
+    for (let colorPicker of $(".js-color"))
+        colorPicker.value = "#FFFFFFFF";
 
     $('#mainForm').data('serialize', $('#mainForm').serialize());
     $(window).bind('beforeunload', function (e) {

@@ -23,10 +23,9 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal
             _hub = hub;
         }
 
-        public async Task<IActionResult> OnPostTestTriggerAsync()
+        public async Task<IActionResult> OnPostTestTriggerAsync(string id)
         {
-            var form = HttpContext.Request.Form;
-            var donationGoalModel = await _context.DonationGoalModel.FirstOrDefaultAsync(a => a.Id == form["DonationGoalModel.Id"].ToString());
+            var donationGoalModel = await _context.DonationGoalModel.FirstOrDefaultAsync(a => a.Id == id);
             if (donationGoalModel == null || donationGoalModel.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();
@@ -34,10 +33,9 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal
             var random = new Random();
             dynamic obj = new ExpandoObject();
             obj.Name = "Test";
-            obj.Amount = float.Round(0.5f * (random.NextInt64(10)+1), 2);
+            obj.Amount = float.Round(0.5f * (random.NextInt64(10) + 1), 2);
             await _hub.Trigger("donationGoal", donationGoalModel.Id, obj);
-            await LoadWidgets();
-            return Page();
+            return new EmptyResult();
         }
 
         private async Task LoadWidgets()

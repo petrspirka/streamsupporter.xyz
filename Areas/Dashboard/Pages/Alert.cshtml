@@ -3,6 +3,12 @@
 @using NewStreamSupporter.Data;
 @using NewStreamSupporter.Helpers;
 @model NewStreamSupporter.Areas.Dashboard.Pages.Alert.AlertPageModel
+@using Microsoft.AspNetCore.Antiforgery;
+@inject IAntiforgery antiforgery;
+@{
+    var tokenStore = antiforgery.GetAndStoreTokens(HttpContext);
+    var afToken = tokenStore.RequestToken;
+}
 
 @inject IFileStore fileStore;
 
@@ -22,7 +28,7 @@
             <input type="hidden" asp-for="AlertModel.AudioType" value="@Model.AlertModel.AudioType" />
             <div class="form-group pb-2">
                 <label asp-for="AlertModel.AlertDuration" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.AlertDuration)))"></label>
-                <input asp-for="AlertModel.AlertDuration" required type="number" class="form-control" min="@(ModelExtensions.GetMinimum<AlertModel>(nameof(AlertModel.AlertDuration)))" max="@(ModelExtensions.GetMaximum<AlertModel>(nameof(AlertModel.AlertDuration)))" />
+                <input asp-for="AlertModel.AlertDuration" required type="number" step="0.05" class="form-control" min="@(ModelExtensions.GetMinimum<AlertModel>(nameof(AlertModel.AlertDuration)))" max="@(ModelExtensions.GetMaximum<AlertModel>(nameof(AlertModel.AlertDuration)))" />
                 <span asp-validation-for="AlertModel.AlertDuration" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
@@ -91,24 +97,13 @@
             </div>
             <div class="form-group pt-2 pb-2">
                 <input type="submit" value="Save" asp-page-handler="" class="btn btn-primary mb-1" id="SubmitFormInput" />
-                <button type="button" onclick="TestWidgetButton()" class="btn btn-primary mb-1" data-bs-toggle="tooltip" title="Test this widget. Keep in mind you must first save if you've modified the alert.">Test alert</button>
+                <a href="#" onclick="TestWidget('@Model.AlertModel.Id', '@afToken')" class="btn btn-primary mb-1" data-bs-toggle="tooltip" title="Test this widget. Keep in mind you must first save if you've modified the alert.">Test alert</a>
                 <a asp-area="Api" asp-controller="Component" asp-action="Alert" asp-route-uid="@Model.AlertModel.OwnerId" asp-route-id="@Model.AlertModel.Id" class="btn btn-primary mb-1" target="_blank">Show</a>
                 <a asp-page="./Index" class="btn btn-danger mb-1">Back to overview</a>
             </div>
         </form>
     </div>
 </div>
-<script>
-    function TestWidgetButton(){
-        $.ajax({
-            method: "POST",
-            url: "?handler=TestTrigger",
-            headers: {
-                "RequestVerificationToken": $('input:hidden[name="__RequestVerificationToken"]').val()
-            }
-        });
-    }
-</script>
 <script>
     // https://stackoverflow.com/questions/7317273/warn-user-before-leaving-web-page-with-unsaved-changes/21061193#21061193
     let isSubmitting = false;
