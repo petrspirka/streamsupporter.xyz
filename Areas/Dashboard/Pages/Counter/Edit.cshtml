@@ -8,35 +8,35 @@
 <div class="border border-top my-2"></div>
 <div class="row mx-0">
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
-        <form method="post">
+        <form method="post" id="mainForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="CounterModel.Id" />
             <input type="hidden" asp-for="CounterModel.OwnerId" />
             <div class="form-group pb-2">
                 <label asp-for="CounterModel.Name" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.Name)))"></label>
-                <input asp-for="CounterModel.Name" class="form-control" />
+                <input asp-for="CounterModel.Name" required class="form-control" />
                 <span asp-validation-for="CounterModel.Name" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="CounterModel.Text" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.Text)))"></label>
-                <input asp-for="CounterModel.Text" class="form-control" />
+                <input asp-for="CounterModel.Text" required class="form-control" />
                 <span asp-validation-for="CounterModel.Text" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="CounterModel.Value" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.Value)))"></label>
-                <input asp-for="CounterModel.Value" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<CounterModel>(nameof(CounterModel.Value)))" max="@(ModelExtensions.GetMaximum<CounterModel>(nameof(CounterModel.Value)))" />
+                <input asp-for="CounterModel.Value" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<CounterModel>(nameof(CounterModel.Value)))" max="@(ModelExtensions.GetMaximum<CounterModel>(nameof(CounterModel.Value)))" />
                 <span asp-validation-for="CounterModel.Value" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="CounterModel.BackgroundColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.BackgroundColor)))"></label>
                 <br />
-                <input class="form-control js-color" asp-for="CounterModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <input class="form-control js-color" required asp-for="CounterModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="CounterModel.BackgroundColor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="CounterModel.FontColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<CounterModel>(nameof(CounterModel.FontColor)))"></label>
                 <br />
-                <input class="form-control js-color" asp-for="CounterModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <input class="form-control js-color" required asp-for="CounterModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="CounterModel.FontColor" class="text-danger"></span>
             </div>
             <div class="form-group form-check pb-2">
@@ -51,6 +51,25 @@
         </form>
     </div>
 </div>
+<script>
+    // https://stackoverflow.com/questions/7317273/warn-user-before-leaving-web-page-with-unsaved-changes/21061193#21061193
+    let isSubmitting = false;
+    $('#mainForm').on("submit", function () {
+        const valid = $(this)[0].checkValidity();
+        console.log("Valid: " + valid);
+        if (valid) {
+            isSubmitting = true;
+        }
+    });
+
+    $('#mainForm').data('serialize', $('#mainForm').serialize());
+    $(window).bind('beforeunload', function (e) {
+        if ($('#mainForm').serialize() != $('#mainForm').data('serialize') && !isSubmitting) {
+            return true;
+        }
+        e = null; // i.e; if form state change show warning box, else don't show it.
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

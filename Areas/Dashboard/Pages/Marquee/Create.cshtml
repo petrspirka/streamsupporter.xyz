@@ -8,50 +8,50 @@
 <div class="border border-top my-2"></div>
 <div class="row mx-0">
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
-        <form method="post">
+        <form method="post" id="mainForm">
             <input type="hidden" asp-for="MarqueeModel.Id" />
             <input type="hidden" asp-for="MarqueeModel.OwnerId" />
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.Name" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.Name)))"></label>
-                <input asp-for="MarqueeModel.Name" class="form-control" />
+                <input asp-for="MarqueeModel.Name" required class="form-control" />
                 <span asp-validation-for="MarqueeModel.Name" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.Text" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.Text)))"></label>
-                <input asp-for="MarqueeModel.Text" class="form-control" />
+                <input asp-for="MarqueeModel.Text" required class="form-control" />
                 <span asp-validation-for="MarqueeModel.Text" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.SpeedFactor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))"></label>
-                <input asp-for="MarqueeModel.SpeedFactor" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))" />
+                <input asp-for="MarqueeModel.SpeedFactor" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.SpeedFactor)))" />
                 <span asp-validation-for="MarqueeModel.SpeedFactor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.SpeedFactorPerCharacter" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))"></label>
-                <input asp-for="MarqueeModel.SpeedFactorPerCharacter" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))" />
+                <input asp-for="MarqueeModel.SpeedFactorPerCharacter" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.SpeedFactorPerCharacter)))" />
                 <span asp-validation-for="MarqueeModel.SpeedFactorPerCharacter" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.FadeTime" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.FadeTime)))"></label>
-                <input asp-for="MarqueeModel.FadeTime" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.FadeTime)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.FadeTime)))" />
+                <input asp-for="MarqueeModel.FadeTime" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.FadeTime)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.FadeTime)))" />
                 <span asp-validation-for="MarqueeModel.FadeTime" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.Delay" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.Delay)))"></label>
-                <input asp-for="MarqueeModel.Delay" class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.Delay)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.Delay)))" />
+                <input asp-for="MarqueeModel.Delay" required class="form-control" type="number" min="@(ModelExtensions.GetMinimum<MarqueeModel>(nameof(MarqueeModel.Delay)))" max="@(ModelExtensions.GetMaximum<MarqueeModel>(nameof(MarqueeModel.Delay)))" />
                 <span asp-validation-for="MarqueeModel.Delay" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.BackgroundColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.BackgroundColor)))"></label>
                 <br />
-                <input class="form-control js-color" asp-for="MarqueeModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <input class="form-control js-color" required asp-for="MarqueeModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="MarqueeModel.BackgroundColor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="MarqueeModel.FontColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<MarqueeModel>(nameof(MarqueeModel.FontColor)))"></label>
                 <br />
-                <input class="form-control js-color" asp-for="MarqueeModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <input class="form-control js-color" required asp-for="MarqueeModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="MarqueeModel.FontColor" class="text-danger"></span>
             </div>
             <div class="form-group form-check pb-2">
@@ -66,6 +66,25 @@
         </form>
     </div>
 </div>
+<script>
+    // https://stackoverflow.com/questions/7317273/warn-user-before-leaving-web-page-with-unsaved-changes/21061193#21061193
+    let isSubmitting = false;
+    $('#mainForm').on("submit", function () {
+        const valid = $(this)[0].checkValidity();
+        console.log("Valid: " + valid);
+        if (valid) {
+            isSubmitting = true;
+        }
+    });
+
+    $('#mainForm').data('serialize', $('#mainForm').serialize());
+    $(window).bind('beforeunload', function (e) {
+        if ($('#mainForm').serialize() != $('#mainForm').data('serialize') && !isSubmitting) {
+            return true;
+        }
+        e = null; // i.e; if form state change show warning box, else don't show it.
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

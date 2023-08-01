@@ -11,13 +11,13 @@
         </div>
         <div class="col px-0 h-100">
             <div class="h-100">
-                <div class="container-fluid overflow-auto h-100 px-0">
+                <div class="container-fluid overflow-auto h-100 px-0 d-flex flex-column">
                     <header>
                         <button class="btn navbar-toggler d-sm-none p-2 border-1 border rounded mb-2" type="button" data-bs-toggle="collapse" data-bs-target="#sidenav" aria-expanded="true">
                             <span class="material-icons align-middle">menu</span>
                         </button>
                     </header>
-                    <main class="mx-2 mx-md-4 h-100 py-3">
+                    <main class="mx-2 mx-md-4 py-3 overflow-auto flex-grow-1">
                         <partial name="_CookieConsentPartial" class="modal-dialog-centered" />
                         @RenderBody()
                     </main>
@@ -30,11 +30,27 @@
                     toggle: false
                 });
                 console.log("Hiding: " + matches);
+
                 if (matches) {
                     collapse.show();
                 }
                 else {
-                    collapse.hide();
+                    const subArea = document.referrer.split('/');
+                    if (subArea.length < 2){
+                        collapse.hide();
+                        return;
+                    }
+                    const viewData = "@ViewData["SubArea"]".split(" ").join("");
+                    const subArea1 = subArea[subArea.length - 1];
+                    const subArea2 = subArea[subArea.length - 2];
+                    console.log(viewData + " : " + subArea1 + " : " + subArea2);
+                    if (viewData != subArea1 && viewData != subArea2) {
+                        collapse.hide();
+                    }
+                    else {
+                        console.log("Match");
+                        $("#sidenav").removeClass("show");
+                    }
                 }
             }
 
@@ -43,7 +59,6 @@
             minQuery.addEventListener("change", (ev) => {
                 updateSideNav(ev.matches);
             });
-
             updateSideNav(minQuery.matches);
             
         </script>

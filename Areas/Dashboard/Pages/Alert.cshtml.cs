@@ -41,14 +41,14 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
 
         public async Task<IActionResult> OnPostTestTriggerAsync()
         {
-            var form = HttpContext.Request.Form;
-            var alert = await _context.Alerts.FirstOrDefaultAsync(a => a.Id == form["AlertModel.Id"].ToString());
+            var user = HttpContext.GetUserId();
+            var alert = await _context.Alerts.FirstOrDefaultAsync(a => a.OwnerId == user);
             if (alert == null || alert.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();
             }
             await _hub.Trigger("alert", alert.Id, "I am a test trigger");
-            return Page();
+            return RedirectToPage("Alert");
         }
 
         public async Task<IActionResult> OnGetAsync()

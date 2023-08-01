@@ -15,14 +15,14 @@
 <div class="border border-top my-2"></div>
 <div class="row mx-0">
     <div class="col-lg-6 col-md-8 offset-lg-3 offset-md-2">
-        <form method="post" enctype="multipart/form-data">
+        <form method="post" enctype="multipart/form-data" id="mainForm">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="AlertModel.Id" />
             <input type="hidden" asp-for="AlertModel.OwnerId" value="@Model.AlertModel.OwnerId" />
             <input type="hidden" asp-for="AlertModel.AudioType" value="@Model.AlertModel.AudioType" />
             <div class="form-group pb-2">
                 <label asp-for="AlertModel.AlertDuration" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.AlertDuration)))"></label>
-                <input asp-for="AlertModel.AlertDuration" type="number" class="form-control" min="@(ModelExtensions.GetMinimum<AlertModel>(nameof(AlertModel.AlertDuration)))" max="@(ModelExtensions.GetMaximum<AlertModel>(nameof(AlertModel.AlertDuration)))" />
+                <input asp-for="AlertModel.AlertDuration" required type="number" class="form-control" min="@(ModelExtensions.GetMinimum<AlertModel>(nameof(AlertModel.AlertDuration)))" max="@(ModelExtensions.GetMaximum<AlertModel>(nameof(AlertModel.AlertDuration)))" />
                 <span asp-validation-for="AlertModel.AlertDuration" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
@@ -70,13 +70,13 @@
             <div class="form-group pb-2">
                 <label asp-for="AlertModel.BackgroundColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.BackgroundColor)))"></label>
                 <br />
-                <input class="form-control js-color" asp-for="AlertModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <input class="form-control js-color" required asp-for="AlertModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="AlertModel.BackgroundColor" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
                 <label asp-for="AlertModel.FontColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.FontColor)))"></label>
                 <br />
-                <input class="form-control js-color" asp-for="AlertModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
+                <input class="form-control js-color" required asp-for="AlertModel.FontColor" data-jscolor="{preset: 'ThemedPreset'}" />
                 <span asp-validation-for="AlertModel.FontColor" class="text-danger"></span>
             </div>
             <div class="form-group form-check pb-2">
@@ -91,13 +91,43 @@
             </div>
             <div class="form-group pt-2 pb-2">
                 <input type="submit" value="Save" asp-page-handler="" class="btn btn-primary mb-1" id="SubmitFormInput" />
-                <button asp-page-handler="TestTrigger" class="btn btn-primary mb-1" data-bs-toggle="tooltip" title="Test this widget. Keep in mind you must first save if you've modified the alert.">Test alert</button>
+                <button type="button" onclick="TestWidgetButton()" class="btn btn-primary mb-1" data-bs-toggle="tooltip" title="Test this widget. Keep in mind you must first save if you've modified the alert.">Test alert</button>
                 <a asp-area="Api" asp-controller="Component" asp-action="Alert" asp-route-uid="@Model.AlertModel.OwnerId" asp-route-id="@Model.AlertModel.Id" class="btn btn-primary mb-1" target="_blank">Show</a>
                 <a asp-page="./Index" class="btn btn-danger mb-1">Back to overview</a>
             </div>
         </form>
     </div>
 </div>
+<script>
+    function TestWidgetButton(){
+        $.ajax({
+            method: "POST",
+            url: "?handler=TestTrigger",
+            headers: {
+                "RequestVerificationToken": $('input:hidden[name="__RequestVerificationToken"]').val()
+            }
+        });
+    }
+</script>
+<script>
+    // https://stackoverflow.com/questions/7317273/warn-user-before-leaving-web-page-with-unsaved-changes/21061193#21061193
+    let isSubmitting = false;
+    $('#mainForm').on("submit", function () {
+        const valid = $(this)[0].checkValidity();
+        console.log("Valid: " + valid);
+        if (valid) {
+            isSubmitting = true;
+        }
+    });
+
+    $('#mainForm').data('serialize', $('#mainForm').serialize());
+    $(window).bind('beforeunload', function (e) {
+        if ($('#mainForm').serialize() != $('#mainForm').data('serialize') && !isSubmitting) {
+            return true;
+        }
+        e = null; // i.e; if form state change show warning box, else don't show it.
+    });
+</script>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
