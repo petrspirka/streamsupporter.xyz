@@ -10,7 +10,7 @@ using TwitchLib.Api.Core.Exceptions;
 
 namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
 {
-    [RequestSizeLimit(30_000_000)]
+    [RequestSizeLimit(10_485_760)]
     public class AlertPageModel : PageModel
     {
         private readonly DispatcherHubStateService _hubService;
@@ -29,6 +29,8 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
         [BindProperty]
         public AlertModel AlertModel { get; set; } = default!;
         public string FileStatusMessage { get; set; } = "";
+
+        public long MaxFileSize { get; } = 2_097_152;
 
         public async Task<IActionResult> OnPostClearFileAsync()
         {
@@ -88,7 +90,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
             if (HttpContext.Request.Form.Files.Count == 1)
             {
                 var file = HttpContext.Request.Form.Files[0];
-                if (file.Length > 2000000)
+                if (file.Length > MaxFileSize)
                 {
                     FileStatusMessage = "Maximum file size exceeded.";
                     return Page();
@@ -162,8 +164,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
                             array[2] == '3') 
                             || 
                             (array[0] == 255 &&
-                            (array[1] & 0xE0) == 224 &&
-                            (array[2] & 0xF0) == 240)
+                            (array[1] & 0xE0) == 224)
                         );
                 case ".wav":
                     return array.Length >= 4 &&

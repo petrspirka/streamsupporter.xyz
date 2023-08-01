@@ -26,6 +26,48 @@
                 <span asp-validation-for="AlertModel.AlertDuration" class="text-danger"></span>
             </div>
             <div class="form-group pb-2">
+                <label for="AlertModel_CustomAudio" class="control-label" data-bs-toggle="tooltip" title="Lets you upload a custom audio sound to be used. Must be .mp3 or .wav. Maximum file size is 2MB.">Choose custom audio</label>
+                @if (await fileStore.Exists(HttpContext.GetUserId()))
+                {
+                    <br />
+                    <button id="AlertModel_CustomAudio" class="btn btn-danger mt-1" asp-page-handler="ClearFile">Clear custom audio</button>
+                }
+                else
+                {
+                    <input id="AlertModel_CustomAudio" type="file" name="AlertModel.CustomAudio" accept=".mp3,.wav" class="form-control">
+                    <span id="AlertModel_CustomAudio_Status" class="text-danger"></span>
+                    <script>
+                        $("#AlertModel_CustomAudio").bind("change", function () {
+                            if (this.files.length < 1) {
+                                return;
+                            }
+                            else if (this.files.length > 1) {
+                                $("#AlertModel_CustomAudio_Status").text("Only one file is allowed");
+                                $("#SubmitFormInput").prop("disabled", true);
+                                return;
+                            }
+                            const fileDup = this.files[0];
+                            const ext = fileDup.name.split(".").pop();
+                            console.log(ext);
+                            if (this.files[0].size > @Model.MaxFileSize) {
+                                $("#AlertModel_CustomAudio_Status").text("The specified file is too big");
+                                $("#SubmitFormInput").prop("disabled", true);
+                            }
+                            else if (ext != "mp3" && ext != "wav") {
+                                $("#AlertModel_CustomAudio_Status").text("The specified file contains an invalid extension");
+                                $("#SubmitFormInput").prop("disabled", true);
+                            }
+                            else {
+                                $("#AlertModel_CustomAudio_Status").text("");
+                                $("#SubmitFormInput").prop("disabled", false);
+                            }
+
+                        })
+                    </script>
+                }
+                <span id="AlertModel_CustomAudio_Status" class="text-danger">@Model.FileStatusMessage</span>
+            </div>
+            <div class="form-group pb-2">
                 <label asp-for="AlertModel.BackgroundColor" class="control-label" data-bs-toggle="tooltip" data-bs-title="@(ModelExtensions.GetDescription<AlertModel>(nameof(AlertModel.BackgroundColor)))"></label>
                 <br />
                 <input class="form-control js-color" asp-for="AlertModel.BackgroundColor" data-jscolor="{preset: 'ThemedPreset'}" />
@@ -47,21 +89,8 @@
                     <input class="form-check-input" asp-for="AlertModel.ShouldTriggerDonations" /> @Html.DisplayNameFor(model => model.AlertModel.ShouldTriggerDonations)
                 </label>
             </div>
-            <div class="form-group pb-2">
-                <label for="AlertModel_CustomAudio" class="control-label" data-bs-toggle="tooltip" title="Lets you upload a custom audio sound to be used. Must be .mp3 or .wav. Uploading files beyond 30MB is not supported.">Choose custom audio</label>
-                @if (await fileStore.Exists(HttpContext.GetUserId()))
-                {
-                    <br />
-                    <button id="AlertModel_CustomAudio" class="btn btn-danger mt-1" asp-page-handler="ClearFile">Clear custom audio</button>
-                }
-                else
-                {
-                    <input id="AlertModel_CustomAudio" type="file" name="AlertModel.CustomAudio" accept=".mp3,.wav" class="form-control">
-                }
-                <span class="text-danger">@Model.FileStatusMessage</span>
-            </div>
             <div class="form-group pt-2 pb-2">
-                <input type="submit" value="Save" asp-page-handler="" class="btn btn-primary mb-1" />
+                <input type="submit" value="Save" asp-page-handler="" class="btn btn-primary mb-1" id="SubmitFormInput" />
                 <button asp-page-handler="TestTrigger" class="btn btn-primary mb-1" data-bs-toggle="tooltip" title="Test this widget. Keep in mind you must first save if you've modified the alert.">Test alert</button>
                 <a asp-area="Api" asp-controller="Component" asp-action="Alert" asp-route-uid="@Model.AlertModel.OwnerId" asp-route-id="@Model.AlertModel.Id" class="btn btn-primary mb-1" target="_blank">Show</a>
                 <a asp-page="./Index" class="btn btn-danger mb-1">Back to overview</a>
