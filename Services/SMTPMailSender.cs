@@ -2,15 +2,15 @@
 using MimeKit;
 using NewStreamSupporter.Contracts;
 using System.Net;
+using System.Threading;
 
 namespace NewStreamSupporter.Services
 {
     /// <summary>
     /// Implementace třídy <see cref="IImplementedEmailSender"/> pro posílání emailů uživatelům (reset hesla, potvrzení registrace...)
     /// </summary>
-    public class SMTPMailSender : IImplementedEmailSender, IHostedService
+    public class SMTPMailSender : IImplementedEmailSender
     {
-        private readonly ISmtpClient _mailService;
         private readonly NetworkCredential _mailCredential;
 
         //Z které adresy jdou maily
@@ -30,7 +30,6 @@ namespace NewStreamSupporter.Services
             _port = port;
             _host = host;
             _fromAddress = new MailboxAddress(String.Empty, email);
-            _mailService = new SmtpClient();
             _mailCredential = new NetworkCredential(email, password);
         }
 
@@ -53,22 +52,11 @@ namespace NewStreamSupporter.Services
                 Subject = subject
             };
 
-            string result = await _mailService.SendAsync(message);
-
-        }
-
-        /// <inheritdoc/>
-        public async Task StartAsync(CancellationToken cancellationToken)
-        {
-            await _mailService.ConnectAsync(_host, _port, _port == 465, cancellationToken);
-            await _mailService.AuthenticateAsync(_mailCredential, cancellationToken);
-        }
-
-        /// <inheritdoc/>
-        public async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await _mailService.DisconnectAsync(true, cancellationToken);
-            _fromAddress = null;
+            using var smtpClient = new SmtpClient();
+            await smtpClient.ConnectAsync(_host, _port, _port == 465);
+            await smtpClient.AuthenticateAsync(_mailCredential);
+            await smtpClient.SendAsync(message);
+            await smtpClient.DisconnectAsync(true);
         }
     }
 }
