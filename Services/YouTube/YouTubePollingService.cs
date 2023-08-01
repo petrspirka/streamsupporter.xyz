@@ -34,6 +34,7 @@ namespace NewStreamSupporter.Services.YouTube
         private readonly long _rewardTime;
         private readonly Timer _streamTimer;
         private readonly Timer _chatTimer;
+        private readonly DateTime _startUp;
 
         //Uchovává uživatele, kteří nestreamují a kteří streamují
         private readonly IList<string> _inactiveUsers;
@@ -48,6 +49,8 @@ namespace NewStreamSupporter.Services.YouTube
 
             _streamPollingTime = youtubeSettings.StreamPollingTime;
             _chatPollingTime = youtubeSettings.ChatPollingTime;
+
+            _startUp = new DateTime(DateTime.Now.Ticks);
 
             _rewardTime = (long)rewardOptions.RewardCooldown;
 
@@ -191,6 +194,12 @@ namespace NewStreamSupporter.Services.YouTube
         {
             LiveChatMessageSnippet snippet = message.Snippet;
 
+            //Disregard messages before our app launched to avoid duplicates
+            if (snippet.PublishedAt == null || snippet.PublishedAt < _startUp)
+            {
+                return snippet.Type == "chatEndedEvent";
+            }
+            
             PlatformUser author = new(snippet.AuthorChannelId, message.AuthorDetails.DisplayName, Platform.YouTube);
             switch (snippet.Type)
             {
