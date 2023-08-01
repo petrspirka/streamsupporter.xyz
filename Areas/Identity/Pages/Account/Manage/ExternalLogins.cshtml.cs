@@ -189,10 +189,6 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
                     user.TwitchAccessToken = info.AuthenticationTokens.Where(token => token.Name == "access_token").First().Value;
                     user.TwitchRefreshToken = info.AuthenticationTokens.Where(token => token.Name == "refresh_token").First().Value;
                     user.TwitchAccessTokenExpiry = DateTime.Parse(info.AuthenticationTokens.Where(token => token.Name == "expires_at").First().Value);
-                    if (user.IsTwitchActive)
-                    {
-                        await _twitchService.AddAllUserListeners(user.TwitchId);
-                    }
                     break;
                 case "Google":
                     if (!info.AuthenticationTokens.Any(t => t.Name == "refresh_token") || !info.AuthenticationTokens.Any(t => t.Name == "access_token"))
@@ -224,9 +220,6 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
                         user.GoogleBrandName = youtubeInfo.Name;
                     }
                     await _youtubeProviderService.SaveUserCredential(user.GoogleBrandId, googleRefreshToken);
-                    if(user.IsGoogleActive) {
-                        await _youtubeService.AddAllUserListeners(user.GoogleBrandId);
-                    }
                     break;
             }
 
@@ -241,6 +234,21 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
             }
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+            switch (info.LoginProvider)
+            {
+                case "Twitch":
+                    if (user.IsTwitchActive)
+                    {
+                        await _twitchService.AddAllUserListeners(user.TwitchId);
+                    }
+                    break;
+                case "Google":
+                    if (user.IsGoogleActive)
+                    {
+                        await _youtubeService.AddAllUserListeners(user.GoogleBrandId);
+                    }
+                    break;
+            }
 
             StatusMessage = "The external login was added.";
             return RedirectToPage();
