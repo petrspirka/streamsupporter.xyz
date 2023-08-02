@@ -71,6 +71,8 @@
             .goal-name {
                 text-align: center;
                 margin: 0px 0px 5px 0px;
+                word-wrap: break-word;
+                word-break: break-word;
             }
 
             .progress-bar-background {
@@ -298,7 +300,12 @@
             tipDisplay.style.animationFillMode = "backwards";
             goalCurrentWrapper.style.animationName = "slide-out-in";
             goalCurrentWrapper.style.animationDuration = animationLength + "s";
-            setTimeout(() => goalCurrent.innerHTML = "$" + currentDonated.toFixed(2), animationLength * 500);
+            setTimeout(() => {
+                if (currentDonated > 9999999.99){
+                    currentDonated = 9999999.99;
+                }
+                goalCurrent.innerHTML = "$" + currentDonated.toFixed(2);
+            }, animationLength * 500);
         }
     </script>
     <script>

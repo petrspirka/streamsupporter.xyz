@@ -41,7 +41,7 @@
                 else
                 {
                     <input id="AlertModel_CustomAudio" type="file" name="AlertModel.CustomAudio" accept=".mp3,.wav" class="form-control">
-                    <span id="AlertModel_CustomAudio_Status" class="text-danger"></span>
+                    <span id="AlertModel_CustomAudio_Status" class="text-danger">@Model.FileStatusMessage</span>
                     <script>
                         $("#AlertModel_CustomAudio").bind("change", function () {
                             if (this.files.length < 1) {

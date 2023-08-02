@@ -37,7 +37,7 @@ else
         {
             <div class="p-2 m-2 rounded" style="@($"background-color:{reward.BackgroundColor};color:{reward.FontColor};")">
                 <h5>@reward.Name</h5>
-                <p>@reward.Text</p>
+                <p class="text-break">@reward.Text</p>
                 <div class="d-flex flex-row justify-content-between">
                     <button class=" btn btn-primary w-100" 
                         data-reward-id="@reward.Id"
@@ -64,22 +64,33 @@ else
     <div class="modal" id="modal">
         <div class="modal-dialog">
             <div class="modal-content">
-                <form method="post">
+                <form method="post" id="rewardForm">
                     <input id="idInput" type="hidden" name="id"/>
                     <input id="uidInput" type="hidden" name="uid"/>
                     <div class="modal-header">
-                        <h5 class="modal-title">Are you sure you want to purchase <span id="header-span"></span>?</h5>
+                        <h5 class="modal-title text-break">Are you sure you want to purchase <span id="header-span"></span>?</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
-                        <p><span id="body-span"></span></p>
+                        <p><span id="body-span" class="text-break"></span></p>
                         <input class="form-control" id="inputText" maxlength="64" name="text" type="text" />
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <input type="submit" class="btn btn-primary" value="Confirm" />
+                        <input id="submitButton" type="submit" class="btn btn-primary" value="Confirm" />
                     </div>
                 </form>
+                <script>
+                    // Prevent resubmits as per https://stackoverflow.com/questions/50050536/prevent-users-from-submitting-a-form-multiple-times-by-pressing-the-enter-button
+                    $('#rewardForm').on('submit', function () {
+                        $(this).on('submit', function () {
+                            return false;
+                        });
+
+                        $('#submitButton').prop("disabled", true);
+                        return true;
+                    });
+                </script>
             </div>
         </div>
     </div>
@@ -99,6 +110,7 @@ else
             body.innerHTML = triggeredSource.dataset.modalBody;
             idInput.value = triggeredSource.dataset.rewardId;
             uidInput.value = triggeredSource.dataset.userId;
+            inputField.value = "";
             inputField.disabled = (triggeredSource.dataset.modalInputEnabled).toLowerCase() === "false";
         });
     </script>

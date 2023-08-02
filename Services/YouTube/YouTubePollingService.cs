@@ -160,6 +160,13 @@ namespace NewStreamSupporter.Services.YouTube
                 catch (UnauthorizedAccessException)
                 {
                     await HandleUnauthorized(userChatPair.Key);
+                    _activeUsers.Remove(userChatPair.Key);
+                    continue;
+                }
+                catch (NullReferenceException)
+                {
+                    await HandleUnauthorized(userChatPair.Key);
+                    _activeUsers.Remove(userChatPair.Key);
                     continue;
                 }
                 if (messages == null)

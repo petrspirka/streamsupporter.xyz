@@ -105,6 +105,10 @@ namespace NewStreamSupporter.Services
                 obj.Amount = float.Round(e.Amount, 2);
                 await _hubService.Trigger("donationGoal", goal.Id, obj);
                 goal.CurrentAmount += decimal.Parse(Math.Round(e.Amount, 2).ToString());
+                if (goal.CurrentAmount > 9999999.99m)
+                {
+                    goal.CurrentAmount = 9999999.99m;
+                }
             }
             await context.SaveChangesAsync();
 

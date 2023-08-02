@@ -1,4 +1,5 @@
-﻿using NewStreamSupporter.Contracts;
+﻿using Microsoft.EntityFrameworkCore;
+using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using System.Web;
 
@@ -82,6 +83,14 @@ namespace NewStreamSupporter.Services
                 if (reward.TriggeredId != null && reward.TriggeredType != null)
                 {
                     await TriggerReward(reward.TriggeredType, reward.TriggeredId, HttpUtility.HtmlEncode(message));
+                    if(reward.TriggeredType == "counter")
+                    {
+                        var counter = await _context.CounterModel.FirstOrDefaultAsync(c => c.Id == reward.TriggeredId);
+                        if(counter != null && counter.Value < 999999999)
+                        {
+                            counter.Value++;
+                        }
+                    }
                 }
             }
             _context.Purchases.Add(purchase);

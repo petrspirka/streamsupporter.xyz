@@ -37,7 +37,7 @@ namespace NewStreamSupporter.Helpers
                 StreamEventType.StreamFollow => new string[] { "channel.follow" },
                 StreamEventType.StreamEnded => new string[] { "stream.offline" },
                 StreamEventType.StreamStarted => new string[] { "stream.online" },
-                StreamEventType.StreamDonation => new string[] { "channel.subscribe", "channel.subscription.gift", "channel.cheer" },
+                StreamEventType.StreamDonation => new string[] { "channel.subscription.message", "channel.subscribe", "channel.subscription.gift", "channel.cheer" },
                 StreamEventType.StreamStatusChanged => new string[] { "stream.online", "stream.offline" },
                 _ => throw new NotSupportedException($"The specified {nameof(StreamEventType)} {eventType} does not have a valid topic")
             };

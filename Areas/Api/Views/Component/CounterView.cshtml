@@ -20,7 +20,9 @@
             text-align: center;
             letter-spacing: 2px;
             font-weight: bold;
-            padding: 8px
+            padding: 8px;
+            word-wrap: break-word;
+            word-break: break-word;
         }
     </style>
     <script>
@@ -30,7 +32,9 @@
 
         function trigger() {
             const original = Number(counter.innerHTML);
-            counter.innerHTML = original + 1;
+            if (original < 999999999){
+                counter.innerHTML = original + 1;
+            }
         }
 
         window.onload = function(){
@@ -42,8 +46,13 @@
         import("/js/component.js").then(res => {
             const signalClient = new res.SignalComponent("@Model.Id", "@Model.OwnerId", "counter");
             signalClient.setTrigger((arg) => {
-                console.log("Triggering counter");
-                trigger(arg);
+                if (Number(counter.innerHTML) < 999999999){
+                    console.log("Triggering counter");
+                    trigger(arg);
+                }
+                else {
+                    console.log("Reached max");
+                }
             });
             signalClient.start();
         });
