@@ -55,7 +55,7 @@ namespace NewStreamSupporter.Pages
 
         public async Task<IActionResult> OnPostAsync(string id, string uid, string? text = null)
         {
-            var reward = _context.Rewards.First(r => r.Id == id);
+            var reward = await _context.Rewards.FirstAsync(r => r.Id == id);
             if(!reward.HasTextField && !text.IsNullOrEmpty())
             {
                 return await OnGetAsync(uid, false);
