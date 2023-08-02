@@ -85,6 +85,16 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages
                     }
                 }
                 await _context.SaveChangesAsync();
+                var text = purchase.Text;
+                if(text != null) { 
+                    var isMessageText = text.Contains("\nMessage: ");
+                    if(isMessageText)
+                    {
+                        var index = text.IndexOf("\nMessage: ");
+                        var newText = text.Substring(index + 10);
+                        text = newText;
+                    }
+                }
                 await _hubService.Trigger(purchase.Reward.TriggeredType, purchase.Reward.TriggeredId, purchase.Text);
             }
             else

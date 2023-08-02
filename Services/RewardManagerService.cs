@@ -61,7 +61,7 @@ namespace NewStreamSupporter.Services
                 RewardId = reward.Id,
                 OwnerId = reward.OwnerId,
                 CostAtPurchase = (ulong)cost,
-                Text = $"{user.UserName} purchased {reward.Name}."
+                Text = $"{user.UserName} purchased {reward.Name}"
             };
 
             if (message != null)

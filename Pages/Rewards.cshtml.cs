@@ -70,7 +70,7 @@ namespace NewStreamSupporter.Pages
             }
             try
             {
-                return await OnGetAsync(uid, await _rewardService.RedeemReward(loggedInUser, id, HttpUtility.HtmlEncode(text)));
+                return await OnGetAsync(uid, await _rewardService.RedeemReward(loggedInUser, id, text));
             }
             catch (Exception)
             {
