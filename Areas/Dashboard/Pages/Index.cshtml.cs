@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
@@ -87,13 +86,14 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages
                     }
                 }
                 await _context.SaveChangesAsync();
-                var text = purchase.Text;
-                if(text != null) { 
-                    var isMessageText = text.Contains("\nMessage: ");
-                    if(isMessageText)
+                string? text = purchase.Text;
+                if (text != null)
+                {
+                    bool isMessageText = text.Contains("\nMessage: ");
+                    if (isMessageText)
                     {
-                        var index = text.IndexOf("\nMessage: ");
-                        var newText = text.Substring(index + 10);
+                        int index = text.IndexOf("\nMessage: ");
+                        string newText = text.Substring(index + 10);
                         text = newText;
                         text = HttpUtility.HtmlEncode(text);
                     }

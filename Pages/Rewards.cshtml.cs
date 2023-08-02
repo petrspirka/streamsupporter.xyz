@@ -6,7 +6,6 @@ using Microsoft.IdentityModel.Tokens;
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Services;
-using System.Web;
 
 namespace NewStreamSupporter.Pages
 {
@@ -55,12 +54,12 @@ namespace NewStreamSupporter.Pages
 
         public async Task<IActionResult> OnPostAsync(string id, string uid, string? text = null)
         {
-            var reward = await _context.Rewards.FirstAsync(r => r.Id == id);
-            if(!reward.HasTextField && !text.IsNullOrEmpty())
+            RewardModel reward = await _context.Rewards.FirstAsync(r => r.Id == id);
+            if (reward == null || (!reward.HasTextField && !text.IsNullOrEmpty()))
             {
                 return await OnGetAsync(uid, false);
             }
-            if(text != null && text.Length > 64)
+            if (text != null && text.Length > 64)
             {
                 return await OnGetAsync(uid, false);
             }
