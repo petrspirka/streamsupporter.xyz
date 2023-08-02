@@ -1,5 +1,6 @@
 ﻿using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
+using System.Web;
 
 namespace NewStreamSupporter.Services
 {
@@ -80,7 +81,7 @@ namespace NewStreamSupporter.Services
                 purchase.Finished = true;
                 if (reward.TriggeredId != null && reward.TriggeredType != null)
                 {
-                    await TriggerReward(reward.TriggeredType, reward.TriggeredId, message);
+                    await TriggerReward(reward.TriggeredType, reward.TriggeredId, HttpUtility.HtmlEncode(message));
                 }
             }
             _context.Purchases.Add(purchase);

@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
 using NewStreamSupporter.Services;
+using System.Web;
 
 namespace NewStreamSupporter.Areas.Dashboard.Pages
 {
@@ -93,9 +95,10 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages
                         var index = text.IndexOf("\nMessage: ");
                         var newText = text.Substring(index + 10);
                         text = newText;
+                        text = HttpUtility.HtmlEncode(text);
                     }
                 }
-                await _hubService.Trigger(purchase.Reward.TriggeredType, purchase.Reward.TriggeredId, purchase.Text);
+                await _hubService.Trigger(purchase.Reward.TriggeredType, purchase.Reward.TriggeredId, text);
             }
             else
             {

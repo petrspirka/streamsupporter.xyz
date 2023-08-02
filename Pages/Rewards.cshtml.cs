@@ -55,6 +55,15 @@ namespace NewStreamSupporter.Pages
 
         public async Task<IActionResult> OnPostAsync(string id, string uid, string? text = null)
         {
+            var reward = _context.Rewards.First(r => r.Id == id);
+            if(!reward.HasTextField && !text.IsNullOrEmpty())
+            {
+                return await OnGetAsync(uid, false);
+            }
+            if(text != null && text.Length > 64)
+            {
+                return await OnGetAsync(uid, false);
+            }
             if (!text.IsNullOrEmpty())
             {
                 text = _filter.CensorString(text);
