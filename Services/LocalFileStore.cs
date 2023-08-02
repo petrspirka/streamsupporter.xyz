@@ -39,7 +39,7 @@ namespace NewStreamSupporter.Services
 
         public Task<Stream?> Load(string key)
         {
-            var filePath = GetPath(key);
+            string filePath = GetPath(key);
             if (!File.Exists(filePath))
             {
                 return Task.FromResult<Stream?>(null);
@@ -53,7 +53,7 @@ namespace NewStreamSupporter.Services
             {
                 throw new ArgumentException("Data provided is too large");
             }
-            var stream = File.OpenWrite(GetPath(key));
+            FileStream stream = File.OpenWrite(GetPath(key));
             await data.CopyToAsync(stream);
             stream.Close();
             return;

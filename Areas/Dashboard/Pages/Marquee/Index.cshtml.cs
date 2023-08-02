@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
@@ -23,7 +22,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Marquee
 
         public async Task<IActionResult> OnPostTestTriggerAsync(string id)
         {
-            var marquee = await _context.Marquees.FirstOrDefaultAsync(a => a.Id == id);
+            MarqueeModel? marquee = await _context.Marquees.FirstOrDefaultAsync(a => a.Id == id);
             if (marquee == null || marquee.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();

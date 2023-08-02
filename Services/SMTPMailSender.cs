@@ -2,7 +2,6 @@
 using MimeKit;
 using NewStreamSupporter.Contracts;
 using System.Net;
-using System.Threading;
 
 namespace NewStreamSupporter.Services
 {
@@ -14,7 +13,7 @@ namespace NewStreamSupporter.Services
         private readonly NetworkCredential _mailCredential;
 
         //Z které adresy jdou maily
-        private MailboxAddress? _fromAddress;
+        private readonly MailboxAddress? _fromAddress;
         private readonly int _port;
         private readonly string _host;
 
@@ -52,7 +51,7 @@ namespace NewStreamSupporter.Services
                 Subject = subject
             };
 
-            using var smtpClient = new SmtpClient();
+            using SmtpClient smtpClient = new();
             await smtpClient.ConnectAsync(_host, _port, _port == 465);
             await smtpClient.AuthenticateAsync(_mailCredential);
             await smtpClient.SendAsync(message);

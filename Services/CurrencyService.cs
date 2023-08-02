@@ -2,7 +2,6 @@
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Models;
-using SQLitePCL;
 
 namespace NewStreamSupporter.Services
 {
@@ -310,11 +309,11 @@ namespace NewStreamSupporter.Services
         {
             using IServiceScope scope = _serviceProvider.CreateScope();
             ApplicationContext context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-            var twitchId = user.TwitchId;
-            var googleId = user.GoogleBrandId;
+            string? twitchId = user.TwitchId;
+            string? googleId = user.GoogleBrandId;
 
-            var existingTwitchCurrencies = await context.UnclaimedCurrencies.Where(c => c.TwitchId == twitchId).ToListAsync();
-            foreach (var currency in existingTwitchCurrencies)
+            List<UnclaimedCurrencyModel> existingTwitchCurrencies = await context.UnclaimedCurrencies.Where(c => c.TwitchId == twitchId).ToListAsync();
+            foreach (UnclaimedCurrencyModel? currency in existingTwitchCurrencies)
             {
                 ClaimedCurrencyModel? claimedCurrency = await context.ClaimedCurrencies.Where(c => c.OwnerId == user.Id).FirstOrDefaultAsync();
                 if (claimedCurrency != null)
@@ -336,8 +335,8 @@ namespace NewStreamSupporter.Services
             }
             await context.SaveChangesAsync();
 
-            var existingGoogleCurrencies = await context.UnclaimedCurrencies.Where(c => c.GoogleId == googleId).ToListAsync();
-            foreach (var currency in existingGoogleCurrencies)
+            List<UnclaimedCurrencyModel> existingGoogleCurrencies = await context.UnclaimedCurrencies.Where(c => c.GoogleId == googleId).ToListAsync();
+            foreach (UnclaimedCurrencyModel? currency in existingGoogleCurrencies)
             {
                 ClaimedCurrencyModel? claimedCurrency = await context.ClaimedCurrencies.Where(c => c.OwnerId == user.Id).FirstOrDefaultAsync();
                 if (claimedCurrency != null)

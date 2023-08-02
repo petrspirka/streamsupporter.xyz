@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
 using NewStreamSupporter.Services;
-using TwitchLib.Api.Core.Exceptions;
 
 namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
 {
@@ -41,8 +39,8 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
 
         public async Task<IActionResult> OnPostTestTriggerAsync()
         {
-            var user = HttpContext.GetUserId();
-            var alert = await _context.Alerts.FirstOrDefaultAsync(a => a.OwnerId == user);
+            string user = HttpContext.GetUserId();
+            AlertModel? alert = await _context.Alerts.FirstOrDefaultAsync(a => a.OwnerId == user);
             if (alert == null || alert.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();
@@ -89,7 +87,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
 
             if (HttpContext.Request.Form.Files.Count == 1)
             {
-                var file = HttpContext.Request.Form.Files[0];
+                IFormFile file = HttpContext.Request.Form.Files[0];
                 if (file.Length > MaxFileSize)
                 {
                     FileStatusMessage = "Maximum file size exceeded.";
@@ -100,10 +98,10 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Alert
                     FileStatusMessage = "Specified file is not a valid audio file.";
                     return Page();
                 }
-                using var stream = new MemoryStream();
+                using MemoryStream stream = new();
                 await file.CopyToAsync(stream);
-                var array = stream.ToArray();
-                var valid = VerifySignature(file, array);
+                byte[] array = stream.ToArray();
+                bool valid = VerifySignature(file, array);
                 if (!valid)
                 {
                     FileStatusMessage = "Invalid file signature detected. Audio files must be of mp3 or wav format.";

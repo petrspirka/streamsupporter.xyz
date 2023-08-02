@@ -60,7 +60,11 @@ namespace NewStreamSupporter.Pages
                 text = _filter.CensorString(text);
             }
             string? loggedInUser = _userManager.GetUserId(User);
-            if (loggedInUser == null)
+            if (text != null && text.Contains('\n'))
+            {
+                text = text.Replace("\n", "\\n");
+            }
+            if (loggedInUser == null || (text != null && text.Length > 64))
             {
                 return await OnGetAsync(uid, false);
             }

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
@@ -21,7 +20,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Timer
 
         public async Task<IActionResult> OnPostTestTriggerAsync(string id)
         {
-            var timer = await _context.TimerModel.FirstOrDefaultAsync(a => a.Id == id);
+            TimerModel? timer = await _context.TimerModel.FirstOrDefaultAsync(a => a.Id == id);
             if (timer == null || timer.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();

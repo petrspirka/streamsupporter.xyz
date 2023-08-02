@@ -65,7 +65,7 @@ namespace NewStreamSupporter.Services
         {
             using AsyncServiceScope scope = _serviceProvider.CreateAsyncScope();
             ApplicationContext context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-            var notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();
+            NotificationService notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();
             ApplicationUser? channelUser = await context.Users.Include(u => u.Alert).Where(u => e.User.Platform == Platform.Twitch ? u.TwitchId == e.Channel : u.GoogleBrandId == e.Channel).FirstOrDefaultAsync();
             if (channelUser == null || channelUser.Alert == null)
             {
@@ -89,7 +89,7 @@ namespace NewStreamSupporter.Services
         {
             using AsyncServiceScope scope = _serviceProvider.CreateAsyncScope();
             ApplicationContext context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
-            var notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();
+            NotificationService notificationService = scope.ServiceProvider.GetRequiredService<NotificationService>();
             ApplicationUser? channelUser = await context.Users.Include(u => u.Alert).Where(u => e.User.Platform == Platform.Twitch ? u.TwitchId == e.Channel : u.GoogleBrandId == e.Channel).FirstOrDefaultAsync();
             if (channelUser == null)
             {
@@ -108,12 +108,12 @@ namespace NewStreamSupporter.Services
             }
             await context.SaveChangesAsync();
 
-            var subCounters = await context.CounterModel
+            List<CounterModel> subCounters = await context.CounterModel
                 .Where(c => c.OwnerId == channelUser.Id)
                 .Where(c => c.TriggeredByDonations)
                 .ToListAsync();
 
-            foreach (var subCounter in subCounters)
+            foreach (CounterModel? subCounter in subCounters)
             {
                 await _hubService.Trigger("counter", subCounter.Id);
                 subCounter.Value += 1;

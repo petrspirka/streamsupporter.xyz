@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
 using NewStreamSupporter.Services;
 using System.Dynamic;
-using TwitchLib.Api.Helix;
 
 namespace NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal
 {
@@ -25,12 +23,12 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.DonationGoal
 
         public async Task<IActionResult> OnPostTestTriggerAsync(string id)
         {
-            var donationGoalModel = await _context.DonationGoalModel.FirstOrDefaultAsync(a => a.Id == id);
+            DonationGoalModel? donationGoalModel = await _context.DonationGoalModel.FirstOrDefaultAsync(a => a.Id == id);
             if (donationGoalModel == null || donationGoalModel.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();
             }
-            var random = new Random();
+            Random random = new();
             dynamic obj = new ExpandoObject();
             obj.Name = "Test";
             obj.Amount = float.Round(0.5f * (random.NextInt64(10) + 1), 2);

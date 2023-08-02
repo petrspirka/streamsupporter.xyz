@@ -1,11 +1,10 @@
-﻿using Google.Apis.Auth.OAuth2.Responses;
+﻿using freecurrencyapi;
+using Google.Apis.Auth.OAuth2.Responses;
 using Google.Apis.Util.Store;
 using Google.Apis.YouTube.v3.Data;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Models;
-using freecurrencyapi;
-using Microsoft.CodeAnalysis.CSharp;
 using Newtonsoft.Json;
 
 namespace NewStreamSupporter.Services.YouTube
@@ -35,14 +34,16 @@ namespace NewStreamSupporter.Services.YouTube
         private readonly Timer _streamTimer;
         private readonly Timer _chatTimer;
         private readonly DateTime _startUp;
+        private readonly object _lock = new();
 
         //Uchovává uživatele, kteří nestreamují a kteří streamují
         private readonly IList<string> _inactiveUsers;
         private readonly IDictionary<string, Tuple<string, string?>> _activeUsers;
         private readonly IDictionary<string, DateTime> _chatMap;
+        private readonly ILogger<YouTubePollingService> _logger;
         private readonly IServiceProvider _serviceProvider;
 
-        public YouTubePollingService(IYouTubeOptions youtubeSettings, IYouTubeProviderService youTubeProviderService, IServiceProvider serviceProvider, IRewardOptions rewardOptions)
+        public YouTubePollingService(IYouTubeOptions youtubeSettings, IYouTubeProviderService youTubeProviderService, IServiceProvider serviceProvider, IRewardOptions rewardOptions, ILogger<YouTubePollingService> logger)
         {
             _youTubeProviderService = youTubeProviderService;
             _serviceProvider = serviceProvider;
@@ -61,6 +62,7 @@ namespace NewStreamSupporter.Services.YouTube
             _chatTimer = new Timer(OnChatTimerTick);
 
             _chatMap = new Dictionary<string, DateTime>();
+            _logger = logger;
         }
 
         /// <inheritdoc/>
@@ -199,7 +201,7 @@ namespace NewStreamSupporter.Services.YouTube
             {
                 return snippet.Type == "chatEndedEvent";
             }
-            
+
             PlatformUser author = new(snippet.AuthorChannelId, message.AuthorDetails.DisplayName, Platform.YouTube);
             switch (snippet.Type)
             {
@@ -207,9 +209,9 @@ namespace NewStreamSupporter.Services.YouTube
                     return true;
                 case "superChatEvent":
                     {
-                        var conversionRateRaw = freeCurrencyApi.Latest(snippet.SuperChatDetails.Currency, "USD");
-                        var amountString = JsonConvert.DeserializeXmlNode(conversionRateRaw)!.FirstChild!.InnerText;
-                        var conversionRate = float.Parse(amountString);
+                        string conversionRateRaw = freeCurrencyApi.Latest(snippet.SuperChatDetails.Currency, "USD");
+                        string amountString = JsonConvert.DeserializeXmlNode(conversionRateRaw)!.FirstChild!.InnerText;
+                        float conversionRate = float.Parse(amountString);
                         float amount = (float)(snippet.SuperChatDetails.AmountMicros! / 1000000) * conversionRate;
                         float roundedAmount = (float)Math.Round(amount, 2);
 
@@ -218,9 +220,9 @@ namespace NewStreamSupporter.Services.YouTube
                     break;
                 case "superStickerEvent":
                     {
-                        var conversionRateRaw = freeCurrencyApi.Latest(snippet.SuperChatDetails.Currency, "USD");
-                        var amountString = JsonConvert.DeserializeXmlNode(conversionRateRaw)!.FirstChild!.InnerText;
-                        var conversionRate = float.Parse(amountString);
+                        string conversionRateRaw = freeCurrencyApi.Latest(snippet.SuperChatDetails.Currency, "USD");
+                        string amountString = JsonConvert.DeserializeXmlNode(conversionRateRaw)!.FirstChild!.InnerText;
+                        float conversionRate = float.Parse(amountString);
                         float amount = (float)(snippet.SuperChatDetails.AmountMicros! / 1000000) * conversionRate;
                         float roundedAmount = (float)Math.Round(amount, 2);
 
@@ -241,20 +243,28 @@ namespace NewStreamSupporter.Services.YouTube
 
         private Task AddStreamMessage(string userId, PlatformUser author, LiveChatMessageSnippet snippet)
         {
-            var sent = snippet.PublishedAt;
-            if (sent == null)
+            _logger.LogInformation("Message: " + snippet.DisplayMessage + " from user " + snippet.AuthorChannelId);
+            DateTime? sent = snippet.PublishedAt;
+            lock (_lock)
             {
-                return Task.CompletedTask;
+                if (sent == null)
+                {
+                    return Task.CompletedTask;
+                }
+                if (!_chatMap.ContainsKey(author.Id))
+                {
+                    _logger.LogInformation("Key not in map");
+                    OnStreamChatMessage?.Invoke(this, new StreamChatMessageEventArgs(userId, author, snippet.TextMessageDetails.MessageText));
+                    _chatMap[author.Id] = sent.Value;
+                }
+                else if (_chatMap[author.Id] + new TimeSpan(_rewardTime * TimeSpan.TicksPerMillisecond) < sent.Value)
+                {
+                    _logger.LogInformation("Key in map.");
+                    OnStreamChatMessage?.Invoke(this, new StreamChatMessageEventArgs(userId, author, snippet.TextMessageDetails.MessageText));
+                    _chatMap[author.Id] = sent.Value;
+                }
             }
-            if (!_chatMap.ContainsKey(author.Id))
-            {
-                _chatMap[author.Id] = sent.Value;
-            }
-            else if (_chatMap[author.Id] + new TimeSpan(_rewardTime) < sent.Value)
-            {
-                OnStreamChatMessage?.Invoke(this, new StreamChatMessageEventArgs(userId, author, snippet.TextMessageDetails.MessageText));
-                _chatMap[author.Id] = sent.Value;
-            }
+            _logger.LogInformation("Key in map but on cooldown");
             return Task.CompletedTask;
         }
 

@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
-using TwitchLib.Communication.Interfaces;
 
 namespace NewStreamSupporter.Services
 {
@@ -9,12 +8,12 @@ namespace NewStreamSupporter.Services
         //Mapa pro převod typu widgetu + id widgetu na všechny připojené widgety
         private readonly IDictionary<string, IDictionary<string, IList<string>>> _connectedClients = new Dictionary<string, IDictionary<string, IList<string>>>();
 
-        private readonly object _lock = new object();
+        private readonly object _lock = new();
 
         //Zpětná mapa pro převod připojených klientů na typ a Id
         private readonly IDictionary<string, Tuple<string, string>> _reverseConnectedClients = new Dictionary<string, Tuple<string, string>>();
-        private IServiceProvider _serviceProvider;
-        private ILogger<DispatcherHubStateService> _logger;
+        private readonly IServiceProvider _serviceProvider;
+        private readonly ILogger<DispatcherHubStateService> _logger;
 
         public DispatcherHubStateService(IServiceProvider serviceProvider, ILogger<DispatcherHubStateService> logger)
         {
@@ -132,10 +131,10 @@ namespace NewStreamSupporter.Services
                 return;
             }
 
-            using var scope = _serviceProvider.CreateAsyncScope();
-            var hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<DispatcherHub>>();
+            using AsyncServiceScope scope = _serviceProvider.CreateAsyncScope();
+            IHubContext<DispatcherHub> hubContext = scope.ServiceProvider.GetRequiredService<IHubContext<DispatcherHub>>();
 
-            var serializedArg = JsonConvert.SerializeObject(arg);
+            string serializedArg = JsonConvert.SerializeObject(arg);
 
             try
             {

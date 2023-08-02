@@ -18,7 +18,7 @@ namespace NewStreamSupporter.Services.Twitch
         private IList<EventSubSubscription> _userSubscriptions;
         private bool _initialized = false;
         private readonly EventSub _eventSubApi;
-        private ILogger _logger;
+        private readonly ILogger _logger;
 
         /// <summary>
         /// Vytvoří novou instanci třídy TwitchEventSubManager

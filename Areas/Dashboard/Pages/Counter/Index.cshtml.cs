@@ -1,11 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
 using NewStreamSupporter.Services;
-using System.Dynamic;
 
 namespace NewStreamSupporter.Areas.Dashboard.Pages.Counter
 {
@@ -24,7 +22,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Counter
 
         public async Task<IActionResult> OnPostTestTriggerAsync(string id)
         {
-            var counter = await _context.CounterModel.FirstOrDefaultAsync(a => a.Id == id);
+            CounterModel? counter = await _context.CounterModel.FirstOrDefaultAsync(a => a.Id == id);
             if (counter == null || counter.OwnerId != HttpContext.GetUserId())
             {
                 return Forbid();

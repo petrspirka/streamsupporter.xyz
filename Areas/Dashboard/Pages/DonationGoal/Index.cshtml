@@ -13,23 +13,24 @@
 </h1>
 
 <div class="border border-top my-2"></div>
-<table class="table table-responsive table-striped table-hover widget-table align-middle">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.DonationGoalModel[0].Name)
-            </th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.DonationGoalModel)
-        {
+<div class="table-responsive h-100">
+    <table class="table table-striped table-hover widget-table align-middle">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Name)
-                </td>
-                <td>
+                <th>
+                    @Html.DisplayNameFor(model => model.DonationGoalModel[0].Name)
+                </th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.DonationGoalModel)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
                         <a asp-page="./Edit" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit">edit</span></a>
 
                         <a href="#" onclick="TestWidget('@item.Id', '@afToken')"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Test widget. Changes are only local and will roll back on reload.">play_arrow</span></a>
@@ -37,8 +38,9 @@
                         <a asp-page="./Details" asp-route-id="@item.Id"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Details">info</span></a>
                         <a asp-area="Api" asp-controller="Component" asp-action="DonationGoal" asp-route-uid="@item.OwnerId" asp-route-id="@item.Id" target="_blank"><span class="material-icons border border-1 border-primary rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Open widget">visibility</span></a>
                         <a asp-page="./Delete" asp-route-id="@item.Id"><span class="material-icons border border-1 border-danger text-danger rounded p-1" data-bs-toggle="tooltip" data-bs-placement="top" title="Delete">delete</span></a>
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using NewStreamSupporter.Data;
 using System.ComponentModel.DataAnnotations;
-using System.Configuration;
 
 namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
 {

@@ -96,11 +96,11 @@ namespace NewStreamSupporter.Areas.Identity.Pages.Account.Manage
                 }
             }
 
-            if(user.TwitchId != null && user.IsTwitchActive)
+            if (user.TwitchId != null && user.IsTwitchActive)
             {
                 await _twitchListenerService.RemoveAllUserListeners(user.TwitchId);
             }
-            if(user.GoogleBrandId != null && user.IsGoogleActive)
+            if (user.GoogleBrandId != null && user.IsGoogleActive)
             {
                 await _youTubeListenerService.RemoveAllUserListeners(user.GoogleBrandId);
             }

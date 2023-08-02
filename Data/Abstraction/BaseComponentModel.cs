@@ -1,5 +1,4 @@
 ﻿using NewStreamSupporter.Data.Abstraction;
-using NewStreamSupporter.Models;
 using System.ComponentModel.DataAnnotations;
 
 namespace NewStreamSupporter.Data.Abstractions

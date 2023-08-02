@@ -3,7 +3,6 @@ using NewStreamSupporter.Contracts;
 using NewStreamSupporter.Data;
 using NewStreamSupporter.Helpers;
 using NewStreamSupporter.Models;
-using System.Threading.Channels;
 using TwitchLib.Api.Helix.Models.EventSub;
 using TwitchLib.Api.Interfaces;
 
@@ -68,8 +67,8 @@ namespace NewStreamSupporter.Services
             };
             webhookReceiver.OnStreamFollow += async (sender, e) =>
             {
-                var scope = _serviceProvider.CreateAsyncScope();
-                var context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
+                AsyncServiceScope scope = _serviceProvider.CreateAsyncScope();
+                ApplicationContext context = scope.ServiceProvider.GetRequiredService<ApplicationContext>();
                 //Either trigger a follow if the configuration property is set or see if the follow is in database, and if not, trigger a follow message and add it
                 if (shouldFollowsRetrigger || !(await context.StreamerFollows.Where(s => s.FollowerId == e.User.Id).Where(s => s.Platform == e.User.Platform).AnyAsync(s => s.StreamerId == e.Channel)))
                 {
@@ -151,8 +150,8 @@ namespace NewStreamSupporter.Services
 
                     if (detail.Topic == "stream.online")
                     {
-                        var broadcasterId = detail.Condition["broadcaster_user_id"];
-                        var streamResponse = await _twitchApi.Helix.Streams.GetStreamsAsync(userIds: new()
+                        string broadcasterId = detail.Condition["broadcaster_user_id"];
+                        TwitchLib.Api.Helix.Models.Streams.GetStreams.GetStreamsResponse streamResponse = await _twitchApi.Helix.Streams.GetStreamsAsync(userIds: new()
                         {
                             { broadcasterId }
                         });
@@ -164,8 +163,8 @@ namespace NewStreamSupporter.Services
 
                     if (detail.Topic == "stream.offline")
                     {
-                        var broadcasterId = detail.Condition["broadcaster_user_id"];
-                        var streamResponse = await _twitchApi.Helix.Streams.GetStreamsAsync(userIds: new()
+                        string broadcasterId = detail.Condition["broadcaster_user_id"];
+                        TwitchLib.Api.Helix.Models.Streams.GetStreams.GetStreamsResponse streamResponse = await _twitchApi.Helix.Streams.GetStreamsAsync(userIds: new()
                         {
                             { broadcasterId }
                         });

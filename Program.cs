@@ -14,7 +14,6 @@ using NewStreamSupporter.Models;
 using NewStreamSupporter.Services;
 using NewStreamSupporter.Services.Twitch;
 using NewStreamSupporter.Services.YouTube;
-using System.Configuration;
 using System.Net;
 using TwitchLib.Api;
 using TwitchLib.Api.Core;
@@ -160,7 +159,8 @@ namespace NewStreamSupporter
                     impl.GetRequiredService<IYouTubeOptions>(),
                     impl.GetRequiredService<IYouTubeProviderService>(),
                     impl,
-                    impl.GetRequiredService<IRewardOptions>()))
+                    impl.GetRequiredService<IRewardOptions>(),
+                    impl.GetRequiredService<ILogger<YouTubePollingService>>()))
                 .AddTransient<YouTubeService>()
                 .AddSingleton<ICurrencyService, CurrencyService>()
                 .AddSingleton<ValidClientFilter>()
