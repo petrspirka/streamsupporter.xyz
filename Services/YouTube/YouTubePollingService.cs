@@ -99,6 +99,11 @@ namespace NewStreamSupporter.Services.YouTube
                     await HandleUnauthorized(user);
                     continue;
                 }
+                catch (NullReferenceException)
+                {
+                    await HandleUnauthorized(user);
+                    continue;
+                }
                 if (streams == null)
                 {
                     continue;
