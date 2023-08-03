@@ -27,7 +27,7 @@ namespace NewStreamSupporter.Areas.Dashboard.Pages.Marquee
             {
                 return Forbid();
             }
-            await _hub.Trigger("marquee", marquee.Id, "I am a test trigger");
+            await _hub.Trigger("marquee", marquee.Id, null);
             return new EmptyResult();
         }
 
