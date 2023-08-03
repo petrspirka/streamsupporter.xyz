@@ -57,11 +57,11 @@ namespace NewStreamSupporter.Pages
             RewardModel reward = await _context.Rewards.FirstAsync(r => r.Id == id);
             if (reward == null || (!reward.HasTextField && !text.IsNullOrEmpty()))
             {
-                return await OnGetAsync(uid, false);
+                return RedirectToPage(new { uid = uid, success=false });
             }
             if (text != null && text.Length > 64)
             {
-                return await OnGetAsync(uid, false);
+                return RedirectToPage(new { uid = uid, success = false });
             }
             if (!text.IsNullOrEmpty())
             {
@@ -74,15 +74,15 @@ namespace NewStreamSupporter.Pages
             }
             if (loggedInUser == null || (text != null && text.Length > 64))
             {
-                return await OnGetAsync(uid, false);
+                return RedirectToPage(new { uid = uid, success = false });
             }
             try
             {
-                return await OnGetAsync(uid, await _rewardService.RedeemReward(loggedInUser, id, text));
+                return RedirectToPage(new { uid = uid, success = await _rewardService.RedeemReward(loggedInUser, id, text) });
             }
             catch (Exception)
             {
-                return await OnGetAsync(uid, false);
+                return RedirectToPage(new { uid = uid, success = false });
             }
         }
     }
