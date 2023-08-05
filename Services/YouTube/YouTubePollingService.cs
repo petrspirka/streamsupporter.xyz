@@ -68,7 +68,7 @@ namespace NewStreamSupporter.Services.YouTube
         /// <inheritdoc/>
         public void AddUserListener(string userId)
         {
-            if (!_inactiveUsers.Contains(userId) && !_activeUsers.ContainsKey(userId))
+            if (!_inactiveUsers.Contains(userId) && !_activeUsers.ContainsKey(userId) && userId != null)
             {
                 _inactiveUsers.Add(userId);
             }
@@ -197,8 +197,11 @@ namespace NewStreamSupporter.Services.YouTube
                 if (streamEnded)
                 {
                     OnStreamDown?.Invoke(this, new(userChatPair.Key));
-                    _inactiveUsers.Add(userChatPair.Key);
-                    _activeUsers.Remove(userChatPair.Key);
+                    if (userChatPair.Key != null)
+                    {
+                        _inactiveUsers.Add(userChatPair.Key);
+                        _activeUsers.Remove(userChatPair.Key);
+                    }
                 }
             }
         }

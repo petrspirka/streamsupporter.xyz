@@ -22,6 +22,7 @@ using TwitchLib.Api.Interfaces;
 using TwitchLib.Client;
 using TwitchLib.Client.Interfaces;
 using TwitchLib.Communication.Interfaces;
+using TwitchLib.Communication.Models;
 using TwitchLib.EventSub.Webhooks.Extensions;
 
 namespace NewStreamSupporter
@@ -172,6 +173,10 @@ namespace NewStreamSupporter
                 .AddSingleton<YouTubeListenerService>()
                 .AddHostedService(impl => impl.GetRequiredService<TwitchListenerService>())
                 .AddHostedService(impl => impl.GetRequiredService<YouTubeListenerService>())
+                .AddSingleton<IClient, TwitchLib.Communication.Clients.WebSocketClient>(impl => new(new ClientOptions
+                {
+                    ReconnectionPolicy = new(3000)
+                }))
                 .AddSingleton<ITwitchClient, TwitchClient>(impl =>
                 {
                     TwitchClient twitchClient = new(impl.GetService<IClient>(), logger: impl.GetService<ILogger<TwitchClient>>());
