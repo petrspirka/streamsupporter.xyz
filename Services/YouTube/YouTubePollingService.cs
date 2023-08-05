@@ -68,7 +68,7 @@ namespace NewStreamSupporter.Services.YouTube
         /// <inheritdoc/>
         public void AddUserListener(string userId)
         {
-            if (!_inactiveUsers.Contains(userId) && !_activeUsers.ContainsKey(userId) && userId != null)
+            if (!_inactiveUsers.Contains(userId) && !_activeUsers.ContainsKey(userId))
             {
                 _inactiveUsers.Add(userId);
             }
@@ -150,6 +150,7 @@ namespace NewStreamSupporter.Services.YouTube
         /// </summary>
         private async void OnChatTimerTick(object? state)
         {
+            
             using AsyncServiceScope scope = _serviceProvider.CreateAsyncScope();
             Freecurrencyapi freeCurrencyApi = scope.ServiceProvider.GetRequiredService<Freecurrencyapi>();
 
@@ -174,6 +175,10 @@ namespace NewStreamSupporter.Services.YouTube
                     _activeUsers.Remove(userChatPair.Key);
                     continue;
                 }
+                catch (Exception)
+                {
+                    return;
+                }
                 if (messages == null)
                 {
                     continue;
@@ -197,11 +202,8 @@ namespace NewStreamSupporter.Services.YouTube
                 if (streamEnded)
                 {
                     OnStreamDown?.Invoke(this, new(userChatPair.Key));
-                    if (userChatPair.Key != null)
-                    {
-                        _inactiveUsers.Add(userChatPair.Key);
-                        _activeUsers.Remove(userChatPair.Key);
-                    }
+                    _inactiveUsers.Add(userChatPair.Key);
+                    _activeUsers.Remove(userChatPair.Key);
                 }
             }
         }
@@ -258,7 +260,7 @@ namespace NewStreamSupporter.Services.YouTube
 
         private Task AddStreamMessage(string userId, PlatformUser author, LiveChatMessageSnippet snippet)
         {
-            _logger.LogInformation("Message: " + snippet.DisplayMessage + " from user " + snippet.AuthorChannelId);
+            _logger.LogInformation("Message: {displayText} from user {author}", snippet.DisplayMessage, snippet.AuthorChannelId);
             DateTime? sent = snippet.PublishedAt;
             lock (_lock)
             {

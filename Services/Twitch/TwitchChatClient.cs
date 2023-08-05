@@ -17,8 +17,6 @@ namespace NewStreamSupporter.Services.Twitch
 
         public event EventHandler<StreamChatMessageEventArgs>? StreamChatMessageReceived;
 
-        private bool _isInitialized = false;
-
         /// <summary>
         /// Vytvoří novou instanci třídy TwitchChatClient
         /// </summary>
@@ -35,11 +33,10 @@ namespace NewStreamSupporter.Services.Twitch
         //Metoda sloužící pro připojení uživatelů při spuštění
         private void OnConnected(object? sender, OnConnectedArgs e)
         {
-                foreach (string channel in _queuedChannels)
-                {
-                    _client.JoinChannel(channel);
-                }
-                _isInitialized = true;
+            foreach (string channel in _queuedChannels)
+            {
+                _client.JoinChannel(channel);
+            }
         }
 
         //Metoda sloužící pro převedení vnitřních argumentů knihovny na argumenty používané aplikací
@@ -52,7 +49,8 @@ namespace NewStreamSupporter.Services.Twitch
         /// <inheritdoc/>
         public void JoinChannel(string channelId)
         {
-            if (!_queuedChannels.Contains(channelId)) { 
+            if (!_queuedChannels.Contains(channelId))
+            {
                 _queuedChannels.Add(channelId);
             }
 
